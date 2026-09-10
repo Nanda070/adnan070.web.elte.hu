@@ -51,12 +51,20 @@
     }
 
     body {
+      zoom: 0.9;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
       padding: 1.5rem 1rem 4rem;
+    }
+
+    @supports not (zoom: 0.9) {
+      .viewport-wrapper {
+        transform: scale(0.9);
+        transform-origin: center top;
+      }
     }
 
     /* Ambient Animated Background Orbs */
@@ -433,19 +441,7 @@
       100% { transform: scale(1, 1) translateY(0); }
     }
 
-    /* Sunglasses Overlay (10 Clicks Milestone) */
-    .sunglasses-layer {
-      opacity: 0;
-      transform: translateY(-20px) scale(0.6);
-      transform-origin: 88px 46px;
-      transition: opacity 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
-      pointer-events: none;
-    }
 
-    .sunglasses-layer.visible {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
 
     /* Dynamic Shadow */
     .duck-shadow {
@@ -1068,7 +1064,7 @@
         <div class="quack-container" id="quackContainer" aria-live="polite" aria-atomic="true"></div>
 
         <div class="duck-wrapper" id="duckInteractive" role="button" tabindex="0" title="Click or Tap to Quack!" aria-label="Rubber duck (tap to quack)">
-          <!-- Handcrafted Vector Duck SVG with Sunglasses Overlay Layer -->
+          <!-- Handcrafted Vector Duck SVG -->
           <svg class="duck-svg" viewBox="0 0 220 200" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="duckBody" x1="40" y1="20" x2="190" y2="190" gradientUnits="userSpaceOnUse">
@@ -1099,14 +1095,7 @@
                 <stop offset="100%" stop-color="#BF360C" stop-opacity="0" />
               </radialGradient>
 
-              <linearGradient id="shadesLens" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#111827" />
-                <stop offset="45%" stop-color="#1f2937" />
-                <stop offset="50%" stop-color="#38bdf8" stop-opacity="0.8" />
-                <stop offset="60%" stop-color="#111827" />
-                <stop offset="100%" stop-color="#030712" />
-              </linearGradient>
-            </defs>
+              </defs>
 
             <!-- Tail Feathers -->
             <path d="M165 110 C185 92 205 95 212 104 C215 108 214 114 207 119 C198 126 186 132 173 135 Z" fill="url(#duckBody)" />
@@ -1149,15 +1138,7 @@
               <path d="M106 138 C116 148 130 148 140 142" stroke="#FFF8E1" stroke-width="2" stroke-linecap="round" opacity="0.3" />
             </g>
 
-            <!-- Sunglasses Layer (Unlocked at 10 Clicks) -->
-            <g class="sunglasses-layer" id="sunglassesLayer">
-              <!-- Sunglasses frame and lenses -->
-              <polygon points="68,44 104,38 106,53 84,56 68,48" fill="url(#shadesLens)" stroke="#0f172a" stroke-width="2" stroke-linejoin="round" />
-              <polygon points="68,44 56,42 54,46 68,47" fill="#0f172a" />
-              <line x1="72" y1="45" x2="84" y2="49" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.8" />
-              <line x1="88" y1="42" x2="100" y2="46" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.8" />
-              <circle cx="103" cy="40" r="2.5" fill="#f59e0b" />
-            </g>
+
           </svg>
         </div>
       </section>
@@ -1319,7 +1300,6 @@
       const duckStage = document.getElementById('duckStage');
       const duckWrapper = document.getElementById('duckInteractive');
       const duckSvg = duckWrapper.querySelector('.duck-svg');
-      const sunglassesLayer = document.getElementById('sunglassesLayer');
       const quackContainer = document.getElementById('quackContainer');
       const bubbleContainer = document.getElementById('bubbleContainer');
       const langButtons = document.querySelectorAll('.lang-btn');
@@ -1473,11 +1453,7 @@
       setInterval(updateCPS, 150);
 
       function checkMilestones() {
-        // Milestone 1: 10 Clicks / Combo -> Sunglasses overlay
-        const hasShades = comboStreak >= 10 || sessionClicks >= 10;
-        sunglassesLayer.classList.toggle('visible', hasShades);
-
-        // Milestone 2: 50 Clicks / Combo -> Neon Cyberpunk Border
+        // Milestone: 50 Clicks / Combo -> Neon Cyberpunk Border
         const hasNeon = comboStreak >= 50 || sessionClicks >= 50;
         mainCard.classList.toggle('neon-glow', hasNeon);
 
