@@ -2,11 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Random Duck</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="Random Duck - An interactive, procedural audio quack sanctuary powered by PHP 8.2 & ELTE Caesar.">
+  <title>Random Duck | Quack Wall</title>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -17,36 +20,46 @@
 
     :root {
       --bg-dark: #0d0f12;
-      --card-bg: rgba(23, 27, 34, 0.65);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --card-border-hover: rgba(255, 255, 255, 0.16);
-      --card-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.6), 0 0 40px -10px rgba(255, 199, 44, 0.05);
-      --text-main: #f1f5f9;
+      --card-bg: rgba(23, 27, 34, 0.72);
+      --card-border: rgba(255, 255, 255, 0.09);
+      --card-border-hover: rgba(255, 255, 255, 0.18);
+      --card-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.7), 0 0 45px -10px rgba(255, 199, 44, 0.08);
+      --text-main: #f8fafc;
       --text-muted: #94a3b8;
+      --text-dim: #64748b;
       --accent-yellow: #ffc72c;
       --accent-orange: #ff7a00;
-      --btn-bg: rgba(255, 255, 255, 0.05);
-      --btn-border: rgba(255, 255, 255, 0.08);
-      --btn-active-bg: rgba(255, 199, 44, 0.15);
-      --btn-active-border: rgba(255, 199, 44, 0.45);
+      --accent-gold: #ffd700;
+      --accent-cyan: #00f3ff;
+      --accent-pink: #ff007b;
+      --matrix-green: #00ff66;
+      --btn-bg: rgba(255, 255, 255, 0.06);
+      --btn-border: rgba(255, 255, 255, 0.1);
+      --btn-active-bg: rgba(255, 199, 44, 0.16);
+      --btn-active-border: rgba(255, 199, 44, 0.5);
     }
 
     html, body {
       width: 100%;
-      height: 100%;
       min-height: 100vh;
       min-height: 100dvh;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background-color: var(--bg-dark);
       color: var(--text-main);
       overflow-x: hidden;
-      overflow-y: auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      touch-action: manipulation;
     }
 
-    /* Ambient Animated Background */
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 1.5rem 1rem 4rem;
+    }
+
+    /* Ambient Animated Background Orbs */
     .background-container {
       position: fixed;
       inset: 0;
@@ -58,100 +71,86 @@
     .glow-orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(90px);
-      opacity: 0.35;
-      animation: orbFloat 18s ease-in-out infinite alternate;
+      filter: blur(95px);
+      opacity: 0.32;
+      animation: orbFloat 22s ease-in-out infinite alternate;
       will-change: transform;
     }
 
     .orb-1 {
-      width: 450px;
-      height: 450px;
-      background: radial-gradient(circle, #ffb300, #ff6f00 70%);
-      top: -10%;
-      left: 15%;
-      animation-duration: 22s;
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle, #ff9f00, #ff5e00 70%);
+      top: -12%;
+      left: 10%;
+      animation-duration: 24s;
     }
 
     .orb-2 {
-      width: 500px;
-      height: 500px;
+      width: 520px;
+      height: 520px;
       background: radial-gradient(circle, #3b82f6, #6366f1 70%);
       bottom: -15%;
-      right: 10%;
-      animation-duration: 26s;
-      animation-delay: -7s;
-      opacity: 0.25;
+      right: 5%;
+      animation-duration: 28s;
+      animation-delay: -6s;
+      opacity: 0.22;
     }
 
     .orb-3 {
-      width: 350px;
-      height: 350px;
+      width: 380px;
+      height: 380px;
       background: radial-gradient(circle, #ec4899, #8b5cf6 70%);
-      top: 40%;
-      right: 25%;
+      top: 38%;
+      right: 22%;
       animation-duration: 20s;
-      animation-delay: -12s;
-      opacity: 0.2;
+      animation-delay: -11s;
+      opacity: 0.18;
     }
 
     .noise-overlay {
       position: absolute;
       inset: 0;
-      background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
-      background-size: 24px 24px;
-      opacity: 0.7;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 0);
+      background-size: 26px 26px;
+      opacity: 0.6;
     }
 
     @keyframes orbFloat {
-      0% {
-        transform: translate(0, 0) scale(1);
-      }
-      50% {
-        transform: translate(40px, -50px) scale(1.08);
-      }
-      100% {
-        transform: translate(-35px, 35px) scale(0.95);
-      }
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(45px, -55px) scale(1.08); }
+      100% { transform: translate(-40px, 40px) scale(0.92); }
     }
 
-    /* Interactive Container Layout */
+    /* Main Viewport Container */
     .viewport-wrapper {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       width: 100%;
-      min-height: 100vh;
-      min-height: 100dvh;
+      max-width: 540px;
+      margin: 0 auto;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 24px 16px;
     }
 
-    /* Glassmorphic Central Card */
+    /* Glassmorphism Card */
     .card {
       position: relative;
       width: 100%;
-      max-width: 520px;
       background: var(--card-bg);
-      backdrop-filter: blur(24px) saturate(160%);
-      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      backdrop-filter: blur(28px) saturate(170%);
+      -webkit-backdrop-filter: blur(28px) saturate(170%);
       border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 32px 28px 36px;
+      border-radius: 28px;
+      padding: 28px 24px 30px;
       box-shadow: var(--card-shadow);
       display: flex;
       flex-direction: column;
       align-items: center;
-      transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.3s ease;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
-    .card:hover {
-      border-color: var(--card-border-hover);
-      box-shadow: 0 35px 80px -15px rgba(0, 0, 0, 0.7), 0 0 50px -10px rgba(255, 199, 44, 0.08);
-    }
-
-    /* Subtle Inner Top Glow Highlight */
     .card::before {
       content: '';
       position: absolute;
@@ -159,8 +158,43 @@
       left: 15%;
       right: 15%;
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
       pointer-events: none;
+    }
+
+    /* Cyberpunk Neon Glow Milestone (50 Clicks) */
+    .card.neon-glow {
+      animation: neonPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes neonPulse {
+      0% {
+        border-color: #00f3ff;
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.4), 0 0 45px rgba(255, 0, 123, 0.25), inset 0 0 15px rgba(0, 243, 255, 0.15);
+      }
+      50% {
+        border-color: #ff007b;
+        box-shadow: 0 0 30px rgba(255, 0, 123, 0.5), 0 0 65px rgba(0, 243, 255, 0.35), inset 0 0 20px rgba(255, 0, 123, 0.2);
+      }
+      100% {
+        border-color: #00f3ff;
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.4), 0 0 45px rgba(255, 0, 123, 0.25), inset 0 0 15px rgba(0, 243, 255, 0.15);
+      }
+    }
+
+    /* Intense Screen Shake Milestone (100 Clicks) */
+    body.screen-shaking {
+      animation: intenseShake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+    }
+
+    @keyframes intenseShake {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      15% { transform: translate(-4px, -4px) rotate(-1deg); }
+      30% { transform: translate(5px, 3px) rotate(1.2deg); }
+      45% { transform: translate(-5px, 4px) rotate(-0.8deg); }
+      60% { transform: translate(4px, -3px) rotate(0.9deg); }
+      75% { transform: translate(-3px, 2px) rotate(-0.5deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
     }
 
     /* Card Header & Language Switcher */
@@ -169,44 +203,45 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
-    .badge {
+    .badge-status {
       display: inline-flex;
       align-items: center;
       gap: 7px;
       font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
+      font-weight: 700;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--text-muted);
-      background: rgba(255, 255, 255, 0.04);
-      padding: 5px 12px;
-      border-radius: 100px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      user-select: none;
     }
 
     .badge-dot {
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: #10b981;
-      box-shadow: 0 0 8px #10b981;
+      box-shadow: 0 0 10px #10b981;
       animation: pulseDot 2.2s infinite;
     }
 
     @keyframes pulseDot {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
+      50% { opacity: 0.4; transform: scale(0.8); }
     }
 
     .lang-switcher {
       display: inline-flex;
-      background: rgba(0, 0, 0, 0.35);
-      padding: 3px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 4px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
       gap: 3px;
     }
 
@@ -215,12 +250,13 @@
       border: 1px solid transparent;
       color: var(--text-muted);
       font-family: inherit;
-      font-size: 0.8rem;
-      font-weight: 600;
-      padding: 6px 14px;
-      border-radius: 9px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 6px 13px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      touch-action: manipulation;
+      transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
       user-select: none;
     }
 
@@ -233,133 +269,203 @@
       background: var(--btn-active-bg);
       border-color: var(--btn-active-border);
       color: var(--accent-yellow);
-      box-shadow: 0 2px 10px rgba(255, 199, 44, 0.15);
+      box-shadow: 0 2px 10px rgba(255, 199, 44, 0.18);
+    }
+
+    /* Global Quack Counter & Combo HUD */
+    .hud-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .counter-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+
+    .counter-value {
+      font-size: 2.1rem;
+      font-weight: 800;
+      font-feature-settings: "tnum";
+      font-variant-numeric: tabular-nums;
+      background: linear-gradient(135deg, #ffffff 40%, #ffc72c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      text-shadow: 0 2px 20px rgba(255, 199, 44, 0.2);
+    }
+
+    .combo-bar-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+      min-height: 24px;
+    }
+
+    .combo-badge {
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(255, 199, 44, 0.15);
+      border: 1px solid rgba(255, 199, 44, 0.4);
+      color: var(--accent-yellow);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      opacity: 0;
+      transform: scale(0.85);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .combo-badge.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .cps-indicator {
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      background: rgba(0, 0, 0, 0.35);
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     /* Central Duck Stage */
     .duck-stage {
       position: relative;
-      width: 220px;
-      height: 220px;
-      margin: 12px 0 28px;
+      width: 230px;
+      height: 230px;
+      margin: 8px 0 22px;
       display: flex;
       align-items: center;
       justify-content: center;
       user-select: none;
+      touch-action: manipulation;
     }
 
-    /* Ambient Duck Glow Effect */
     .duck-glow-bg {
       position: absolute;
-      width: 140px;
-      height: 140px;
+      width: 150px;
+      height: 150px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 199, 44, 0.25) 0%, rgba(255, 122, 0, 0.1) 50%, transparent 75%);
-      filter: blur(25px);
-      transition: transform 0.4s ease, opacity 0.4s ease, background 0.4s ease;
+      background: radial-gradient(circle, rgba(255, 199, 44, 0.28) 0%, rgba(255, 122, 0, 0.12) 50%, transparent 75%);
+      filter: blur(28px);
+      transition: transform 0.4s ease, opacity 0.4s ease;
       pointer-events: none;
       z-index: 1;
     }
 
-    .duck-stage:hover .duck-glow-bg {
-      transform: scale(1.4);
-      opacity: 0.7;
-      background: radial-gradient(circle, rgba(255, 199, 44, 0.45) 0%, rgba(255, 122, 0, 0.2) 60%, transparent 80%);
+    .duck-stage:hover .duck-glow-bg,
+    .duck-stage.clicking .duck-glow-bg {
+      transform: scale(1.45);
+      opacity: 0.75;
     }
 
-    /* Floating Duck Wrapper */
     .duck-wrapper {
       position: relative;
-      z-index: 2;
-      width: 170px;
-      height: 170px;
+      z-index: 3;
+      width: 180px;
+      height: 180px;
       cursor: pointer;
-      animation: float 3.6s ease-in-out infinite;
+      animation: float 3.8s ease-in-out infinite;
       transform-origin: center bottom;
-      transition: filter 0.35s ease;
+      transition: filter 0.3s ease;
+      touch-action: manipulation;
     }
 
     .duck-wrapper:hover {
-      filter: drop-shadow(0 14px 22px rgba(255, 199, 44, 0.38));
+      filter: drop-shadow(0 14px 25px rgba(255, 199, 44, 0.4));
+    }
+
+    /* Golden Duck Milestone Filter (100 Clicks) */
+    .duck-wrapper.golden-duck {
+      filter: drop-shadow(0 0 28px #ffd700) brightness(1.22) saturate(1.8) contrast(1.1);
+      animation: float 2.4s ease-in-out infinite, goldenSparkle 1.8s infinite alternate;
+    }
+
+    @keyframes goldenSparkle {
+      0% { filter: drop-shadow(0 0 22px #ffd700) brightness(1.2); }
+      100% { filter: drop-shadow(0 0 40px #ff9100) brightness(1.35); }
     }
 
     .duck-svg {
       width: 100%;
       height: 100%;
       display: block;
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
       transform-origin: center bottom;
+      overflow: visible;
     }
 
     .duck-wrapper:hover .duck-svg {
-      transform: scale(1.08);
+      transform: scale(1.06);
     }
 
-    .duck-wrapper:active .duck-svg,
     .duck-svg.squishing {
-      animation: squishBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      animation: squishBounce 0.48s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
 
-    /* Continuous Soft Wobble / Float Animation */
     @keyframes float {
-      0% {
-        transform: translateY(0px) rotate(0deg);
-      }
-      30% {
-        transform: translateY(-11px) rotate(-2deg);
-      }
-      70% {
-        transform: translateY(-6px) rotate(2deg);
-      }
-      100% {
-        transform: translateY(0px) rotate(0deg);
-      }
+      0% { transform: translateY(0px) rotate(0deg); }
+      30% { transform: translateY(-11px) rotate(-2deg); }
+      70% { transform: translateY(-6px) rotate(2deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
     }
 
-    /* Squish & Bounce on Click */
     @keyframes squishBounce {
-      0% {
-        transform: scale(1, 1);
-      }
-      25% {
-        transform: scale(1.22, 0.78) translateY(6px);
-      }
-      50% {
-        transform: scale(0.88, 1.15) translateY(-14px);
-      }
-      75% {
-        transform: scale(1.06, 0.94) translateY(-3px);
-      }
-      100% {
-        transform: scale(1, 1) translateY(0);
-      }
+      0% { transform: scale(1, 1); }
+      22% { transform: scale(1.24, 0.76) translateY(7px); }
+      48% { transform: scale(0.86, 1.18) translateY(-16px); }
+      75% { transform: scale(1.08, 0.93) translateY(-4px); }
+      100% { transform: scale(1, 1) translateY(0); }
     }
 
-    /* Dynamic Shadow Below Duck */
+    /* Sunglasses Overlay (10 Clicks Milestone) */
+    .sunglasses-layer {
+      opacity: 0;
+      transform: translateY(-20px) scale(0.6);
+      transform-origin: 88px 46px;
+      transition: opacity 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+    }
+
+    .sunglasses-layer.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Dynamic Shadow */
     .duck-shadow {
       position: absolute;
       bottom: 12px;
-      width: 110px;
+      width: 115px;
       height: 18px;
-      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 70%);
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 70%);
       border-radius: 50%;
       pointer-events: none;
       z-index: 1;
-      animation: shadowPulse 3.6s ease-in-out infinite;
+      animation: shadowPulse 3.8s ease-in-out infinite;
     }
 
     @keyframes shadowPulse {
-      0%, 100% {
-        transform: scale(1);
-        opacity: 0.6;
-      }
-      50% {
-        transform: scale(0.78);
-        opacity: 0.25;
-      }
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(0.76); opacity: 0.22; }
     }
 
-    /* Floating Quack Badges Spawn Container */
+    /* Quack Container & Badges */
     .quack-container {
       position: absolute;
       inset: 0;
@@ -370,14 +476,14 @@
 
     .quack-badge {
       position: absolute;
-      font-weight: 700;
-      font-size: 1rem;
-      color: #ffe680;
-      background: rgba(30, 24, 12, 0.85);
-      border: 1px solid rgba(255, 213, 79, 0.55);
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: #fff176;
+      background: rgba(22, 18, 9, 0.88);
+      border: 1px solid rgba(255, 213, 79, 0.6);
       padding: 6px 14px;
-      border-radius: 100px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45), 0 0 16px rgba(255, 199, 44, 0.4);
+      border-radius: 999px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 18px rgba(255, 199, 44, 0.4);
       backdrop-filter: blur(8px);
       white-space: nowrap;
       user-select: none;
@@ -388,43 +494,114 @@
     @keyframes quackFloat {
       0% {
         opacity: 0;
-        transform: translate(-50%, 0) scale(0.4) rotate(var(--rot, 0deg));
+        transform: translate(-50%, 0) scale(0.3) rotate(var(--rot, 0deg));
       }
-      20% {
+      22% {
         opacity: 1;
-        transform: translate(-50%, -20px) scale(1.15) rotate(var(--rot, 0deg));
+        transform: translate(-50%, -24px) scale(1.2) rotate(var(--rot, 0deg));
       }
-      60% {
+      65% {
         opacity: 0.95;
-        transform: translate(-50%, -50px) scale(1) rotate(var(--rot, 0deg));
+        transform: translate(-50%, -55px) scale(1) rotate(var(--rot, 0deg));
       }
       100% {
         opacity: 0;
-        transform: translate(-50%, -85px) scale(0.85) rotate(var(--rot, 0deg));
+        transform: translate(-50%, -90px) scale(0.85) rotate(var(--rot, 0deg));
       }
     }
 
-    /* Content Area & Text Cross-Fade */
+    /* Floating Comic Speech Bubbles */
+    .bubble-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 15;
+    }
+
+    .comic-bubble {
+      position: absolute;
+      max-width: 220px;
+      background: #ffffff;
+      color: #090d16;
+      font-weight: 700;
+      font-size: 0.85rem;
+      line-height: 1.35;
+      padding: 9px 15px;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 14px rgba(255, 255, 255, 0.35);
+      border: 2px solid #0f172a;
+      pointer-events: none;
+      word-break: break-word;
+      animation: speechBubbleAnim 3.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transform-origin: bottom left;
+    }
+
+    .comic-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 18px;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 10px 8px 0 8px;
+      border-color: #ffffff transparent transparent transparent;
+      z-index: 2;
+    }
+
+    .comic-bubble::before {
+      content: '';
+      position: absolute;
+      bottom: -13px;
+      left: 16px;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 12px 10px 0 10px;
+      border-color: #0f172a transparent transparent transparent;
+      z-index: 1;
+    }
+
+    @keyframes speechBubbleAnim {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, 15px) scale(0.4);
+      }
+      14% {
+        opacity: 1;
+        transform: translate(-50%, -10px) scale(1.05);
+      }
+      22% {
+        transform: translate(-50%, -16px) scale(1);
+      }
+      80% {
+        opacity: 1;
+        transform: translate(-50%, -36px) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -65px) scale(0.9);
+      }
+    }
+
+    /* Multilingual Text Section */
     .content-area {
       width: 100%;
-      min-height: 105px;
+      min-height: 85px;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 0 10px;
-      position: relative;
+      padding: 0 12px;
+      margin-bottom: 22px;
     }
 
     .message-text {
-      font-size: 1.06rem;
-      line-height: 1.68;
+      font-size: 1.02rem;
+      line-height: 1.62;
       font-weight: 500;
       color: #e2e8f0;
-      letter-spacing: -0.01em;
-      transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-      opacity: 1;
-      transform: translateY(0);
+      transition: opacity 0.26s cubic-bezier(0.4, 0, 0.2, 1), transform 0.26s cubic-bezier(0.4, 0, 0.2, 1);
       will-change: opacity, transform;
     }
 
@@ -438,22 +615,162 @@
       transform: translateY(0);
     }
 
-    /* Footer / Interaction Hint */
-    .card-footer {
-      margin-top: 24px;
+    /* Guestbook / Quack Wall Form */
+    .quack-wall-section {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 18px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
       display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .wall-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .char-counter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      transition: color 0.2s ease;
+    }
+
+    .char-counter.warning {
+      color: #f59e0b;
+    }
+
+    .char-counter.limit {
+      color: #ef4444;
+      font-weight: 700;
+    }
+
+    .wall-form {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .wall-input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .wall-input::placeholder {
+      color: #475569;
+    }
+
+    .wall-input:focus {
+      border-color: rgba(255, 199, 44, 0.5);
+      box-shadow: 0 0 12px rgba(255, 199, 44, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .wall-submit-btn {
+      background: linear-gradient(135deg, #ffc72c 0%, #ff8800 100%);
+      color: #0b0f14;
+      border: none;
+      border-radius: 12px;
+      padding: 0 18px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      opacity: 0.75;
+      box-shadow: 0 4px 14px rgba(255, 153, 0, 0.35);
+      transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.18s ease, filter 0.18s ease;
+      touch-action: manipulation;
       user-select: none;
-      transition: opacity 0.2s ease;
+      white-space: nowrap;
     }
 
-    .card-footer:hover {
-      opacity: 1;
+    .wall-submit-btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(255, 153, 0, 0.45);
+    }
+
+    .wall-submit-btn:active {
+      transform: translateY(1px);
+    }
+
+    .wall-submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Live Message Ticker / Recent Posts */
+    .recent-feed {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    .feed-tag {
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .feed-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-style: italic;
+    }
+
+    /* Footer & Easter Egg Secret Hint */
+    .card-footer {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .click-hint-text {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      opacity: 0.8;
+      user-select: none;
     }
 
     .click-hint-icon {
@@ -462,31 +779,240 @@
       fill: currentColor;
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 480px) {
+    .secret-hint-text {
+      font-size: 0.72rem;
+      color: #475569;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.03em;
+      opacity: 0.6;
+      transition: opacity 0.3s ease, color 0.3s ease;
+      cursor: default;
+      user-select: none;
+    }
+
+    .secret-hint-text:hover {
+      opacity: 0.95;
+      color: #94a3b8;
+    }
+
+    /* Sleek Developer Badge (Bottom Right) */
+    .dev-badge {
+      position: fixed;
+      bottom: 18px;
+      right: 20px;
+      z-index: 100;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(18, 22, 29, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      color: #e2e8f0;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 7px 15px;
+      border-radius: 999px;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 255, 255, 0.04);
+      transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+      touch-action: manipulation;
+      user-select: none;
+    }
+
+    .dev-badge:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 199, 44, 0.45);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 199, 44, 0.2);
+    }
+
+    .dev-badge strong {
+      color: var(--accent-yellow);
+      font-weight: 700;
+    }
+
+    .dev-badge-icon {
+      font-size: 0.85rem;
+      color: var(--accent-yellow);
+    }
+
+    /* ========================================================= */
+    /* Easter Egg: Matrix Green Terminal Mode                    */
+    /* ========================================================= */
+    .terminal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: #040905;
+      color: var(--matrix-green);
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+      overflow-y: auto;
+    }
+
+    .terminal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Scanline effect */
+    .terminal-overlay::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 1001;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(0, 255, 102, 0.3);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .terminal-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-shadow: 0 0 8px rgba(0, 255, 102, 0.6);
+    }
+
+    .terminal-close-btn {
+      background: rgba(0, 255, 102, 0.1);
+      border: 1px solid var(--matrix-green);
+      color: var(--matrix-green);
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-shadow: 0 0 6px rgba(0, 255, 102, 0.6);
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .terminal-close-btn:hover {
+      background: rgba(0, 255, 102, 0.25);
+    }
+
+    .terminal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .terminal-metric-card {
+      background: rgba(0, 255, 102, 0.04);
+      border: 1px solid rgba(0, 255, 102, 0.2);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .metric-title {
+      font-size: 0.72rem;
+      opacity: 0.75;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .metric-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      text-shadow: 0 0 10px rgba(0, 255, 102, 0.7);
+    }
+
+    .terminal-logs {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(0, 255, 102, 0.15);
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 0.82rem;
+      line-height: 1.65;
+      overflow-y: auto;
+      max-height: 240px;
+    }
+
+    .terminal-callout {
+      margin-top: 18px;
+      padding: 14px;
+      background: rgba(0, 255, 102, 0.08);
+      border: 1px dashed var(--matrix-green);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .terminal-link {
+      color: #ffffff;
+      background: var(--matrix-green);
+      color: #040905;
+      text-decoration: none;
+      font-weight: 700;
+      padding: 7px 16px;
+      border-radius: 6px;
+      box-shadow: 0 0 14px rgba(0, 255, 102, 0.6);
+      transition: transform 0.2s ease;
+    }
+
+    .terminal-link:hover {
+      transform: scale(1.04);
+    }
+
+    /* Mobile Responsive Adjustments */
+    @media (max-width: 520px) {
+      body {
+        padding: 1rem 0.75rem 5rem;
+      }
       .card {
-        padding: 24px 20px 28px;
-        border-radius: 20px;
+        padding: 22px 18px 24px;
+        border-radius: 24px;
       }
       .duck-stage {
-        width: 190px;
-        height: 190px;
-        margin: 8px 0 20px;
+        width: 195px;
+        height: 195px;
+        margin: 4px 0 16px;
       }
       .duck-wrapper {
-        width: 145px;
-        height: 145px;
+        width: 155px;
+        height: 155px;
+      }
+      .counter-value {
+        font-size: 1.85rem;
       }
       .message-text {
-        font-size: 0.98rem;
-        line-height: 1.6;
+        font-size: 0.94rem;
+        line-height: 1.55;
       }
       .content-area {
-        min-height: 120px;
+        min-height: 90px;
       }
       .lang-btn {
-        padding: 5px 11px;
-        font-size: 0.75rem;
+        padding: 5px 10px;
+        font-size: 0.78rem;
+      }
+      .dev-badge {
+        bottom: 14px;
+        right: 14px;
+        padding: 6px 12px;
+        font-size: 0.76rem;
       }
     }
   </style>
@@ -503,13 +1029,13 @@
 
   <!-- Main Viewport Layout -->
   <main class="viewport-wrapper">
-    <article class="card">
+    <article class="card" id="mainCard">
 
       <!-- Header: Status & Language Switcher -->
       <header class="card-header">
-        <div class="badge">
+        <div class="badge-status">
           <span class="badge-dot" aria-hidden="true"></span>
-          <span>Feed</span>
+          <span id="badgeText">Live Duck</span>
         </div>
 
         <nav class="lang-switcher" aria-label="Language selector">
@@ -519,49 +1045,67 @@
         </nav>
       </header>
 
+      <!-- Global Quack Counter & Combo HUD -->
+      <section class="hud-container" aria-live="polite">
+        <div class="counter-label" id="counterLabel">Global Quacks</div>
+        <div class="counter-value" id="globalCounter">0</div>
+        <div class="combo-bar-wrapper">
+          <div class="combo-badge" id="comboBadge">
+            <span id="comboIcon">🔥</span>
+            <span id="comboText">10 COMBO</span>
+          </div>
+          <div class="cps-indicator" id="cpsIndicator">0.0 CPS</div>
+        </div>
+      </section>
+
       <!-- Central Stage: The Duck -->
-      <section class="duck-stage" aria-label="Interactive Duck">
+      <section class="duck-stage" id="duckStage" aria-label="Interactive Duck">
         <div class="duck-glow-bg" aria-hidden="true"></div>
         <div class="duck-shadow" aria-hidden="true"></div>
 
+        <!-- Floating Comic Speech Bubbles & Quack Badges -->
+        <div class="bubble-container" id="bubbleContainer" aria-hidden="true"></div>
         <div class="quack-container" id="quackContainer" aria-live="polite" aria-atomic="true"></div>
 
-        <div class="duck-wrapper" id="duckInteractive" role="button" tabindex="0" title="Click me!" aria-label="Rubber duck (click to quack)">
-          <!-- Handcrafted Vector Duck SVG -->
+        <div class="duck-wrapper" id="duckInteractive" role="button" tabindex="0" title="Click or Tap to Quack!" aria-label="Rubber duck (tap to quack)">
+          <!-- Handcrafted Vector Duck SVG with Sunglasses Overlay Layer -->
           <svg class="duck-svg" viewBox="0 0 220 200" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <!-- Body Gradient -->
               <linearGradient id="duckBody" x1="40" y1="20" x2="190" y2="190" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stop-color="#FFF36D" />
                 <stop offset="42%" stop-color="#FFCA28" />
                 <stop offset="100%" stop-color="#F57F17" />
               </linearGradient>
 
-              <!-- Wing Gradient -->
               <linearGradient id="duckWing" x1="70" y1="80" x2="160" y2="170" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stop-color="#FFE082" />
                 <stop offset="60%" stop-color="#FFB300" />
                 <stop offset="100%" stop-color="#E65100" />
               </linearGradient>
 
-              <!-- Beak Gradient -->
               <linearGradient id="duckBeak" x1="10" y1="55" x2="70" y2="85" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stop-color="#FF9E40" />
                 <stop offset="50%" stop-color="#FF6D00" />
                 <stop offset="100%" stop-color="#DD2C00" />
               </linearGradient>
 
-              <!-- Head Highlight Gradient -->
               <linearGradient id="headHighlight" x1="95" y1="25" x2="120" y2="60" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6" />
                 <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
               </linearGradient>
 
-              <!-- Soft Shadow Gradient -->
               <radialGradient id="wingShadow" cx="50%" cy="50%" r="50%">
                 <stop offset="0%" stop-color="#BF360C" stop-opacity="0.3" />
                 <stop offset="100%" stop-color="#BF360C" stop-opacity="0" />
               </radialGradient>
+
+              <linearGradient id="shadesLens" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#111827" />
+                <stop offset="45%" stop-color="#1f2937" />
+                <stop offset="50%" stop-color="#38bdf8" stop-opacity="0.8" />
+                <stop offset="60%" stop-color="#111827" />
+                <stop offset="100%" stop-color="#030712" />
+              </linearGradient>
             </defs>
 
             <!-- Tail Feathers -->
@@ -582,58 +1126,134 @@
 
             <!-- Duck Eye -->
             <g class="duck-eye-group">
-              <!-- Eye outer -->
               <ellipse cx="88" cy="46" rx="7.5" ry="9" fill="#1e1810" />
-              <!-- Specular reflection primary -->
               <ellipse cx="86" cy="43" rx="3" ry="4" fill="#FFFFFF" />
-              <!-- Specular reflection secondary -->
               <circle cx="90.5" cy="49" r="1.5" fill="#FFFFFF" />
             </g>
 
-            <!-- Cute Eyebrow Accent -->
+            <!-- Cute Eyebrow -->
             <path d="M82 34 C86 31 92 32 96 35" stroke="#BF360C" stroke-width="2.2" stroke-linecap="round" opacity="0.6" />
 
-            <!-- Duck Beak (Lip/Bill) -->
+            <!-- Duck Beak -->
             <g class="duck-beak-group">
-              <!-- Upper & lower beak shape -->
               <path d="M67 52 C52 52 28 58 22 66 C20 68 22 72 26 73 C35 75 52 75 66 73 C70 70 70 56 67 52 Z" fill="url(#duckBeak)" />
-              <!-- Beak divider & smile line -->
               <path d="M26 69 C38 69 56 67 67 65" stroke="#BF360C" stroke-width="2" stroke-linecap="round" opacity="0.5" />
-              <!-- Nostril -->
               <ellipse cx="50" cy="59" rx="1.8" ry="1.2" fill="#7F0000" opacity="0.5" />
             </g>
 
             <!-- Duck Wing -->
             <g class="duck-wing-group">
-              <!-- Shadow beneath wing -->
               <path d="M102 110 C90 110 82 120 84 135 C88 155 110 162 136 158 C158 154 165 138 160 125 C150 112 125 110 102 110 Z" fill="url(#wingShadow)" />
-              <!-- Wing feather plate -->
               <path d="M104 104 C88 104 78 116 80 132 C84 154 106 162 132 158 C152 155 160 142 155 128 C148 112 126 104 104 104 Z" fill="url(#duckWing)" />
-              <!-- Feather accents -->
               <path d="M96 128 C108 142 128 142 144 134" stroke="#FFF8E1" stroke-width="2.5" stroke-linecap="round" opacity="0.4" />
               <path d="M106 138 C116 148 130 148 140 142" stroke="#FFF8E1" stroke-width="2" stroke-linecap="round" opacity="0.3" />
+            </g>
+
+            <!-- Sunglasses Layer (Unlocked at 10 Clicks) -->
+            <g class="sunglasses-layer" id="sunglassesLayer">
+              <!-- Sunglasses frame and lenses -->
+              <polygon points="68,44 104,38 106,53 84,56 68,48" fill="url(#shadesLens)" stroke="#0f172a" stroke-width="2" stroke-linejoin="round" />
+              <polygon points="68,44 56,42 54,46 68,47" fill="#0f172a" />
+              <line x1="72" y1="45" x2="84" y2="49" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.8" />
+              <line x1="88" y1="42" x2="100" y2="46" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.8" />
+              <circle cx="103" cy="40" r="2.5" fill="#f59e0b" />
             </g>
           </svg>
         </div>
       </section>
 
-      <!-- Multilingual Text Area -->
+      <!-- Multilingual Cross-Fade Quote Area -->
       <section class="content-area" aria-live="polite">
         <p class="message-text" id="duckMessage">
           I have no idea why I have this or what it's for, but I found out I can post random stuff here. So here is a duck.
         </p>
       </section>
 
-      <!-- Footer Micro-Action -->
+      <!-- Quack Wall / Guestbook Input Form -->
+      <section class="quack-wall-section">
+        <div class="wall-title-row">
+          <span id="wallTitle">Quack Wall Guestbook</span>
+          <span class="char-counter" id="charCounter">0/60</span>
+        </div>
+        <form class="wall-form" id="wallForm" autocomplete="off">
+          <input type="text" class="wall-input" id="messageInput" maxlength="60" placeholder="Drop a thought (max 60 chars)..." aria-label="Drop a message on the Quack Wall" required>
+          <button type="submit" class="wall-submit-btn" id="postBtn">
+            <span id="postBtnText">Post</span>
+          </button>
+        </form>
+        <div class="recent-feed" id="recentFeed">
+          <span class="feed-tag">Latest</span>
+          <span class="feed-text" id="feedText">Quack something cool!</span>
+        </div>
+      </section>
+
+      <!-- Card Footer & Easter Egg Secret Hint -->
       <footer class="card-footer">
-        <svg class="click-hint-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14.5v-3h2.5L12 8.5 8.5 13.5H11v3h2z"/>
-        </svg>
-        <span id="clickHint">Click the duck</span>
+        <div class="click-hint-text">
+          <svg class="click-hint-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14.5v-3h2.5L12 8.5 8.5 13.5H11v3h2z"/>
+          </svg>
+          <span id="clickHint">Click the duck to quack</span>
+        </div>
+        <div class="secret-hint-text" id="secretHint">
+          Try typing...
+        </div>
       </footer>
 
     </article>
   </main>
+
+  <!-- Sleek Developer Badge (Bottom Right corner) -->
+  <a href="https://nanda.is-a.dev" target="_blank" rel="noopener noreferrer" class="dev-badge" id="devBadge" title="Visit Developer Portfolio">
+    <span class="dev-badge-icon">⚡</span>
+    <span>Dev: <strong>Nanda</strong></span>
+  </a>
+
+  <!-- Secret Matrix Terminal Overlay -->
+  <div class="terminal-overlay" id="terminalOverlay" role="dialog" aria-modal="true" aria-label="Matrix Cyber Duck Terminal">
+    <div class="terminal-header">
+      <div class="terminal-title">
+        <span>[CYBER-DUCK ROOT TERMINAL v2.82]</span>
+      </div>
+      <button type="button" class="terminal-close-btn" id="terminalCloseBtn">[EXIT TERMINAL]</button>
+    </div>
+
+    <div class="terminal-grid">
+      <div class="terminal-metric-card">
+        <div class="metric-title">Live Clicks Per Second</div>
+        <div class="metric-value" id="termCps">0.0 CPS</div>
+      </div>
+      <div class="terminal-metric-card">
+        <div class="metric-title">Session Clicks</div>
+        <div class="metric-value" id="termSessionClicks">0</div>
+      </div>
+      <div class="terminal-metric-card">
+        <div class="metric-title">Global DB Quacks</div>
+        <div class="metric-value" id="termGlobalQuacks">0</div>
+      </div>
+      <div class="terminal-metric-card">
+        <div class="metric-title">API Latency</div>
+        <div class="metric-value" id="termLatency">-- ms</div>
+      </div>
+    </div>
+
+    <div class="terminal-logs" id="terminalLogs">
+      <div>> INITIALIZING MATRIX PROTOCOL...</div>
+      <div>> CONNECTED TO ELTE CAESAR INFRASTRUCTURE [PHP 8.2 + MYSQL]</div>
+      <div>> COMBO ENGINE: ONLINE</div>
+      <div>> AUDIO SYNTHESIZER: ACTIVE (WEB AUDIO API)</div>
+      <div>> ACCESS GRANTED: WELCOME OPERATOR.</div>
+    </div>
+
+    <div class="terminal-callout">
+      <div>
+        <strong>Architect:</strong> Nanda | ELTE caesar project space
+      </div>
+      <a href="https://nanda.is-a.dev" target="_blank" rel="noopener noreferrer" class="terminal-link">
+        ACCESS NANDA.IS-A.DEV &rarr;
+      </a>
+    </div>
+  </div>
 
   <script>
     (function() {
@@ -645,19 +1265,40 @@
           message: "Я не знаю, зачем это и почему у меня это есть, но я узнал, что сюда можно публиковать фигню. Так что вот вам утка.",
           quack: "Кря!",
           hint: "Нажмите на утку",
-          ariaLabel: "Резиновая утка (нажмите, чтобы крякнуть)"
+          ariaLabel: "Резиновая утка (нажмите, чтобы крякнуть)",
+          secretHint: "Попробуй ввести...",
+          counterLabel: "Всего кряков",
+          placeholder: "Напиши что-нибудь (до 60 симв.)...",
+          postBtn: "Пост",
+          badgeText: "Утка Онлайн",
+          latest: "Новое",
+          emptyFeed: "Напиши что-нибудь классное!"
         },
         en: {
           message: "I have no idea why I have this or what it's for, but I found out I can post random stuff here. So here is a duck.",
           quack: "Quack!",
-          hint: "Click the duck",
-          ariaLabel: "Rubber duck (click to quack)"
+          hint: "Click the duck to quack",
+          ariaLabel: "Rubber duck (click or tap to quack)",
+          secretHint: "Try typing...",
+          counterLabel: "Global Quacks",
+          placeholder: "Drop a thought (max 60 chars)...",
+          postBtn: "Post",
+          badgeText: "Live Duck",
+          latest: "Latest",
+          emptyFeed: "Quack something cool!"
         },
         hu: {
           message: "Fogalmam sincs, miért van ez és mire jó, de megtudtam, hogy ide baromságokat lehet posztolni. Úgyhogy tessék, itt egy kacsa.",
           quack: "Háp!",
-          hint: "Kattints a kacsára",
-          ariaLabel: "Gumikacsa (kattints a hápogáshoz)"
+          hint: "Kattints a kacsára a hápogáshoz",
+          ariaLabel: "Gumikacsa (kattints a hápogáshoz)",
+          secretHint: "Próbálj meg begépelni...",
+          counterLabel: "Összes hápogás",
+          placeholder: "Írj egy üzenetet (max 60 kar.)...",
+          postBtn: "Küldés",
+          badgeText: "Élő Kacsa",
+          latest: "Legújabb",
+          emptyFeed: "Írj valami vicceset!"
         }
       };
 
@@ -665,82 +1306,454 @@
       let isTransitioning = false;
 
       // DOM Elements
+      const mainCard = document.getElementById('mainCard');
       const messageEl = document.getElementById('duckMessage');
       const clickHintEl = document.getElementById('clickHint');
+      const secretHintEl = document.getElementById('secretHint');
+      const badgeTextEl = document.getElementById('badgeText');
+      const counterLabelEl = document.getElementById('counterLabel');
+      const globalCounterEl = document.getElementById('globalCounter');
+      const comboBadgeEl = document.getElementById('comboBadge');
+      const comboTextEl = document.getElementById('comboText');
+      const cpsIndicatorEl = document.getElementById('cpsIndicator');
+      const duckStage = document.getElementById('duckStage');
       const duckWrapper = document.getElementById('duckInteractive');
       const duckSvg = duckWrapper.querySelector('.duck-svg');
+      const sunglassesLayer = document.getElementById('sunglassesLayer');
       const quackContainer = document.getElementById('quackContainer');
+      const bubbleContainer = document.getElementById('bubbleContainer');
       const langButtons = document.querySelectorAll('.lang-btn');
+      const wallForm = document.getElementById('wallForm');
+      const messageInput = document.getElementById('messageInput');
+      const charCounter = document.getElementById('charCounter');
+      const postBtn = document.getElementById('postBtn');
+      const postBtnText = document.getElementById('postBtnText');
+      const feedText = document.getElementById('feedText');
+      const devBadge = document.getElementById('devBadge');
 
-      // Synthesized Web Audio Duck Quack (Zero external dependencies)
+      // Terminal Elements
+      const terminalOverlay = document.getElementById('terminalOverlay');
+      const terminalCloseBtn = document.getElementById('terminalCloseBtn');
+      const termCps = document.getElementById('termCps');
+      const termSessionClicks = document.getElementById('termSessionClicks');
+      const termGlobalQuacks = document.getElementById('termGlobalQuacks');
+      const termLatency = document.getElementById('termLatency');
+      const terminalLogs = document.getElementById('terminalLogs');
+
+      // Session & Stats State
+      let totalGlobalQuacks = 0;
+      let sessionClicks = 0;
+      let comboStreak = 0;
+      let currentCPS = 0;
+      let clickTimestamps = [];
+      let pendingQuacks = 0;
+      let syncTimer = null;
+      let measuredLatency = 0;
+
+      // =========================================================
+      // Web Audio API Procedural Sound Synth
+      // =========================================================
       let audioCtx = null;
-      function playQuackSynth() {
-        try {
-          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-          if (!AudioContextClass) return;
 
-          if (!audioCtx) {
+      function getAudioContext() {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) {
             audioCtx = new AudioContextClass();
           }
-          if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-          }
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume().catch(() => {});
+        }
+        return audioCtx;
+      }
 
-          const now = audioCtx.currentTime;
+      function playProceduralQuack(pitchMultiplier = 1.0) {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
 
-          // Main sound oscillator
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          const filter = audioCtx.createBiquadFilter();
+          const now = ctx.currentTime;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const filter = ctx.createBiquadFilter();
 
-          // Duck-like formant characteristics
+          // Dynamic formant simulation
           osc.type = 'sawtooth';
           filter.type = 'bandpass';
           filter.Q.setValueAtTime(3.8, now);
 
-          // Pitch drop envelope for comic quack effect
-          osc.frequency.setValueAtTime(360, now);
-          osc.frequency.exponentialRampToValueAtTime(230, now + 0.16);
-          osc.frequency.exponentialRampToValueAtTime(190, now + 0.26);
+          // Dynamic pitch modulation based on CPS
+          const baseFreq = 340 * pitchMultiplier;
+          osc.frequency.setValueAtTime(baseFreq, now);
+          osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.65, now + 0.16);
+          osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.52, now + 0.26);
 
-          filter.frequency.setValueAtTime(880, now);
-          filter.frequency.linearRampToValueAtTime(620, now + 0.18);
+          const filterFreq = 860 * pitchMultiplier;
+          filter.frequency.setValueAtTime(filterFreq, now);
+          filter.frequency.linearRampToValueAtTime(filterFreq * 0.7, now + 0.18);
 
-          // Volume amplitude envelope
           gain.gain.setValueAtTime(0.001, now);
-          gain.gain.linearRampToValueAtTime(0.2, now + 0.025);
+          gain.gain.linearRampToValueAtTime(0.24, now + 0.025);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
 
           osc.connect(filter);
           filter.connect(gain);
-          gain.connect(audioCtx.destination);
+          gain.connect(ctx.destination);
 
           osc.start(now);
           osc.stop(now + 0.29);
-        } catch (err) {
-          // Graceful fallback if Web Audio is blocked or unsupported
+        } catch (e) {
+          // Graceful fallback if blocked by browser policy
         }
       }
 
-      // Language Switch Functionality with Smooth Cross-Fade
+      function playTerminalBeep() {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const now = ctx.currentTime;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(880, now);
+          osc.frequency.setValueAtTime(1760, now + 0.08);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } catch (e) {}
+      }
+
+      // =========================================================
+      // Mobile & Touch Handling (Eliminate 300ms Delay)
+      // =========================================================
+      function addTapListener(el, callback) {
+        let lastTouchTime = 0;
+
+        el.addEventListener('touchstart', (e) => {
+          lastTouchTime = Date.now();
+          getAudioContext(); // Unlock audio on first touch
+          callback(e);
+        }, { passive: true });
+
+        el.addEventListener('click', (e) => {
+          if (Date.now() - lastTouchTime < 450) {
+            // Prevent ghost click immediately following touchstart
+            return;
+          }
+          getAudioContext();
+          callback(e);
+        });
+      }
+
+      // =========================================================
+      // CPS Tracker & Combo Engine
+      // =========================================================
+      function updateCPS() {
+        const now = Date.now();
+        // Keep clicks in the last 1000ms window
+        clickTimestamps = clickTimestamps.filter(t => now - t <= 1000);
+        currentCPS = clickTimestamps.length;
+        cpsIndicatorEl.textContent = `${currentCPS.toFixed(1)} CPS`;
+
+        if (termCps) {
+          termCps.textContent = `${currentCPS.toFixed(1)} CPS`;
+        }
+
+        // Cool-down combo if user is idle for more than 1.8s
+        if (clickTimestamps.length === 0 && comboStreak > 0) {
+          comboStreak = Math.max(0, comboStreak - 1);
+          checkMilestones();
+        }
+      }
+
+      setInterval(updateCPS, 150);
+
+      function checkMilestones() {
+        // Milestone 1: 10 Clicks / Combo -> Sunglasses overlay
+        const hasShades = comboStreak >= 10 || sessionClicks >= 10;
+        sunglassesLayer.classList.toggle('visible', hasShades);
+
+        // Milestone 2: 50 Clicks / Combo -> Neon Cyberpunk Border
+        const hasNeon = comboStreak >= 50 || sessionClicks >= 50;
+        mainCard.classList.toggle('neon-glow', hasNeon);
+
+        // Milestone 3: 100 Clicks / Combo -> Golden Duck + Screen Shake
+        const hasGold = comboStreak >= 100 || sessionClicks >= 100;
+        duckWrapper.classList.toggle('golden-duck', hasGold);
+
+        if (hasGold && currentCPS >= 3) {
+          document.body.classList.add('screen-shaking');
+        } else {
+          document.body.classList.remove('screen-shaking');
+        }
+
+        // Combo Badge Text & Visual Feedback
+        if (comboStreak >= 5) {
+          comboBadgeEl.classList.add('active');
+          if (comboStreak >= 100) {
+            comboTextEl.textContent = `${comboStreak} GODLIKE!`;
+            comboBadgeEl.style.borderColor = '#ffd700';
+            comboBadgeEl.style.color = '#ffd700';
+          } else if (comboStreak >= 50) {
+            comboTextEl.textContent = `${comboStreak} CYBER!`;
+            comboBadgeEl.style.borderColor = '#ff007b';
+            comboBadgeEl.style.color = '#ff007b';
+          } else {
+            comboTextEl.textContent = `${comboStreak} COMBO!`;
+            comboBadgeEl.style.borderColor = 'rgba(255, 199, 44, 0.5)';
+            comboBadgeEl.style.color = 'var(--accent-yellow)';
+          }
+        } else {
+          comboBadgeEl.classList.remove('active');
+        }
+      }
+
+      // =========================================================
+      // Backend API Integration (ELTE Caesar)
+      // =========================================================
+      function formatNumber(num) {
+        return num.toLocaleString();
+      }
+
+      async function fetchStats() {
+        const startTime = performance.now();
+        try {
+          const res = await fetch('api.php?action=get_stats');
+          measuredLatency = Math.round(performance.now() - startTime);
+          termLatency.textContent = `${measuredLatency} ms`;
+
+          if (res.ok) {
+            const data = await res.json();
+            if (data.status === 'success') {
+              totalGlobalQuacks = Math.max(totalGlobalQuacks, data.total_quacks);
+              globalCounterEl.textContent = formatNumber(totalGlobalQuacks);
+              termGlobalQuacks.textContent = formatNumber(totalGlobalQuacks);
+
+              if (Array.isArray(data.messages) && data.messages.length > 0) {
+                feedText.textContent = `"${data.messages[0].message}"`;
+              }
+            }
+          }
+        } catch (e) {
+          // Graceful fallback for offline / preview
+          measuredLatency = 12;
+          termLatency.textContent = `~12 ms (Local)`;
+          if (totalGlobalQuacks === 0) {
+            const localSaved = parseInt(localStorage.getItem('quack_total') || '42', 10);
+            totalGlobalQuacks = localSaved;
+            globalCounterEl.textContent = formatNumber(totalGlobalQuacks);
+          }
+        }
+      }
+
+      // Batch send quacks to prevent server overload
+      function scheduleQuackSync() {
+        if (syncTimer) return;
+        syncTimer = setTimeout(async () => {
+          syncTimer = null;
+          if (pendingQuacks <= 0) return;
+
+          const toSend = pendingQuacks;
+          pendingQuacks = 0;
+
+          try {
+            const res = await fetch('api.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: `action=quack&count=${encodeURIComponent(toSend)}`
+            });
+            if (res.ok) {
+              const data = await res.json();
+              if (data.status === 'success' && data.total_quacks) {
+                totalGlobalQuacks = data.total_quacks;
+                globalCounterEl.textContent = formatNumber(totalGlobalQuacks);
+                termGlobalQuacks.textContent = formatNumber(totalGlobalQuacks);
+              }
+            }
+          } catch (e) {
+            // Persist locally
+            localStorage.setItem('quack_total', totalGlobalQuacks);
+          }
+        }, 600);
+      }
+
+      // =========================================================
+      // Floating Badges & Speech Bubbles
+      // =========================================================
+      function spawnQuackBadge(xOffset = 0) {
+        const badge = document.createElement('div');
+        badge.className = 'quack-badge';
+        badge.textContent = i18n[currentLang].quack;
+
+        const randomAngle = (Math.random() * 26 - 13).toFixed(1);
+        const randomX = Math.round(50 + (Math.random() * 22 - 11) + xOffset);
+        const randomY = Math.round(36 + (Math.random() * 12 - 6));
+
+        badge.style.setProperty('--rot', `${randomAngle}deg`);
+        badge.style.left = `${randomX}%`;
+        badge.style.top = `${randomY}%`;
+
+        quackContainer.appendChild(badge);
+
+        setTimeout(() => {
+          if (badge.parentNode) {
+            badge.parentNode.removeChild(badge);
+          }
+        }, 980);
+      }
+
+      function spawnSpeechBubble(text) {
+        const bubble = document.createElement('div');
+        bubble.className = 'comic-bubble';
+        bubble.textContent = text;
+        bubble.style.left = '42%';
+        bubble.style.top = '15%';
+
+        bubbleContainer.appendChild(bubble);
+
+        setTimeout(() => {
+          if (bubble.parentNode) {
+            bubble.parentNode.removeChild(bubble);
+          }
+        }, 3600);
+      }
+
+      // =========================================================
+      // Duck Tap / Click Interaction
+      // =========================================================
+      function handleDuckInteraction(e) {
+        const now = Date.now();
+        clickTimestamps.push(now);
+        sessionClicks++;
+        comboStreak++;
+        totalGlobalQuacks++;
+        pendingQuacks++;
+
+        // Optimistic UI updates
+        globalCounterEl.textContent = formatNumber(totalGlobalQuacks);
+        termSessionClicks.textContent = sessionClicks;
+        termGlobalQuacks.textContent = formatNumber(totalGlobalQuacks);
+
+        // Procedural Audio pitch escalation based on CPS (up to 1.6x)
+        const pitchFactor = 1.0 + Math.min(currentCPS, 14) * 0.042;
+        playProceduralQuack(pitchFactor);
+
+        // SVG Squish Physics Animation
+        duckSvg.classList.remove('squishing');
+        void duckSvg.offsetWidth;
+        duckSvg.classList.add('squishing');
+
+        // Stage click glow effect
+        duckStage.classList.add('clicking');
+        setTimeout(() => duckStage.classList.remove('clicking'), 250);
+
+        // Badge Spawn Offset
+        let offsetX = 0;
+        if (e && e.clientX) {
+          const rect = duckWrapper.getBoundingClientRect();
+          const relativeX = (e.clientX - rect.left) / rect.width;
+          offsetX = (relativeX - 0.5) * 25;
+        }
+        spawnQuackBadge(offsetX);
+
+        checkMilestones();
+        scheduleQuackSync();
+      }
+
+      addTapListener(duckWrapper, handleDuckInteraction);
+
+      duckWrapper.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleDuckInteraction();
+        }
+      });
+
+      // =========================================================
+      // Guestbook / Quack Wall Submission
+      // =========================================================
+      messageInput.addEventListener('input', () => {
+        const len = messageInput.value.length;
+        charCounter.textContent = `${len}/60`;
+        charCounter.classList.toggle('warning', len > 45 && len < 60);
+        charCounter.classList.toggle('limit', len >= 60);
+      });
+
+      wallForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const raw = messageInput.value.trim();
+        if (!raw) return;
+
+        postBtn.disabled = true;
+        const originalBtnText = postBtnText.textContent;
+        postBtnText.textContent = '...';
+
+        try {
+          const res = await fetch('api.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `action=add_message&message=${encodeURIComponent(raw)}`
+          });
+
+          let messagePosted = raw;
+          if (res.ok) {
+            const data = await res.json();
+            if (data.status === 'success' && data.message) {
+              messagePosted = data.message.message;
+            }
+          }
+
+          spawnSpeechBubble(messagePosted);
+          feedText.textContent = `"${messagePosted}"`;
+          messageInput.value = '';
+          charCounter.textContent = '0/60';
+          charCounter.classList.remove('warning', 'limit');
+
+          // Trigger duck celebration bounce
+          duckSvg.classList.remove('squishing');
+          void duckSvg.offsetWidth;
+          duckSvg.classList.add('squishing');
+          playProceduralQuack(1.2);
+        } catch (err) {
+          // Local fallback simulation
+          spawnSpeechBubble(raw);
+          feedText.textContent = `"${raw}"`;
+          messageInput.value = '';
+          charCounter.textContent = '0/60';
+        } finally {
+          postBtn.disabled = false;
+          postBtnText.textContent = originalBtnText;
+        }
+      });
+
+      // =========================================================
+      // Multilingual Switcher with Smooth Cross-Fade
+      // =========================================================
       function switchLanguage(lang) {
         if (lang === currentLang || isTransitioning || !i18n[lang]) return;
         isTransitioning = true;
         currentLang = lang;
 
-        // Update Button States
         langButtons.forEach(btn => {
           const isActive = btn.dataset.lang === lang;
           btn.classList.toggle('active', isActive);
           btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
         });
 
-        // Cross-fade message text
         messageEl.classList.add('fade-out');
 
         setTimeout(() => {
           messageEl.textContent = i18n[lang].message;
           clickHintEl.textContent = i18n[lang].hint;
+          secretHintEl.textContent = i18n[lang].secretHint;
+          counterLabelEl.textContent = i18n[lang].counterLabel;
+          badgeTextEl.textContent = i18n[lang].badgeText;
+          messageInput.setAttribute('placeholder', i18n[lang].placeholder);
+          postBtnText.textContent = i18n[lang].postBtn;
           duckWrapper.setAttribute('aria-label', i18n[lang].ariaLabel);
           document.documentElement.lang = lang;
 
@@ -750,104 +1763,121 @@
           setTimeout(() => {
             messageEl.classList.remove('fade-in');
             isTransitioning = false;
-          }, 280);
-        }, 280);
+          }, 260);
+        }, 260);
       }
 
-      // Language Button Event Handlers
       langButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          switchLanguage(btn.dataset.lang);
-        });
+        addTapListener(btn, () => switchLanguage(btn.dataset.lang));
       });
 
-      // Spawn Animated Floating Quack Badge
-      function spawnQuackBadge(xOffset = 0) {
-        const badge = document.createElement('div');
-        badge.className = 'quack-badge';
-        badge.textContent = i18n[currentLang].quack;
+      // =========================================================
+      // Easter Egg: Konami Code & Mobile 3-Tap Dev Badge
+      // =========================================================
+      let isTerminalOpen = false;
 
-        // Dynamic slight random rotation and position offset
-        const randomAngle = (Math.random() * 24 - 12).toFixed(1);
-        const randomX = Math.round(50 + (Math.random() * 20 - 10) + xOffset);
-        const randomY = Math.round(35 + (Math.random() * 10 - 5));
+      function openTerminalMode(triggerType = 'KEYBOARD') {
+        isTerminalOpen = true;
+        terminalOverlay.classList.add('active');
+        playTerminalBeep();
 
-        badge.style.setProperty('--rot', `${randomAngle}deg`);
-        badge.style.left = `${randomX}%`;
-        badge.style.top = `${randomY}%`;
+        const logEntry = document.createElement('div');
+        logEntry.innerHTML = `> [${new Date().toLocaleTimeString()}] EASTER EGG UNLOCKED VIA ${triggerType}!`;
+        terminalLogs.appendChild(logEntry);
+        terminalLogs.scrollTop = terminalLogs.scrollHeight;
+      }
 
-        quackContainer.appendChild(badge);
+      function closeTerminalMode() {
+        isTerminalOpen = false;
+        terminalOverlay.classList.remove('active');
+      }
 
-        // Auto remove badge after animation ends
-        setTimeout(() => {
-          if (badge.parentNode) {
-            badge.parentNode.removeChild(badge);
+      terminalCloseBtn.addEventListener('click', closeTerminalMode);
+
+      // Konami Code Sequence: Up Up Down Down Left Right Left Right b a
+      const konamiSequence = [
+        'ArrowUp', 'ArrowUp',
+        'ArrowDown', 'ArrowDown',
+        'ArrowLeft', 'ArrowRight',
+        'ArrowLeft', 'ArrowRight',
+        'b', 'a'
+      ];
+      let konamiIndex = 0;
+
+      document.addEventListener('keydown', (e) => {
+        if (isTerminalOpen && e.key === 'Escape') {
+          closeTerminalMode();
+          return;
+        }
+
+        // If user is currently typing in input field, ignore Konami keys
+        if (document.activeElement === messageInput) {
+          return;
+        }
+
+        const requiredKey = konamiSequence[konamiIndex];
+        if (e.key === requiredKey || e.key.toLowerCase() === requiredKey) {
+          konamiIndex++;
+          if (konamiIndex === konamiSequence.length) {
+            konamiIndex = 0;
+            openTerminalMode('KONAMI CODE OVERRIDE');
           }
-        }, 1000);
-      }
-
-      // Duck Squish & Interaction Trigger
-      function triggerDuckInteraction(e) {
-        // Trigger squish animation
-        duckSvg.classList.remove('squishing');
-        void duckSvg.offsetWidth; // Force CSS reflow
-        duckSvg.classList.add('squishing');
-
-        // Play sound
-        playQuackSynth();
-
-        // Calculate click position relative to stage for subtle badge spawn influence
-        let offsetX = 0;
-        if (e && e.clientX) {
-          const rect = duckWrapper.getBoundingClientRect();
-          const relativeX = (e.clientX - rect.left) / rect.width;
-          offsetX = (relativeX - 0.5) * 20;
-        }
-
-        spawnQuackBadge(offsetX);
-      }
-
-      // Duck Events (Mouse, Touch, Keyboard Accessibility)
-      duckWrapper.addEventListener('click', triggerDuckInteraction);
-
-      duckWrapper.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          triggerDuckInteraction();
+        } else {
+          // Reset sequence on mismatch
+          konamiIndex = (e.key === konamiSequence[0]) ? 1 : 0;
         }
       });
 
-      // Subtle 3D Card Tilt Follow on Pointer Move
-      const card = document.querySelector('.card');
-      let tiltRAF = null;
+      // Mobile Easter Egg: Secret 3-Tap Gesture on Dev Badge within 1.2 seconds
+      let badgeTapCount = 0;
+      let badgeTapTimer = null;
 
+      devBadge.addEventListener('click', (e) => {
+        badgeTapCount++;
+        clearTimeout(badgeTapTimer);
+
+        if (badgeTapCount >= 3) {
+          e.preventDefault(); // Intercept navigation to open terminal
+          badgeTapCount = 0;
+          openTerminalMode('TRIPLE-TAP BADGE GESTURE');
+          return;
+        }
+
+        badgeTapTimer = setTimeout(() => {
+          badgeTapCount = 0;
+        }, 1200);
+      });
+
+      // 3D Card Tilt on Pointer Move (Desktop only)
+      let tiltRAF = null;
       function handleCardTilt(e) {
-        if (window.innerWidth < 768) return; // Disable tilt on mobile for performance
+        if (window.innerWidth < 768 || isTerminalOpen) return;
         if (tiltRAF) cancelAnimationFrame(tiltRAF);
 
         tiltRAF = requestAnimationFrame(() => {
-          const rect = card.getBoundingClientRect();
+          const rect = mainCard.getBoundingClientRect();
           const cardCenterX = rect.left + rect.width / 2;
           const cardCenterY = rect.top + rect.height / 2;
-
           const mouseX = e.clientX - cardCenterX;
           const mouseY = e.clientY - cardCenterY;
 
-          // Subtle angles
-          const rotateX = (-mouseY / (rect.height / 2)) * 4.5;
-          const rotateY = (mouseX / (rect.width / 2)) * 4.5;
+          const rotateX = (-mouseY / (rect.height / 2)) * 4;
+          const rotateY = (mouseX / (rect.width / 2)) * 4;
 
-          card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
+          mainCard.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
         });
       }
 
       function resetCardTilt() {
         if (tiltRAF) cancelAnimationFrame(tiltRAF);
-        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+        mainCard.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
       }
 
       document.addEventListener('mousemove', handleCardTilt);
       document.addEventListener('mouseleave', resetCardTilt);
+
+      // Initial stats fetch
+      fetchStats();
 
     })();
   </script>
