@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Duck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg-dark: #0d0f12;
+      --card-bg: rgba(23, 27, 34, 0.65);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-hover: rgba(255, 255, 255, 0.16);
+      --card-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.6), 0 0 40px -10px rgba(255, 199, 44, 0.05);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent-yellow: #ffc72c;
+      --accent-orange: #ff7a00;
+      --btn-bg: rgba(255, 255, 255, 0.05);
+      --btn-border: rgba(255, 255, 255, 0.08);
+      --btn-active-bg: rgba(255, 199, 44, 0.15);
+      --btn-active-border: rgba(255, 199, 44, 0.45);
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+      overflow-y: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Ambient Animated Background */
+    .background-container {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.35;
+      animation: orbFloat 18s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+
+    .orb-1 {
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, #ffb300, #ff6f00 70%);
+      top: -10%;
+      left: 15%;
+      animation-duration: 22s;
+    }
+
+    .orb-2 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #3b82f6, #6366f1 70%);
+      bottom: -15%;
+      right: 10%;
+      animation-duration: 26s;
+      animation-delay: -7s;
+      opacity: 0.25;
+    }
+
+    .orb-3 {
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, #ec4899, #8b5cf6 70%);
+      top: 40%;
+      right: 25%;
+      animation-duration: 20s;
+      animation-delay: -12s;
+      opacity: 0.2;
+    }
+
+    .noise-overlay {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+      background-size: 24px 24px;
+      opacity: 0.7;
+    }
+
+    @keyframes orbFloat {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+      50% {
+        transform: translate(40px, -50px) scale(1.08);
+      }
+      100% {
+        transform: translate(-35px, 35px) scale(0.95);
+      }
+    }
+
+    /* Interactive Container Layout */
+    .viewport-wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    /* Glassmorphic Central Card */
+    .card {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      background: var(--card-bg);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px 28px 36px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: var(--card-border-hover);
+      box-shadow: 0 35px 80px -15px rgba(0, 0, 0, 0.7), 0 0 50px -10px rgba(255, 199, 44, 0.08);
+    }
+
+    /* Subtle Inner Top Glow Highlight */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 15%;
+      right: 15%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+      pointer-events: none;
+    }
+
+    /* Card Header & Language Switcher */
+    .card-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.04);
+      padding: 5px 12px;
+      border-radius: 100px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulseDot 2.2s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .lang-switcher {
+      display: inline-flex;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 3px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      gap: 3px;
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      user-select: none;
+    }
+
+    .lang-btn:hover:not(.active) {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .lang-btn.active {
+      background: var(--btn-active-bg);
+      border-color: var(--btn-active-border);
+      color: var(--accent-yellow);
+      box-shadow: 0 2px 10px rgba(255, 199, 44, 0.15);
+    }
+
+    /* Central Duck Stage */
+    .duck-stage {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      margin: 12px 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+
+    /* Ambient Duck Glow Effect */
+    .duck-glow-bg {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 199, 44, 0.25) 0%, rgba(255, 122, 0, 0.1) 50%, transparent 75%);
+      filter: blur(25px);
+      transition: transform 0.4s ease, opacity 0.4s ease, background 0.4s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .duck-stage:hover .duck-glow-bg {
+      transform: scale(1.4);
+      opacity: 0.7;
+      background: radial-gradient(circle, rgba(255, 199, 44, 0.45) 0%, rgba(255, 122, 0, 0.2) 60%, transparent 80%);
+    }
+
+    /* Floating Duck Wrapper */
+    .duck-wrapper {
+      position: relative;
+      z-index: 2;
+      width: 170px;
+      height: 170px;
+      cursor: pointer;
+      animation: float 3.6s ease-in-out infinite;
+      transform-origin: center bottom;
+      transition: filter 0.35s ease;
+    }
+
+    .duck-wrapper:hover {
+      filter: drop-shadow(0 14px 22px rgba(255, 199, 44, 0.38));
+    }
+
+    .duck-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-origin: center bottom;
+    }
+
+    .duck-wrapper:hover .duck-svg {
+      transform: scale(1.08);
+    }
+
+    .duck-wrapper:active .duck-svg,
+    .duck-svg.squishing {
+      animation: squishBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    /* Continuous Soft Wobble / Float Animation */
+    @keyframes float {
+      0% {
+        transform: translateY(0px) rotate(0deg);
+      }
+      30% {
+        transform: translateY(-11px) rotate(-2deg);
+      }
+      70% {
+        transform: translateY(-6px) rotate(2deg);
+      }
+      100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+    }
+
+    /* Squish & Bounce on Click */
+    @keyframes squishBounce {
+      0% {
+        transform: scale(1, 1);
+      }
+      25% {
+        transform: scale(1.22, 0.78) translateY(6px);
+      }
+      50% {
+        transform: scale(0.88, 1.15) translateY(-14px);
+      }
+      75% {
+        transform: scale(1.06, 0.94) translateY(-3px);
+      }
+      100% {
+        transform: scale(1, 1) translateY(0);
+      }
+    }
+
+    /* Dynamic Shadow Below Duck */
+    .duck-shadow {
+      position: absolute;
+      bottom: 12px;
+      width: 110px;
+      height: 18px;
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      animation: shadowPulse 3.6s ease-in-out infinite;
+    }
+
+    @keyframes shadowPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.6;
+      }
+      50% {
+        transform: scale(0.78);
+        opacity: 0.25;
+      }
+    }
+
+    /* Floating Quack Badges Spawn Container */
+    .quack-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+      overflow: visible;
+    }
+
+    .quack-badge {
+      position: absolute;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #ffe680;
+      background: rgba(30, 24, 12, 0.85);
+      border: 1px solid rgba(255, 213, 79, 0.55);
+      padding: 6px 14px;
+      border-radius: 100px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45), 0 0 16px rgba(255, 199, 44, 0.4);
+      backdrop-filter: blur(8px);
+      white-space: nowrap;
+      user-select: none;
+      animation: quackFloat 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      pointer-events: none;
+    }
+
+    @keyframes quackFloat {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, 0) scale(0.4) rotate(var(--rot, 0deg));
+      }
+      20% {
+        opacity: 1;
+        transform: translate(-50%, -20px) scale(1.15) rotate(var(--rot, 0deg));
+      }
+      60% {
+        opacity: 0.95;
+        transform: translate(-50%, -50px) scale(1) rotate(var(--rot, 0deg));
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -85px) scale(0.85) rotate(var(--rot, 0deg));
+      }
+    }
+
+    /* Content Area & Text Cross-Fade */
+    .content-area {
+      width: 100%;
+      min-height: 105px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 10px;
+      position: relative;
+    }
+
+    .message-text {
+      font-size: 1.06rem;
+      line-height: 1.68;
+      font-weight: 500;
+      color: #e2e8f0;
+      letter-spacing: -0.01em;
+      transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 1;
+      transform: translateY(0);
+      will-change: opacity, transform;
+    }
+
+    .message-text.fade-out {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    .message-text.fade-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Footer / Interaction Hint */
+    .card-footer {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      opacity: 0.75;
+      user-select: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .card-footer:hover {
+      opacity: 1;
+    }
+
+    .click-hint-icon {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .card {
+        padding: 24px 20px 28px;
+        border-radius: 20px;
+      }
+      .duck-stage {
+        width: 190px;
+        height: 190px;
+        margin: 8px 0 20px;
+      }
+      .duck-wrapper {
+        width: 145px;
+        height: 145px;
+      }
+      .message-text {
+        font-size: 0.98rem;
+        line-height: 1.6;
+      }
+      .content-area {
+        min-height: 120px;
+      }
+      .lang-btn {
+        padding: 5px 11px;
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Glowing Orbs Background -->
+  <div class="background-container" aria-hidden="true">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+    <div class="noise-overlay"></div>
+  </div>
+
+  <!-- Main Viewport Layout -->
+  <main class="viewport-wrapper">
+    <article class="card">
+
+      <!-- Header: Status & Language Switcher -->
+      <header class="card-header">
+        <div class="badge">
+          <span class="badge-dot" aria-hidden="true"></span>
+          <span>Feed</span>
+        </div>
+
+        <nav class="lang-switcher" aria-label="Language selector">
+          <button type="button" class="lang-btn" data-lang="ru" id="btn-ru" aria-pressed="false">RU</button>
+          <button type="button" class="lang-btn active" data-lang="en" id="btn-en" aria-pressed="true">EN</button>
+          <button type="button" class="lang-btn" data-lang="hu" id="btn-hu" aria-pressed="false">HU</button>
+        </nav>
+      </header>
+
+      <!-- Central Stage: The Duck -->
+      <section class="duck-stage" aria-label="Interactive Duck">
+        <div class="duck-glow-bg" aria-hidden="true"></div>
+        <div class="duck-shadow" aria-hidden="true"></div>
+
+        <div class="quack-container" id="quackContainer" aria-live="polite" aria-atomic="true"></div>
+
+        <div class="duck-wrapper" id="duckInteractive" role="button" tabindex="0" title="Click me!" aria-label="Rubber duck (click to quack)">
+          <!-- Handcrafted Vector Duck SVG -->
+          <svg class="duck-svg" viewBox="0 0 220 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <!-- Body Gradient -->
+              <linearGradient id="duckBody" x1="40" y1="20" x2="190" y2="190" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FFF36D" />
+                <stop offset="42%" stop-color="#FFCA28" />
+                <stop offset="100%" stop-color="#F57F17" />
+              </linearGradient>
+
+              <!-- Wing Gradient -->
+              <linearGradient id="duckWing" x1="70" y1="80" x2="160" y2="170" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FFE082" />
+                <stop offset="60%" stop-color="#FFB300" />
+                <stop offset="100%" stop-color="#E65100" />
+              </linearGradient>
+
+              <!-- Beak Gradient -->
+              <linearGradient id="duckBeak" x1="10" y1="55" x2="70" y2="85" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FF9E40" />
+                <stop offset="50%" stop-color="#FF6D00" />
+                <stop offset="100%" stop-color="#DD2C00" />
+              </linearGradient>
+
+              <!-- Head Highlight Gradient -->
+              <linearGradient id="headHighlight" x1="95" y1="25" x2="120" y2="60" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6" />
+                <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+              </linearGradient>
+
+              <!-- Soft Shadow Gradient -->
+              <radialGradient id="wingShadow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#BF360C" stop-opacity="0.3" />
+                <stop offset="100%" stop-color="#BF360C" stop-opacity="0" />
+              </radialGradient>
+            </defs>
+
+            <!-- Tail Feathers -->
+            <path d="M165 110 C185 92 205 95 212 104 C215 108 214 114 207 119 C198 126 186 132 173 135 Z" fill="url(#duckBody)" />
+            <path d="M172 102 C188 88 202 89 208 97 C204 105 192 114 178 120 Z" fill="#FFB300" opacity="0.75" />
+
+            <!-- Main Duck Body -->
+            <path d="M72 100 C72 75 92 65 116 65 C155 65 186 92 186 128 C186 160 156 182 118 182 C76 182 52 153 52 128 C52 118 58 108 72 100 Z" fill="url(#duckBody)" />
+
+            <!-- Duck Head & Neck -->
+            <path d="M62 62 C62 36 82 18 108 18 C134 18 152 36 152 62 C152 76 142 90 128 98 C105 102 85 94 72 82 C65 76 62 69 62 62 Z" fill="url(#duckBody)" />
+
+            <!-- Head Glossy Highlight -->
+            <ellipse cx="106" cy="30" rx="20" ry="8" transform="rotate(-15 106 30)" fill="url(#headHighlight)" />
+
+            <!-- Cheek Blush -->
+            <circle cx="92" cy="65" r="9" fill="#FF5252" opacity="0.32" />
+
+            <!-- Duck Eye -->
+            <g class="duck-eye-group">
+              <!-- Eye outer -->
+              <ellipse cx="88" cy="46" rx="7.5" ry="9" fill="#1e1810" />
+              <!-- Specular reflection primary -->
+              <ellipse cx="86" cy="43" rx="3" ry="4" fill="#FFFFFF" />
+              <!-- Specular reflection secondary -->
+              <circle cx="90.5" cy="49" r="1.5" fill="#FFFFFF" />
+            </g>
+
+            <!-- Cute Eyebrow Accent -->
+            <path d="M82 34 C86 31 92 32 96 35" stroke="#BF360C" stroke-width="2.2" stroke-linecap="round" opacity="0.6" />
+
+            <!-- Duck Beak (Lip/Bill) -->
+            <g class="duck-beak-group">
+              <!-- Upper & lower beak shape -->
+              <path d="M67 52 C52 52 28 58 22 66 C20 68 22 72 26 73 C35 75 52 75 66 73 C70 70 70 56 67 52 Z" fill="url(#duckBeak)" />
+              <!-- Beak divider & smile line -->
+              <path d="M26 69 C38 69 56 67 67 65" stroke="#BF360C" stroke-width="2" stroke-linecap="round" opacity="0.5" />
+              <!-- Nostril -->
+              <ellipse cx="50" cy="59" rx="1.8" ry="1.2" fill="#7F0000" opacity="0.5" />
+            </g>
+
+            <!-- Duck Wing -->
+            <g class="duck-wing-group">
+              <!-- Shadow beneath wing -->
+              <path d="M102 110 C90 110 82 120 84 135 C88 155 110 162 136 158 C158 154 165 138 160 125 C150 112 125 110 102 110 Z" fill="url(#wingShadow)" />
+              <!-- Wing feather plate -->
+              <path d="M104 104 C88 104 78 116 80 132 C84 154 106 162 132 158 C152 155 160 142 155 128 C148 112 126 104 104 104 Z" fill="url(#duckWing)" />
+              <!-- Feather accents -->
+              <path d="M96 128 C108 142 128 142 144 134" stroke="#FFF8E1" stroke-width="2.5" stroke-linecap="round" opacity="0.4" />
+              <path d="M106 138 C116 148 130 148 140 142" stroke="#FFF8E1" stroke-width="2" stroke-linecap="round" opacity="0.3" />
+            </g>
+          </svg>
+        </div>
+      </section>
+
+      <!-- Multilingual Text Area -->
+      <section class="content-area" aria-live="polite">
+        <p class="message-text" id="duckMessage">
+          I have no idea why I have this or what it's for, but I found out I can post random stuff here. So here is a duck.
+        </p>
+      </section>
+
+      <!-- Footer Micro-Action -->
+      <footer class="card-footer">
+        <svg class="click-hint-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14.5v-3h2.5L12 8.5 8.5 13.5H11v3h2z"/>
+        </svg>
+        <span id="clickHint">Click the duck</span>
+      </footer>
+
+    </article>
+  </main>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // Multilingual Content Dictionary
+      const i18n = {
+        ru: {
+          message: "Я не знаю, зачем это и почему у меня это есть, но я узнал, что сюда можно публиковать фигню. Так что вот вам утка.",
+          quack: "Кря!",
+          hint: "Нажмите на утку",
+          ariaLabel: "Резиновая утка (нажмите, чтобы крякнуть)"
+        },
+        en: {
+          message: "I have no idea why I have this or what it's for, but I found out I can post random stuff here. So here is a duck.",
+          quack: "Quack!",
+          hint: "Click the duck",
+          ariaLabel: "Rubber duck (click to quack)"
+        },
+        hu: {
+          message: "Fogalmam sincs, miért van ez és mire jó, de megtudtam, hogy ide baromságokat lehet posztolni. Úgyhogy tessék, itt egy kacsa.",
+          quack: "Háp!",
+          hint: "Kattints a kacsára",
+          ariaLabel: "Gumikacsa (kattints a hápogáshoz)"
+        }
+      };
+
+      let currentLang = 'en';
+      let isTransitioning = false;
+
+      // DOM Elements
+      const messageEl = document.getElementById('duckMessage');
+      const clickHintEl = document.getElementById('clickHint');
+      const duckWrapper = document.getElementById('duckInteractive');
+      const duckSvg = duckWrapper.querySelector('.duck-svg');
+      const quackContainer = document.getElementById('quackContainer');
+      const langButtons = document.querySelectorAll('.lang-btn');
+
+      // Synthesized Web Audio Duck Quack (Zero external dependencies)
+      let audioCtx = null;
+      function playQuackSynth() {
+        try {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContextClass) return;
+
+          if (!audioCtx) {
+            audioCtx = new AudioContextClass();
+          }
+          if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+          }
+
+          const now = audioCtx.currentTime;
+
+          // Main sound oscillator
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          const filter = audioCtx.createBiquadFilter();
+
+          // Duck-like formant characteristics
+          osc.type = 'sawtooth';
+          filter.type = 'bandpass';
+          filter.Q.setValueAtTime(3.8, now);
+
+          // Pitch drop envelope for comic quack effect
+          osc.frequency.setValueAtTime(360, now);
+          osc.frequency.exponentialRampToValueAtTime(230, now + 0.16);
+          osc.frequency.exponentialRampToValueAtTime(190, now + 0.26);
+
+          filter.frequency.setValueAtTime(880, now);
+          filter.frequency.linearRampToValueAtTime(620, now + 0.18);
+
+          // Volume amplitude envelope
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.2, now + 0.025);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.29);
+        } catch (err) {
+          // Graceful fallback if Web Audio is blocked or unsupported
+        }
+      }
+
+      // Language Switch Functionality with Smooth Cross-Fade
+      function switchLanguage(lang) {
+        if (lang === currentLang || isTransitioning || !i18n[lang]) return;
+        isTransitioning = true;
+        currentLang = lang;
+
+        // Update Button States
+        langButtons.forEach(btn => {
+          const isActive = btn.dataset.lang === lang;
+          btn.classList.toggle('active', isActive);
+          btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+
+        // Cross-fade message text
+        messageEl.classList.add('fade-out');
+
+        setTimeout(() => {
+          messageEl.textContent = i18n[lang].message;
+          clickHintEl.textContent = i18n[lang].hint;
+          duckWrapper.setAttribute('aria-label', i18n[lang].ariaLabel);
+          document.documentElement.lang = lang;
+
+          messageEl.classList.remove('fade-out');
+          messageEl.classList.add('fade-in');
+
+          setTimeout(() => {
+            messageEl.classList.remove('fade-in');
+            isTransitioning = false;
+          }, 280);
+        }, 280);
+      }
+
+      // Language Button Event Handlers
+      langButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          switchLanguage(btn.dataset.lang);
+        });
+      });
+
+      // Spawn Animated Floating Quack Badge
+      function spawnQuackBadge(xOffset = 0) {
+        const badge = document.createElement('div');
+        badge.className = 'quack-badge';
+        badge.textContent = i18n[currentLang].quack;
+
+        // Dynamic slight random rotation and position offset
+        const randomAngle = (Math.random() * 24 - 12).toFixed(1);
+        const randomX = Math.round(50 + (Math.random() * 20 - 10) + xOffset);
+        const randomY = Math.round(35 + (Math.random() * 10 - 5));
+
+        badge.style.setProperty('--rot', `${randomAngle}deg`);
+        badge.style.left = `${randomX}%`;
+        badge.style.top = `${randomY}%`;
+
+        quackContainer.appendChild(badge);
+
+        // Auto remove badge after animation ends
+        setTimeout(() => {
+          if (badge.parentNode) {
+            badge.parentNode.removeChild(badge);
+          }
+        }, 1000);
+      }
+
+      // Duck Squish & Interaction Trigger
+      function triggerDuckInteraction(e) {
+        // Trigger squish animation
+        duckSvg.classList.remove('squishing');
+        void duckSvg.offsetWidth; // Force CSS reflow
+        duckSvg.classList.add('squishing');
+
+        // Play sound
+        playQuackSynth();
+
+        // Calculate click position relative to stage for subtle badge spawn influence
+        let offsetX = 0;
+        if (e && e.clientX) {
+          const rect = duckWrapper.getBoundingClientRect();
+          const relativeX = (e.clientX - rect.left) / rect.width;
+          offsetX = (relativeX - 0.5) * 20;
+        }
+
+        spawnQuackBadge(offsetX);
+      }
+
+      // Duck Events (Mouse, Touch, Keyboard Accessibility)
+      duckWrapper.addEventListener('click', triggerDuckInteraction);
+
+      duckWrapper.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          triggerDuckInteraction();
+        }
+      });
+
+      // Subtle 3D Card Tilt Follow on Pointer Move
+      const card = document.querySelector('.card');
+      let tiltRAF = null;
+
+      function handleCardTilt(e) {
+        if (window.innerWidth < 768) return; // Disable tilt on mobile for performance
+        if (tiltRAF) cancelAnimationFrame(tiltRAF);
+
+        tiltRAF = requestAnimationFrame(() => {
+          const rect = card.getBoundingClientRect();
+          const cardCenterX = rect.left + rect.width / 2;
+          const cardCenterY = rect.top + rect.height / 2;
+
+          const mouseX = e.clientX - cardCenterX;
+          const mouseY = e.clientY - cardCenterY;
+
+          // Subtle angles
+          const rotateX = (-mouseY / (rect.height / 2)) * 4.5;
+          const rotateY = (mouseX / (rect.width / 2)) * 4.5;
+
+          card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
+        });
+      }
+
+      function resetCardTilt() {
+        if (tiltRAF) cancelAnimationFrame(tiltRAF);
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+      }
+
+      document.addEventListener('mousemove', handleCardTilt);
+      document.addEventListener('mouseleave', resetCardTilt);
+
+    })();
+  </script>
+</body>
+</html>
