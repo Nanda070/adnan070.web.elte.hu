@@ -1,0 +1,18 @@
+{
+  "name": "Random Duck | Quack Sanctuary",
+  "short_name": "Random Duck",
+  "description": "Interactive procedural audio quack sanctuary and clicker game.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d0f12",
+  "theme_color": "#ffc72c",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

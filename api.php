@@ -60,7 +60,15 @@ try {
             CREATE TABLE IF NOT EXISTS quack_messages (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 message VARCHAR(191) NOT NULL,
+                likes INT NOT NULL DEFAULT 0,
                 created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        ");
+
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS quack_rate_limits (
+                ip VARCHAR(45) PRIMARY KEY,
+                last_post_at INT UNSIGNED NOT NULL
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         ");
     } else {
@@ -76,9 +84,28 @@ try {
             CREATE TABLE IF NOT EXISTS quack_messages (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 message TEXT NOT NULL,
+                likes INTEGER NOT NULL DEFAULT 0,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             );
         ");
+
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS quack_rate_limits (
+                ip TEXT PRIMARY KEY,
+                last_post_at INTEGER NOT NULL
+            );
+        ");
+    }
+
+    // Auto-migration: ensure 'likes' column exists if table was created previously
+    try {
+        if ($isCaesar) {
+            $pdo->exec("ALTER TABLE quack_messages ADD COLUMN likes INT NOT NULL DEFAULT 0;");
+        } else {
+            $pdo->exec("ALTER TABLE quack_messages ADD COLUMN likes INTEGER NOT NULL DEFAULT 0;");
+        }
+    } catch (Throwable $e) {
+        // Column already exists
     }
 } catch (Throwable $e) {
     // Fail silently if table already exists
@@ -119,8 +146,8 @@ switch ($action) {
                 $totalQuacks = (int)$statRow['total_quacks'];
             }
 
-            // Retrieve last 10 messages
-            $msgStmt = $pdo->prepare("SELECT id, message, created_at FROM quack_messages ORDER BY id DESC LIMIT 10");
+            // Retrieve last 10 messages with likes
+            $msgStmt = $pdo->prepare("SELECT id, message, likes, created_at FROM quack_messages ORDER BY id DESC LIMIT 10");
             $msgStmt->execute();
             $messages = $msgStmt->fetchAll();
 
@@ -135,12 +162,57 @@ switch ($action) {
         }
         break;
 
+    case 'get_wall':
+        try {
+            // Retrieve last 50 messages for the full wall modal
+            $msgStmt = $pdo->prepare("SELECT id, message, likes, created_at FROM quack_messages ORDER BY id DESC LIMIT 50");
+            $msgStmt->execute();
+            $messages = $msgStmt->fetchAll();
+
+            echo json_encode([
+                'status' => 'success',
+                'messages' => $messages
+            ], JSON_UNESCAPED_UNICODE);
+        } catch (Throwable $e) {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'Failed to fetch wall messages']);
+        }
+        break;
+
+    case 'like_message':
+        try {
+            $msgId = (int)($_POST['id'] ?? $json['id'] ?? $_GET['id'] ?? 0);
+            if ($msgId <= 0) {
+                http_response_code(400);
+                echo json_encode(['status' => 'error', 'message' => 'Invalid message ID']);
+                exit;
+            }
+
+            $likeStmt = $pdo->prepare("UPDATE quack_messages SET likes = likes + 1 WHERE id = :id");
+            $likeStmt->execute([':id' => $msgId]);
+
+            // Fetch updated like count
+            $fetchStmt = $pdo->prepare("SELECT likes FROM quack_messages WHERE id = :id LIMIT 1");
+            $fetchStmt->execute([':id' => $msgId]);
+            $row = $fetchStmt->fetch();
+
+            echo json_encode([
+                'status' => 'success',
+                'id' => $msgId,
+                'likes' => $row ? (int)$row['likes'] : 0
+            ]);
+        } catch (Throwable $e) {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'Failed to like message']);
+        }
+        break;
+
     case 'quack':
         try {
-            // Batched quack support (clamps between 1 and 100)
+            // Batched quack support (clamps between 1 and 250)
             $count = (int)($_POST['count'] ?? $json['count'] ?? $_GET['count'] ?? 1);
             if ($count < 1) $count = 1;
-            if ($count > 100) $count = 100;
+            if ($count > 250) $count = 250;
 
             $updateStmt = $pdo->prepare("UPDATE quack_stats SET total_quacks = total_quacks + :count WHERE id = 1");
             $updateStmt->execute([':count' => $count]);
@@ -173,6 +245,27 @@ switch ($action) {
 
     case 'add_message':
         try {
+            // Rate limiting: 10s cooldown per IP
+            $userIp = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+            $userIp = substr(trim(explode(',', $userIp)[0]), 0, 45);
+            $nowTime = time();
+            $cooldown = 10;
+
+            $rateStmt = $pdo->prepare("SELECT last_post_at FROM quack_rate_limits WHERE ip = :ip LIMIT 1");
+            $rateStmt->execute([':ip' => $userIp]);
+            $rateRow = $rateStmt->fetch();
+
+            if ($rateRow && ($nowTime - (int)$rateRow['last_post_at']) < $cooldown) {
+                $rem = $cooldown - ($nowTime - (int)$rateRow['last_post_at']);
+                http_response_code(429);
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => "Too fast! Wait {$rem}s before posting again.",
+                    'retry_after' => $rem
+                ]);
+                exit;
+            }
+
             $messageRaw = $_POST['message'] ?? $json['message'] ?? $_GET['message'] ?? '';
             // Sanitize: strip tags, trim, strip control chars, limit to 60 characters
             $messageClean = trim(strip_tags((string)$messageRaw));
@@ -185,7 +278,7 @@ switch ($action) {
                 exit;
             }
 
-            $insertStmt = $pdo->prepare("INSERT INTO quack_messages (message, created_at) VALUES (:message, :created_at)");
+            $insertStmt = $pdo->prepare("INSERT INTO quack_messages (message, likes, created_at) VALUES (:message, 0, :created_at)");
             $now = date('Y-m-d H:i:s');
             $insertStmt->execute([
                 ':message' => $messageClean,
@@ -194,11 +287,21 @@ switch ($action) {
 
             $newId = (int)$pdo->lastInsertId();
 
+            // Record rate limit timestamp
+            if ($isCaesar) {
+                $insRate = $pdo->prepare("INSERT INTO quack_rate_limits (ip, last_post_at) VALUES (:ip, :now) ON DUPLICATE KEY UPDATE last_post_at = :now2");
+                $insRate->execute([':ip' => $userIp, ':now' => $nowTime, ':now2' => $nowTime]);
+            } else {
+                $insRate = $pdo->prepare("INSERT OR REPLACE INTO quack_rate_limits (ip, last_post_at) VALUES (:ip, :now)");
+                $insRate->execute([':ip' => $userIp, ':now' => $nowTime]);
+            }
+
             echo json_encode([
                 'status' => 'success',
                 'message' => [
                     'id' => $newId,
                     'message' => $messageClean,
+                    'likes' => 0,
                     'created_at' => $now
                 ]
             ], JSON_UNESCAPED_UNICODE);
@@ -212,7 +315,7 @@ switch ($action) {
         http_response_code(400);
         echo json_encode([
             'status' => 'error',
-            'message' => 'Invalid action. Supported: get_stats, quack, add_message'
+            'message' => 'Invalid action. Supported: get_stats, get_wall, quack, add_message, like_message'
         ]);
         break;
 }

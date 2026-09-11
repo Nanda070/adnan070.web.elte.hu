@@ -3,9 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="description" content="Random Duck - An interactive, procedural audio quack sanctuary powered by PHP 8.2 & ELTE Caesar.">
-  <title>Random Duck | Quack Wall</title>
+  <meta name="description" content="Random Duck Sanctuary - Interactive procedural audio quack clicker, tycoon upgrades, duck wardrobe, and global quack wall.">
+  <meta name="theme-color" content="#ffc72c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Random Duck | Quack Sanctuary & Tycoon</title>
   
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
@@ -20,10 +26,10 @@
 
     :root {
       --bg-dark: #0d0f12;
-      --card-bg: rgba(23, 27, 34, 0.72);
-      --card-border: rgba(255, 255, 255, 0.09);
-      --card-border-hover: rgba(255, 255, 255, 0.18);
-      --card-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.7), 0 0 45px -10px rgba(255, 199, 44, 0.08);
+      --card-bg: rgba(23, 27, 34, 0.78);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --card-border-hover: rgba(255, 255, 255, 0.22);
+      --card-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.75), 0 0 45px -10px rgba(255, 199, 44, 0.12);
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
@@ -34,9 +40,10 @@
       --accent-pink: #ff007b;
       --matrix-green: #00ff66;
       --btn-bg: rgba(255, 255, 255, 0.06);
-      --btn-border: rgba(255, 255, 255, 0.1);
-      --btn-active-bg: rgba(255, 199, 44, 0.16);
-      --btn-active-border: rgba(255, 199, 44, 0.5);
+      --btn-border: rgba(255, 255, 255, 0.12);
+      --btn-active-bg: rgba(255, 199, 44, 0.18);
+      --btn-active-border: rgba(255, 199, 44, 0.55);
+      --modal-bg: rgba(18, 22, 29, 0.88);
     }
 
     html, body {
@@ -57,7 +64,7 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      padding: 1.5rem 1rem 4rem;
+      padding: 1.2rem 1rem 4rem;
     }
 
     @supports not (zoom: 0.9) {
@@ -67,7 +74,7 @@
       }
     }
 
-    /* Ambient Animated Background Orbs */
+    /* Ambient Glowing Orbs Background */
     .background-container {
       position: fixed;
       inset: 0;
@@ -135,23 +142,23 @@
       position: relative;
       z-index: 2;
       width: 100%;
-      max-width: 540px;
+      max-width: 550px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    /* Glassmorphism Card */
+    /* Glassmorphism Main Card */
     .card {
       position: relative;
       width: 100%;
       background: var(--card-bg);
-      backdrop-filter: blur(28px) saturate(170%);
-      -webkit-backdrop-filter: blur(28px) saturate(170%);
+      backdrop-filter: blur(28px) saturate(175%);
+      -webkit-backdrop-filter: blur(28px) saturate(175%);
       border: 1px solid var(--card-border);
-      border-radius: 28px;
-      padding: 28px 24px 30px;
+      border-radius: 30px;
+      padding: 24px 22px 28px;
       box-shadow: var(--card-shadow);
       display: flex;
       flex-direction: column;
@@ -166,7 +173,7 @@
       left: 15%;
       right: 15%;
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
       pointer-events: none;
     }
 
@@ -205,13 +212,14 @@
       100% { transform: translate(0, 0) rotate(0deg); }
     }
 
-    /* Card Header & Language Switcher */
+    /* Card Header */
     .card-header {
       width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 20px;
+      margin-bottom: 14px;
+      gap: 8px;
     }
 
     .badge-status {
@@ -244,11 +252,44 @@
       50% { opacity: 0.4; transform: scale(0.8); }
     }
 
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sound-toggle-btn {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .sound-toggle-btn:hover {
+      color: var(--accent-yellow);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 199, 44, 0.4);
+    }
+
+    .sound-toggle-btn.muted {
+      color: #ef4444;
+      opacity: 0.7;
+    }
+
     .lang-switcher {
       display: inline-flex;
       background: rgba(0, 0, 0, 0.4);
-      padding: 4px;
-      border-radius: 14px;
+      padding: 3px;
+      border-radius: 12px;
       border: 1px solid rgba(255, 255, 255, 0.08);
       gap: 3px;
     }
@@ -258,13 +299,12 @@
       border: 1px solid transparent;
       color: var(--text-muted);
       font-family: inherit;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-weight: 700;
-      padding: 6px 13px;
-      border-radius: 10px;
+      padding: 5px 10px;
+      border-radius: 8px;
       cursor: pointer;
-      touch-action: manipulation;
-      transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transition: all 0.2s ease;
       user-select: none;
     }
 
@@ -280,13 +320,80 @@
       box-shadow: 0 2px 10px rgba(255, 199, 44, 0.18);
     }
 
+    /* Floating Feature Toolbar (Wardrobe, Tycoon, Achievements, Wall) */
+    .feature-nav-bar {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .nav-pill-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 7px 13px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+      user-select: none;
+      position: relative;
+    }
+
+    .nav-pill-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 199, 44, 0.4);
+      color: var(--accent-yellow);
+      transform: translateY(-1px);
+    }
+
+    .nav-pill-btn:active {
+      transform: translateY(1px);
+    }
+
+    .nav-pill-badge {
+      font-size: 0.68rem;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: rgba(255, 199, 44, 0.2);
+      border: 1px solid rgba(255, 199, 44, 0.4);
+      color: var(--accent-yellow);
+    }
+
+    .nav-pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ff007b;
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      box-shadow: 0 0 6px #ff007b;
+      display: none;
+    }
+
+    .nav-pill-dot.visible {
+      display: block;
+    }
+
     /* Global Quack Counter & Combo HUD */
     .hud-container {
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       text-align: center;
     }
 
@@ -296,11 +403,11 @@
       text-transform: uppercase;
       letter-spacing: 0.1em;
       color: var(--text-dim);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .counter-value {
-      font-size: 2.1rem;
+      font-size: 2.2rem;
       font-weight: 800;
       font-feature-settings: "tnum";
       font-variant-numeric: tabular-nums;
@@ -312,11 +419,19 @@
       text-shadow: 0 2px 20px rgba(255, 199, 44, 0.2);
     }
 
+    .qps-rate-indicator {
+      font-size: 0.8rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: #10b981;
+      font-weight: 700;
+      margin-top: 1px;
+    }
+
     .combo-bar-wrapper {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-top: 6px;
+      margin-top: 5px;
       min-height: 24px;
     }
 
@@ -351,17 +466,26 @@
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    /* Central Duck Stage */
+    /* Central Duck Stage & Interactive Canvas */
     .duck-stage {
       position: relative;
       width: 230px;
       height: 230px;
-      margin: 8px 0 22px;
+      margin: 4px 0 16px;
       display: flex;
       align-items: center;
       justify-content: center;
       user-select: none;
       touch-action: manipulation;
+    }
+
+    .water-canvas {
+      position: absolute;
+      inset: -30px;
+      width: calc(100% + 60px);
+      height: calc(100% + 60px);
+      pointer-events: none;
+      z-index: 1;
     }
 
     .duck-glow-bg {
@@ -373,7 +497,7 @@
       filter: blur(28px);
       transition: transform 0.4s ease, opacity 0.4s ease;
       pointer-events: none;
-      z-index: 1;
+      z-index: 2;
     }
 
     .duck-stage:hover .duck-glow-bg,
@@ -384,7 +508,7 @@
 
     .duck-wrapper {
       position: relative;
-      z-index: 3;
+      z-index: 4;
       width: 180px;
       height: 180px;
       cursor: pointer;
@@ -398,8 +522,9 @@
       filter: drop-shadow(0 14px 25px rgba(255, 199, 44, 0.4));
     }
 
-    /* Golden Duck Milestone Filter (100 Clicks) */
-    .duck-wrapper.golden-duck {
+    /* SKINS */
+    /* Golden Duck */
+    .duck-wrapper.skin-gold {
       filter: drop-shadow(0 0 28px #ffd700) brightness(1.22) saturate(1.8) contrast(1.1);
       animation: float 2.4s ease-in-out infinite, goldenSparkle 1.8s infinite alternate;
     }
@@ -407,6 +532,22 @@
     @keyframes goldenSparkle {
       0% { filter: drop-shadow(0 0 22px #ffd700) brightness(1.2); }
       100% { filter: drop-shadow(0 0 40px #ff9100) brightness(1.35); }
+    }
+
+    /* Cyber Duck */
+    .duck-wrapper.skin-cyber {
+      filter: drop-shadow(0 0 20px #00f3ff) hue-rotate(180deg) saturate(2);
+    }
+
+    /* Ghost Duck */
+    .duck-wrapper.skin-ghost {
+      opacity: 0.78;
+      filter: drop-shadow(0 0 25px #00e1ff) invert(0.15) brightness(1.3);
+    }
+
+    /* Stealth Duck */
+    .duck-wrapper.skin-stealth {
+      filter: drop-shadow(0 0 22px rgba(255, 0, 60, 0.6)) brightness(0.4) contrast(1.7) grayscale(0.85);
     }
 
     .duck-svg {
@@ -426,6 +567,16 @@
       animation: squishBounce 0.48s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
 
+    .duck-svg.dancing {
+      animation: duckDance 0.8s ease-in-out infinite alternate;
+    }
+
+    @keyframes duckDance {
+      0% { transform: translateY(-10px) rotate(-12deg) scale(1.05); }
+      50% { transform: translateY(5px) rotate(0deg) scale(0.95); }
+      100% { transform: translateY(-10px) rotate(12deg) scale(1.05); }
+    }
+
     @keyframes float {
       0% { transform: translateY(0px) rotate(0deg); }
       30% { transform: translateY(-11px) rotate(-2deg); }
@@ -441,8 +592,6 @@
       100% { transform: scale(1, 1) translateY(0); }
     }
 
-
-
     /* Dynamic Shadow */
     .duck-shadow {
       position: absolute;
@@ -452,7 +601,7 @@
       background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 70%);
       border-radius: 50%;
       pointer-events: none;
-      z-index: 1;
+      z-index: 2;
       animation: shadowPulse 3.8s ease-in-out infinite;
     }
 
@@ -559,76 +708,74 @@
     }
 
     @keyframes speechBubbleAnim {
-      0% {
-        opacity: 0;
-        transform: translate(-50%, 15px) scale(0.4);
-      }
-      14% {
-        opacity: 1;
-        transform: translate(-50%, -10px) scale(1.05);
-      }
-      22% {
-        transform: translate(-50%, -16px) scale(1);
-      }
-      80% {
-        opacity: 1;
-        transform: translate(-50%, -36px) scale(1);
-      }
-      100% {
-        opacity: 0;
-        transform: translate(-50%, -65px) scale(0.9);
-      }
+      0% { opacity: 0; transform: translate(-50%, 15px) scale(0.4); }
+      14% { opacity: 1; transform: translate(-50%, -10px) scale(1.05); }
+      22% { transform: translate(-50%, -16px) scale(1); }
+      80% { opacity: 1; transform: translate(-50%, -36px) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -65px) scale(0.9); }
+    }
+
+    /* Floating Bonus Bread Treat */
+    .floating-treat {
+      position: fixed;
+      font-size: 2.2rem;
+      cursor: pointer;
+      z-index: 100;
+      animation: floatTreat 10s linear forwards;
+      filter: drop-shadow(0 0 14px rgba(255, 199, 44, 0.8));
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    @keyframes floatTreat {
+      0% { transform: translate(-50px, 80vh) rotate(0deg) scale(0.8); opacity: 0; }
+      10% { opacity: 1; transform: translate(50px, 65vh) rotate(25deg) scale(1.1); }
+      80% { opacity: 1; transform: translate(calc(100vw - 80px), 20vh) rotate(320deg) scale(1); }
+      100% { transform: translate(105vw, 10vh) rotate(360deg) scale(0.8); opacity: 0; }
     }
 
     /* Multilingual Text Section */
     .content-area {
       width: 100%;
-      min-height: 85px;
+      min-height: 75px;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 0 12px;
-      margin-bottom: 22px;
+      padding: 0 10px;
+      margin-bottom: 16px;
     }
 
     .message-text {
-      font-size: 1.02rem;
-      line-height: 1.62;
+      font-size: 0.98rem;
+      line-height: 1.58;
       font-weight: 500;
       color: #e2e8f0;
       transition: opacity 0.26s cubic-bezier(0.4, 0, 0.2, 1), transform 0.26s cubic-bezier(0.4, 0, 0.2, 1);
       will-change: opacity, transform;
     }
 
-    .message-text.fade-out {
-      opacity: 0;
-      transform: translateY(8px);
-    }
+    .message-text.fade-out { opacity: 0; transform: translateY(8px); }
+    .message-text.fade-in { opacity: 1; transform: translateY(0); }
 
-    .message-text.fade-in {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Guestbook / Quack Wall Form */
+    /* Quack Wall Form Section */
     .quack-wall-section {
       width: 100%;
       background: rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(255, 255, 255, 0.07);
       border-radius: 18px;
-      padding: 14px 16px;
-      margin-bottom: 18px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
 
     .wall-title-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       font-weight: 700;
       color: var(--text-dim);
       text-transform: uppercase;
@@ -642,14 +789,8 @@
       transition: color 0.2s ease;
     }
 
-    .char-counter.warning {
-      color: #f59e0b;
-    }
-
-    .char-counter.limit {
-      color: #ef4444;
-      font-weight: 700;
-    }
+    .char-counter.warning { color: #f59e0b; }
+    .char-counter.limit { color: #ef4444; font-weight: 700; }
 
     .wall-form {
       display: flex;
@@ -662,18 +803,16 @@
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
-      padding: 10px 14px;
+      padding: 9px 13px;
       color: var(--text-main);
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       outline: none;
       transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
       touch-action: manipulation;
     }
 
-    .wall-input::placeholder {
-      color: #475569;
-    }
+    .wall-input::placeholder { color: #475569; }
 
     .wall-input:focus {
       border-color: rgba(255, 199, 44, 0.5);
@@ -686,9 +825,9 @@
       color: #0b0f14;
       border: none;
       border-radius: 12px;
-      padding: 0 18px;
+      padding: 0 16px;
       font-family: inherit;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
@@ -696,7 +835,7 @@
       justify-content: center;
       gap: 6px;
       box-shadow: 0 4px 14px rgba(255, 153, 0, 0.35);
-      transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.18s ease, filter 0.18s ease;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
       touch-action: manipulation;
       user-select: none;
       white-space: nowrap;
@@ -708,17 +847,10 @@
       box-shadow: 0 6px 18px rgba(255, 153, 0, 0.45);
     }
 
-    .wall-submit-btn:active {
-      transform: translateY(1px);
-    }
+    .wall-submit-btn:active { transform: translateY(1px); }
+    .wall-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-    .wall-submit-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    /* Live Message Ticker / Recent Posts */
+    /* Live Message Ticker */
     .recent-feed {
       font-size: 0.78rem;
       color: var(--text-muted);
@@ -749,21 +881,21 @@
       font-style: italic;
     }
 
-    /* Footer & Easter Egg Secret Hint */
+    /* Footer & Easter Egg Hint */
     .card-footer {
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
-      margin-top: 10px;
+      gap: 6px;
+      margin-top: 6px;
     }
 
     .click-hint-text {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       color: var(--text-muted);
       opacity: 0.8;
       user-select: none;
@@ -776,7 +908,7 @@
     }
 
     .secret-hint-text {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: #475569;
       font-family: 'JetBrains Mono', monospace;
       letter-spacing: 0.03em;
@@ -786,12 +918,9 @@
       user-select: none;
     }
 
-    .secret-hint-text:hover {
-      opacity: 0.95;
-      color: #94a3b8;
-    }
+    .secret-hint-text:hover { opacity: 0.95; color: #94a3b8; }
 
-    /* Sleek Developer Badge (Bottom Right) */
+    /* Developer Badge (Bottom Right) */
     .dev-badge {
       position: fixed;
       bottom: 18px;
@@ -822,19 +951,418 @@
       box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 199, 44, 0.2);
     }
 
-    .dev-badge strong {
-      color: var(--accent-yellow);
+    .dev-badge strong { color: var(--accent-yellow); font-weight: 700; }
+    .dev-badge-icon { font-size: 0.85rem; color: var(--accent-yellow); }
+
+    /* ========================================================= */
+    /* Modals & Backdrop UI (Glassmorphic Popups)               */
+    /* ========================================================= */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-window {
+      background: var(--modal-bg);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 199, 44, 0.1);
+      transform: scale(0.92) translateY(12px);
+      transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+      overflow: hidden;
+    }
+
+    .modal-backdrop.open .modal-window {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-close-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      color: var(--text-muted);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      color: #fff;
+    }
+
+    .modal-body {
+      padding: 18px 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Wardrobe UI */
+    .wardrobe-section-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+    }
+
+    .wardrobe-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .wardrobe-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .wardrobe-card:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 199, 44, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .wardrobe-card.active {
+      background: rgba(255, 199, 44, 0.14);
+      border-color: var(--accent-yellow);
+      box-shadow: 0 0 14px rgba(255, 199, 44, 0.25);
+    }
+
+    .wardrobe-icon { font-size: 1.6rem; }
+    .wardrobe-name { font-size: 0.78rem; font-weight: 700; color: #f1f5f9; }
+
+    /* Tycoon Upgrades UI */
+    .upgrade-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .upgrade-card:hover {
+      border-color: rgba(255, 199, 44, 0.35);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .upgrade-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .upgrade-icon {
+      font-size: 1.8rem;
+      background: rgba(0, 0, 0, 0.3);
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .upgrade-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .upgrade-name {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .upgrade-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .upgrade-level {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: #10b981;
       font-weight: 700;
     }
 
-    .dev-badge-icon {
-      font-size: 0.85rem;
-      color: var(--accent-yellow);
+    .upgrade-buy-btn {
+      background: linear-gradient(135deg, #ffc72c, #ff9100);
+      border: none;
+      color: #0d0f12;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      transition: all 0.2s ease;
+      user-select: none;
+      white-space: nowrap;
     }
 
-    /* ========================================================= */
-    /* Easter Egg: Matrix Green Terminal Mode                    */
-    /* ========================================================= */
+    .upgrade-buy-btn:hover:not(:disabled) {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(255, 153, 0, 0.4);
+    }
+
+    .upgrade-buy-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      filter: grayscale(0.5);
+    }
+
+    /* Achievements List UI */
+    .achievement-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 12px 16px;
+      opacity: 0.55;
+      transition: all 0.22s ease;
+    }
+
+    .achievement-item.unlocked {
+      opacity: 1;
+      border-color: rgba(255, 199, 44, 0.45);
+      background: rgba(255, 199, 44, 0.06);
+    }
+
+    .achievement-trophy {
+      font-size: 1.8rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .achievement-text-col {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .achievement-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .achievement-desc {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    /* Full Quack Wall Modal Feed */
+    .wall-feed-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 55vh;
+      overflow-y: auto;
+    }
+
+    .wall-post-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .wall-post-text {
+      font-size: 0.88rem;
+      color: #f1f5f9;
+      font-weight: 600;
+      word-break: break-word;
+      flex: 1;
+    }
+
+    .wall-post-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .wall-post-date {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .wall-like-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #f8fafc;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      user-select: none;
+    }
+
+    .wall-like-btn:hover {
+      background: rgba(255, 0, 123, 0.2);
+      border-color: #ff007b;
+      color: #ff007b;
+      transform: scale(1.08);
+    }
+
+    /* Sound Settings UI */
+    .sound-presets-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .sound-preset-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .sound-preset-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 199, 44, 0.4);
+    }
+
+    .sound-preset-btn.active {
+      border-color: var(--accent-yellow);
+      background: rgba(255, 199, 44, 0.14);
+    }
+
+    .sound-preset-name { font-size: 0.86rem; font-weight: 700; color: #fff; }
+    .sound-preset-desc { font-size: 0.72rem; color: var(--text-muted); }
+
+    /* Toast Notification Banner (Achievements & Bread Bonanza) */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1200;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .toast-banner {
+      background: rgba(18, 22, 29, 0.95);
+      border: 1px solid rgba(255, 199, 44, 0.6);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 199, 44, 0.3);
+      backdrop-filter: blur(16px);
+      border-radius: 16px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: toastSlideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      pointer-events: auto;
+    }
+
+    @keyframes toastSlideDown {
+      0% { opacity: 0; transform: translateY(-30px) scale(0.9); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .toast-icon { font-size: 1.8rem; }
+    .toast-col { display: flex; flex-direction: column; }
+    .toast-tag { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; color: var(--accent-yellow); letter-spacing: 0.08em; }
+    .toast-title { font-size: 0.88rem; font-weight: 700; color: #fff; }
+
+    /* Matrix Green Terminal Mode */
     .terminal-overlay {
       position: fixed;
       inset: 0;
@@ -851,12 +1379,8 @@
       overflow-y: auto;
     }
 
-    .terminal-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
+    .terminal-overlay.active { opacity: 1; pointer-events: auto; }
 
-    /* Scanline effect */
     .terminal-overlay::before {
       content: '';
       position: fixed;
@@ -896,18 +1420,16 @@
       border-radius: 6px;
       cursor: pointer;
       text-shadow: 0 0 6px rgba(0, 255, 102, 0.6);
-      transition: background 0.2s ease, transform 0.1s ease;
+      transition: background 0.2s ease;
     }
 
-    .terminal-close-btn:hover {
-      background: rgba(0, 255, 102, 0.25);
-    }
+    .terminal-close-btn:hover { background: rgba(0, 255, 102, 0.25); }
 
     .terminal-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin: 16px 0;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin: 14px 0;
     }
 
     .terminal-metric-card {
@@ -926,7 +1448,7 @@
     }
 
     .metric-value {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 700;
       text-shadow: 0 0 10px rgba(0, 255, 102, 0.7);
     }
@@ -940,11 +1462,11 @@
       font-size: 0.82rem;
       line-height: 1.65;
       overflow-y: auto;
-      max-height: 240px;
+      max-height: 220px;
     }
 
     .terminal-callout {
-      margin-top: 18px;
+      margin-top: 16px;
       padding: 14px;
       background: rgba(0, 255, 102, 0.08);
       border: 1px dashed var(--matrix-green);
@@ -957,7 +1479,6 @@
     }
 
     .terminal-link {
-      color: #ffffff;
       background: var(--matrix-green);
       color: #040905;
       text-decoration: none;
@@ -968,48 +1489,22 @@
       transition: transform 0.2s ease;
     }
 
-    .terminal-link:hover {
-      transform: scale(1.04);
-    }
+    .terminal-link:hover { transform: scale(1.04); }
 
     /* Mobile Responsive Adjustments */
     @media (max-width: 520px) {
-      body {
-        padding: 1rem 0.75rem 5rem;
-      }
-      .card {
-        padding: 22px 18px 24px;
-        border-radius: 24px;
-      }
-      .duck-stage {
-        width: 195px;
-        height: 195px;
-        margin: 4px 0 16px;
-      }
-      .duck-wrapper {
-        width: 155px;
-        height: 155px;
-      }
-      .counter-value {
-        font-size: 1.85rem;
-      }
-      .message-text {
-        font-size: 0.94rem;
-        line-height: 1.55;
-      }
-      .content-area {
-        min-height: 90px;
-      }
-      .lang-btn {
-        padding: 5px 10px;
-        font-size: 0.78rem;
-      }
-      .dev-badge {
-        bottom: 14px;
-        right: 14px;
-        padding: 6px 12px;
-        font-size: 0.76rem;
-      }
+      body { padding: 0.8rem 0.6rem 5rem; }
+      .card { padding: 20px 16px 22px; border-radius: 24px; }
+      .duck-stage { width: 195px; height: 195px; margin: 4px 0 14px; }
+      .duck-wrapper { width: 155px; height: 155px; }
+      .counter-value { font-size: 1.85rem; }
+      .message-text { font-size: 0.92rem; line-height: 1.5; }
+      .content-area { min-height: 70px; }
+      .feature-nav-bar { gap: 6px; }
+      .nav-pill-btn { padding: 6px 10px; font-size: 0.74rem; }
+      .wardrobe-grid { grid-template-columns: repeat(2, 1fr); }
+      .sound-presets-grid { grid-template-columns: 1fr; }
+      .dev-badge { bottom: 12px; right: 12px; padding: 6px 12px; font-size: 0.76rem; }
     }
   </style>
 </head>
@@ -1023,28 +1518,64 @@
     <div class="noise-overlay"></div>
   </div>
 
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
   <!-- Main Viewport Layout -->
   <main class="viewport-wrapper">
     <article class="card" id="mainCard">
 
-      <!-- Header: Status & Language Switcher -->
+      <!-- Header: Status, Sound & Language Switcher -->
       <header class="card-header">
         <div class="badge-status">
           <span class="badge-dot" aria-hidden="true"></span>
           <span id="badgeText">Live Duck</span>
         </div>
 
-        <nav class="lang-switcher" aria-label="Language selector">
-          <button type="button" class="lang-btn" data-lang="ru" id="btn-ru" aria-pressed="false">RU</button>
-          <button type="button" class="lang-btn active" data-lang="en" id="btn-en" aria-pressed="true">EN</button>
-          <button type="button" class="lang-btn" data-lang="hu" id="btn-hu" aria-pressed="false">HU</button>
-        </nav>
+        <div class="header-actions">
+          <button type="button" class="sound-toggle-btn" id="soundToggleBtn" title="Toggle Sound (Mute/Unmute)" aria-label="Toggle Sound">
+            🔊
+          </button>
+
+          <nav class="lang-switcher" aria-label="Language selector">
+            <button type="button" class="lang-btn" data-lang="ru" id="btn-ru" aria-pressed="false">RU</button>
+            <button type="button" class="lang-btn active" data-lang="en" id="btn-en" aria-pressed="true">EN</button>
+            <button type="button" class="lang-btn" data-lang="hu" id="btn-hu" aria-pressed="false">HU</button>
+          </nav>
+        </div>
       </header>
 
-      <!-- Global Quack Counter & Combo HUD -->
+      <!-- Floating Feature Toolbar -->
+      <nav class="feature-nav-bar" aria-label="Features toolbar">
+        <button type="button" class="nav-pill-btn" id="openWardrobeBtn">
+          <span>🎨</span>
+          <span id="navWardrobeText">Wardrobe</span>
+        </button>
+
+        <button type="button" class="nav-pill-btn" id="openUpgradesBtn">
+          <span>⚡</span>
+          <span id="navUpgradesText">Tycoon</span>
+          <span class="nav-pill-badge" id="clickPowerBadge">+1</span>
+        </button>
+
+        <button type="button" class="nav-pill-btn" id="openAchievementsBtn">
+          <span>🏆</span>
+          <span id="navAchievementsText">Trophies</span>
+          <span class="nav-pill-badge" id="achieveBadge">0/10</span>
+          <span class="nav-pill-dot" id="achieveDot"></span>
+        </button>
+
+        <button type="button" class="nav-pill-btn" id="openWallBtn">
+          <span>💬</span>
+          <span id="navWallText">Wall</span>
+        </button>
+      </nav>
+
+      <!-- Global Quack Counter & Tycoon HUD -->
       <section class="hud-container" aria-live="polite">
         <div class="counter-label" id="counterLabel">Global Quacks</div>
         <div class="counter-value" id="globalCounter">0</div>
+        <div class="qps-rate-indicator" id="qpsRateIndicator">+0.0 QPS</div>
         <div class="combo-bar-wrapper">
           <div class="combo-badge" id="comboBadge">
             <span id="comboIcon">🔥</span>
@@ -1054,8 +1585,9 @@
         </div>
       </section>
 
-      <!-- Central Stage: The Duck -->
+      <!-- Central Stage: Interactive Duck with Accessories & Canvas Ripples -->
       <section class="duck-stage" id="duckStage" aria-label="Interactive Duck">
+        <canvas class="water-canvas" id="waterCanvas"></canvas>
         <div class="duck-glow-bg" aria-hidden="true"></div>
         <div class="duck-shadow" aria-hidden="true"></div>
 
@@ -1064,7 +1596,7 @@
         <div class="quack-container" id="quackContainer" aria-live="polite" aria-atomic="true"></div>
 
         <div class="duck-wrapper" id="duckInteractive" role="button" tabindex="0" title="Click or Tap to Quack!" aria-label="Rubber duck (tap to quack)">
-          <!-- Handcrafted Vector Duck SVG -->
+          <!-- Handcrafted Vector Duck SVG with Dynamic Accessories -->
           <svg class="duck-svg" viewBox="0 0 220 200" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="duckBody" x1="40" y1="20" x2="190" y2="190" gradientUnits="userSpaceOnUse">
@@ -1094,8 +1626,7 @@
                 <stop offset="0%" stop-color="#BF360C" stop-opacity="0.3" />
                 <stop offset="100%" stop-color="#BF360C" stop-opacity="0" />
               </radialGradient>
-
-              </defs>
+            </defs>
 
             <!-- Tail Feathers -->
             <path d="M165 110 C185 92 205 95 212 104 C215 108 214 114 207 119 C198 126 186 132 173 135 Z" fill="url(#duckBody)" />
@@ -1114,7 +1645,7 @@
             <circle cx="92" cy="65" r="9" fill="#FF5252" opacity="0.32" />
 
             <!-- Duck Eye -->
-            <g class="duck-eye-group">
+            <g class="duck-eye-group" id="duckEyeDefault">
               <ellipse cx="88" cy="46" rx="7.5" ry="9" fill="#1e1810" />
               <ellipse cx="86" cy="43" rx="3" ry="4" fill="#FFFFFF" />
               <circle cx="90.5" cy="49" r="1.5" fill="#FFFFFF" />
@@ -1135,9 +1666,60 @@
               <path d="M102 110 C90 110 82 120 84 135 C88 155 110 162 136 158 C158 154 165 138 160 125 C150 112 125 110 102 110 Z" fill="url(#wingShadow)" />
               <path d="M104 104 C88 104 78 116 80 132 C84 154 106 162 132 158 C152 155 160 142 155 128 C148 112 126 104 104 104 Z" fill="url(#duckWing)" />
               <path d="M96 128 C108 142 128 142 144 134" stroke="#FFF8E1" stroke-width="2.5" stroke-linecap="round" opacity="0.4" />
-              <path d="M106 138 C116 148 130 148 140 142" stroke="#FFF8E1" stroke-width="2" stroke-linecap="round" opacity="0.3" />
+              <path d="M106 138 C116 148 130 148 140 142" stroke="#FFF8E1" stroke-width="2.5" stroke-linecap="round" opacity="0.3" />
             </g>
 
+            <!-- ============================================== -->
+            <!-- DYNAMIC ACCESSORIES LAYER (HATS & GLASSES)     -->
+            <!-- ============================================== -->
+            <g id="hatLayers">
+              <!-- Top Hat (Цилиндр) -->
+              <g id="hat-tophat" style="display:none;">
+                <ellipse cx="108" cy="22" rx="34" ry="7" fill="#111827" />
+                <path d="M88 20 L92 -15 L124 -15 L128 20 Z" fill="#1f2937" />
+                <rect x="91" y="10" width="34" height="6" fill="#e11d48" />
+                <rect x="105" y="9" width="6" height="8" fill="#ffd700" rx="1" />
+              </g>
+
+              <!-- Thug Life / Cool Sunglasses -->
+              <g id="hat-sunglasses" style="display:none;">
+                <path d="M72 40 L108 40 L102 54 L76 54 Z" fill="#090d16" stroke="#ffffff" stroke-width="1.2" />
+                <path d="M76 43 L84 43 L80 50 L74 50 Z" fill="#ffffff" opacity="0.75" />
+                <path d="M90 43 L98 43 L94 50 L88 50 Z" fill="#ffffff" opacity="0.75" />
+                <path d="M72 42 L64 38" stroke="#090d16" stroke-width="2.5" stroke-linecap="round" />
+              </g>
+
+              <!-- ELTE Academic Graduation Cap -->
+              <g id="hat-graduate" style="display:none;">
+                <polygon points="106,-8 144,8 106,20 68,8" fill="#1e293b" stroke="#0f172a" stroke-width="1.5" />
+                <rect x="94" y="14" width="24" height="12" fill="#0f172a" rx="2" />
+                <circle cx="106" cy="6" r="3" fill="#fbbf24" />
+                <path d="M106 6 Q122 10 132 26" stroke="#fbbf24" stroke-width="2" fill="none" />
+                <circle cx="132" cy="26" r="2.5" fill="#f59e0b" />
+              </g>
+
+              <!-- Pirate Tricorn & Eyepatch -->
+              <g id="hat-pirate" style="display:none;">
+                <path d="M68 22 C78 -4 134 -4 144 22 C134 16 78 16 68 22 Z" fill="#0f172a" stroke="#d97706" stroke-width="1.5" />
+                <circle cx="106" cy="10" r="4" fill="#ffffff" />
+                <!-- Eyepatch -->
+                <ellipse cx="88" cy="46" rx="9" ry="10" fill="#0b0f19" stroke="#374151" stroke-width="1.2" />
+                <path d="M70 38 L106 54" stroke="#111827" stroke-width="2" />
+              </g>
+
+              <!-- Angel Halo -->
+              <g id="hat-halo" style="display:none;">
+                <ellipse cx="108" cy="-2" rx="28" ry="7" fill="none" stroke="#ffd700" stroke-width="4" filter="drop-shadow(0 0 8px #ffeb3b)" />
+              </g>
+
+              <!-- Festive Party Cone -->
+              <g id="hat-party" style="display:none;">
+                <polygon points="108,-18 86,20 130,20" fill="#ec4899" />
+                <path d="M92 10 L124 10" stroke="#fbbf24" stroke-width="3" />
+                <path d="M98 0 L118 0" stroke="#00f3ff" stroke-width="3" />
+                <circle cx="108" cy="-20" r="4" fill="#fbbf24" />
+              </g>
+            </g>
 
           </svg>
         </div>
@@ -1150,7 +1732,7 @@
         </p>
       </section>
 
-      <!-- Quack Wall / Guestbook Input Form -->
+      <!-- Quack Wall Input Form -->
       <section class="quack-wall-section">
         <div class="wall-title-row">
           <span id="wallTitle">Quack Wall Guestbook</span>
@@ -1184,11 +1766,175 @@
     </article>
   </main>
 
-  <!-- Sleek Developer Badge (Bottom Right corner) -->
+  <!-- Sleek Developer Badge (Bottom Right) -->
   <a href="https://nanda.is-a.dev" target="_blank" rel="noopener noreferrer" class="dev-badge" id="devBadge" title="Visit Developer Portfolio">
     <span class="dev-badge-icon">⚡</span>
     <span>Dev: <strong>Nanda</strong></span>
   </a>
+
+  <!-- ========================================================= -->
+  <!-- MODAL: DUCK WARDROBE (SKINS & HATS)                       -->
+  <!-- ========================================================= -->
+  <div class="modal-backdrop" id="wardrobeModal" role="dialog" aria-modal="true" aria-label="Duck Wardrobe">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>🎨</span>
+          <span id="wardrobeTitle">Duck Wardrobe</span>
+        </div>
+        <button type="button" class="modal-close-btn" data-close="wardrobeModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="wardrobe-section-title" id="wardrobeHatsTitle">Hats & Accessories</div>
+        <div class="wardrobe-grid" id="hatsGrid">
+          <div class="wardrobe-card active" data-hat="none">
+            <div class="wardrobe-icon">🚫</div>
+            <div class="wardrobe-name" id="hatNone">None</div>
+          </div>
+          <div class="wardrobe-card" data-hat="tophat">
+            <div class="wardrobe-icon">🎩</div>
+            <div class="wardrobe-name" id="hatTopHat">Top Hat</div>
+          </div>
+          <div class="wardrobe-card" data-hat="sunglasses">
+            <div class="wardrobe-icon">🕶️</div>
+            <div class="wardrobe-name" id="hatSunglasses">Thug Shades</div>
+          </div>
+          <div class="wardrobe-card" data-hat="graduate">
+            <div class="wardrobe-icon">🎓</div>
+            <div class="wardrobe-name" id="hatGraduate">ELTE Scholar</div>
+          </div>
+          <div class="wardrobe-card" data-hat="pirate">
+            <div class="wardrobe-icon">🏴‍☠️</div>
+            <div class="wardrobe-name" id="hatPirate">Pirate</div>
+          </div>
+          <div class="wardrobe-card" data-hat="halo">
+            <div class="wardrobe-icon">😇</div>
+            <div class="wardrobe-name" id="hatHalo">Angel Halo</div>
+          </div>
+          <div class="wardrobe-card" data-hat="party">
+            <div class="wardrobe-icon">🎉</div>
+            <div class="wardrobe-name" id="hatParty">Party Cone</div>
+          </div>
+        </div>
+
+        <div class="wardrobe-section-title" id="wardrobeSkinsTitle" style="margin-top:10px;">Duck Skins</div>
+        <div class="wardrobe-grid" id="skinsGrid">
+          <div class="wardrobe-card active" data-skin="classic">
+            <div class="wardrobe-icon">🦆</div>
+            <div class="wardrobe-name" id="skinClassic">Classic Rubber</div>
+          </div>
+          <div class="wardrobe-card" data-skin="gold">
+            <div class="wardrobe-icon">✨</div>
+            <div class="wardrobe-name" id="skinGold">Golden Duck</div>
+          </div>
+          <div class="wardrobe-card" data-skin="cyber">
+            <div class="wardrobe-icon">⚡</div>
+            <div class="wardrobe-name" id="skinCyber">Cyberpunk</div>
+          </div>
+          <div class="wardrobe-card" data-skin="ghost">
+            <div class="wardrobe-icon">👻</div>
+            <div class="wardrobe-name" id="skinGhost">Spectral Ghost</div>
+          </div>
+          <div class="wardrobe-card" data-skin="stealth">
+            <div class="wardrobe-icon">🥷</div>
+            <div class="wardrobe-name" id="skinStealth">Stealth Matte</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL: TYCOON UPGRADES (CLICK POWER & QPS GENERATORS)     -->
+  <!-- ========================================================= -->
+  <div class="modal-backdrop" id="upgradesModal" role="dialog" aria-modal="true" aria-label="Duck Tycoon Upgrades">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>⚡</span>
+          <span id="upgradesTitle">Duck Tycoon & QPS</span>
+        </div>
+        <button type="button" class="modal-close-btn" data-close="upgradesModal">&times;</button>
+      </div>
+      <div class="modal-body" id="upgradesList">
+        <!-- Upgrades dynamically rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL: ACHIEVEMENTS & TROPHIES                            -->
+  <!-- ========================================================= -->
+  <div class="modal-backdrop" id="achievementsModal" role="dialog" aria-modal="true" aria-label="Achievements Showcase">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>🏆</span>
+          <span id="achievementsTitle">Achievements Showcase</span>
+        </div>
+        <button type="button" class="modal-close-btn" data-close="achievementsModal">&times;</button>
+      </div>
+      <div class="modal-body" id="achievementsList">
+        <!-- Achievements dynamically rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL: EXPANDED QUACK WALL 2.0                            -->
+  <!-- ========================================================= -->
+  <div class="modal-backdrop" id="wallModal" role="dialog" aria-modal="true" aria-label="Quack Wall Feed">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>💬</span>
+          <span id="wallModalTitle">Quack Wall Sanctuary</span>
+        </div>
+        <button type="button" class="modal-close-btn" data-close="wallModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="wall-feed-list" id="fullWallFeed">
+          <div style="text-align:center; padding: 20px; color: var(--text-dim);">Loading quacks...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL: SOUND SETTINGS & PRESETS                           -->
+  <!-- ========================================================= -->
+  <div class="modal-backdrop" id="soundModal" role="dialog" aria-modal="true" aria-label="Audio Synthesizer Settings">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>🔊</span>
+          <span id="soundModalTitle">Sound Synthesizer</span>
+        </div>
+        <button type="button" class="modal-close-btn" data-close="soundModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="wardrobe-section-title" id="soundPresetTitle">Procedural Sound Profiles</div>
+        <div class="sound-presets-grid" id="soundPresetsGrid">
+          <div class="sound-preset-btn active" data-preset="classic">
+            <div class="sound-preset-name">Classic Duck</div>
+            <div class="sound-preset-desc">Formant-filtered natural quack</div>
+          </div>
+          <div class="sound-preset-btn" data-preset="chiptune">
+            <div class="sound-preset-name">8-Bit Chiptune</div>
+            <div class="sound-preset-desc">Retro arcade square arpeggio</div>
+          </div>
+          <div class="sound-preset-btn" data-preset="squeak">
+            <div class="sound-preset-name">Funny Squeak</div>
+            <div class="sound-preset-desc">High-pitch toy squeaker</div>
+          </div>
+          <div class="sound-preset-btn" data-preset="bass">
+            <div class="sound-preset-name">Sub Bass Duck</div>
+            <div class="sound-preset-desc">Heavy resonant synth punch</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Secret Matrix Terminal Overlay -->
   <div class="terminal-overlay" id="terminalOverlay" role="dialog" aria-modal="true" aria-label="Matrix Cyber Duck Terminal">
@@ -1240,7 +1986,9 @@
     (function() {
       'use strict';
 
-      // Multilingual Content Dictionary
+      // =========================================================
+      // Multilingual Content Dictionary (RU, EN, HU)
+      // =========================================================
       const i18n = {
         ru: {
           message: "Я не знаю, зачем это и почему у меня это есть, но я узнал, что сюда можно публиковать фигню. Так что вот вам утка.",
@@ -1253,7 +2001,61 @@
           postBtn: "Пост",
           badgeText: "Утка Онлайн",
           latest: "Новое",
-          emptyFeed: "Напиши что-нибудь классное!"
+          emptyFeed: "Напиши что-нибудь классное!",
+          navWardrobe: "Гардероб",
+          navUpgrades: "Ферма",
+          navAchievements: "Награды",
+          navWall: "Стена",
+          wardrobeTitle: "Утиный Гардероб",
+          wardrobeHats: "Шляпы и Очки",
+          wardrobeSkins: "Скины Утки",
+          upgradesTitle: "Утиная Ферма & Доход",
+          achievementsTitle: "Зал Славы и Трофеи",
+          wallModalTitle: "Стена Кряков",
+          soundModalTitle: "Настройки Звука",
+          soundPresetTitle: "Профили Звука",
+          clickPowerName: "Сила Клика",
+          clickPowerDesc: "Увеличивает кряки за один клик",
+          breadGenName: "Хлебные Крошки",
+          breadGenDesc: "Приманивает уток (+1 кряк/сек)",
+          ducklingName: "Утёнок-Помощник",
+          ducklingDesc: "Крякает за вас (+5 кряк/сек)",
+          megaphoneName: "Мегафон Кряка",
+          megaphoneDesc: "Громкое эхо (+20 кряк/сек)",
+          sanctuaryName: "Утиный Пруд ELTE",
+          sanctuaryDesc: "Рай для сотен уток (+80 кряк/сек)",
+          buyText: "Купить",
+          toastUnlocked: "Достижение Получено!",
+          breadCatchTitle: "Золотой Хлебушек!",
+          breadCatchDesc: "+50 Бонусных кряков!",
+          hats: {
+            none: "Без шляпы",
+            tophat: "Цилиндр",
+            sunglasses: "Очки Thug Life",
+            graduate: "Выпускник ELTE",
+            pirate: "Пират",
+            halo: "Нимб Ангела",
+            party: "Праздничный Колпак"
+          },
+          skins: {
+            classic: "Классическая Жёлтая",
+            gold: "Золотая Утка",
+            cyber: "Киберпанк Неон",
+            ghost: "Призрак",
+            stealth: "Стелс Нуар"
+          },
+          achieves: {
+            first_quack: { name: "Первое Кря", desc: "Сделайте свой первый клик по утке" },
+            click_100: { name: "Центурион", desc: "Сделайте 100 кликов за сессию" },
+            click_1000: { name: "Утиный Маньяк", desc: "Накопите 1,000 кряков" },
+            speed_demon: { name: "Пулемётчик", desc: "Разогоните скорость кликов до 8+ CPS" },
+            fashion_icon: { name: "Модник", desc: "Наденьте любую шляпу или скин" },
+            tycoon: { name: "Капиталист", desc: "Приобретите первое улучшение" },
+            quack_wall: { name: "Оратор", desc: "Оставьте сообщение на стене" },
+            matrix_hacker: { name: "Оператор Матрицы", desc: "Откройте секретный терминал" },
+            polyglot: { name: "Полиглот", desc: "Попробуйте все языки интерфейса" },
+            golden_bread: { name: "Утиная Охота", desc: "Поймайте пролетающий золотой хлеб" }
+          }
         },
         en: {
           message: "I have no idea why I have this or what it's for, but I found out I can post random stuff here. So here is a duck.",
@@ -1266,7 +2068,61 @@
           postBtn: "Post",
           badgeText: "Live Duck",
           latest: "Latest",
-          emptyFeed: "Quack something cool!"
+          emptyFeed: "Quack something cool!",
+          navWardrobe: "Wardrobe",
+          navUpgrades: "Tycoon",
+          navAchievements: "Trophies",
+          navWall: "Wall",
+          wardrobeTitle: "Duck Wardrobe",
+          wardrobeHats: "Hats & Accessories",
+          wardrobeSkins: "Duck Skins",
+          upgradesTitle: "Duck Tycoon & QPS",
+          achievementsTitle: "Achievements Showcase",
+          wallModalTitle: "Quack Wall Sanctuary",
+          soundModalTitle: "Sound Synthesizer",
+          soundPresetTitle: "Procedural Sound Profiles",
+          clickPowerName: "Click Power",
+          clickPowerDesc: "Increases quacks produced per tap",
+          breadGenName: "Bread Crumbs",
+          breadGenDesc: "Attracts hungry ducks (+1 QPS)",
+          ducklingName: "Duckling Assistant",
+          ducklingDesc: "Helps you quack along (+5 QPS)",
+          megaphoneName: "Quack Megaphone",
+          megaphoneDesc: "Amplified quack resonance (+20 QPS)",
+          sanctuaryName: "ELTE Duck Sanctuary",
+          sanctuaryDesc: "A bustling pond sanctuary (+80 QPS)",
+          buyText: "Buy",
+          toastUnlocked: "Achievement Unlocked!",
+          breadCatchTitle: "Golden Catch!",
+          breadCatchDesc: "+50 Bonus Quacks Awarded!",
+          hats: {
+            none: "None",
+            tophat: "Top Hat",
+            sunglasses: "Thug Shades",
+            graduate: "ELTE Scholar",
+            pirate: "Pirate Bicorne",
+            halo: "Angel Halo",
+            party: "Party Cone"
+          },
+          skins: {
+            classic: "Classic Rubber",
+            gold: "Golden Duck",
+            cyber: "Cyberpunk Neon",
+            ghost: "Spectral Ghost",
+            stealth: "Stealth Matte"
+          },
+          achieves: {
+            first_quack: { name: "First Quack", desc: "Perform your first tap on the duck" },
+            click_100: { name: "Centurion", desc: "Reach 100 session clicks" },
+            click_1000: { name: "Duck Obsessed", desc: "Amass 1,000 total quacks" },
+            speed_demon: { name: "Speed Demon", desc: "Reach a click speed of 8+ CPS" },
+            fashion_icon: { name: "Dapper Duck", desc: "Equip any accessory or skin" },
+            tycoon: { name: "Duck Capitalist", desc: "Purchase your first upgrade" },
+            quack_wall: { name: "Public Speaker", desc: "Post a thought on the wall" },
+            matrix_hacker: { name: "The Matrix Operator", desc: "Unlock the secret terminal" },
+            polyglot: { name: "Polyglot", desc: "Switch across all 3 languages" },
+            golden_bread: { name: "Golden Hunter", desc: "Catch the flying golden treat" }
+          }
         },
         hu: {
           message: "Fogalmam sincs, miért van ez és mire jó, de megtudtam, hogy ide baromságokat lehet posztolni. Úgyhogy tessék, itt egy kacsa.",
@@ -1279,12 +2135,67 @@
           postBtn: "Küldés",
           badgeText: "Élő Kacsa",
           latest: "Legújabb",
-          emptyFeed: "Írj valami vicceset!"
+          emptyFeed: "Írj valami vicceset!",
+          navWardrobe: "Ruhatár",
+          navUpgrades: "Fejlesztés",
+          navAchievements: "Trófeák",
+          navWall: "Üzenőfal",
+          wardrobeTitle: "Kacsa Ruhatár",
+          wardrobeHats: "Kalapok & Kiegészítők",
+          wardrobeSkins: "Kacsa Külsők",
+          upgradesTitle: "Kacsa Gazdaság (QPS)",
+          achievementsTitle: "Dicsőségcsarnok",
+          wallModalTitle: "Kacsa Fal",
+          soundModalTitle: "Hangszintetizátor",
+          soundPresetTitle: "Hangprofilok",
+          clickPowerName: "Kattintási Erő",
+          clickPowerDesc: "Több hápogás kattintásonként",
+          breadGenName: "Kenyérmorzsák",
+          breadGenDesc: "Éhes kacsákat vonz (+1 QPS)",
+          ducklingName: "Kiskacsa Segéd",
+          ducklingDesc: "Segít hápogni (+5 QPS)",
+          megaphoneName: "Megafon",
+          megaphoneDesc: "Felerősített hápogás (+20 QPS)",
+          sanctuaryName: "ELTE Kacsa Tavacska",
+          sanctuaryDesc: "Nyüzsgő szentély (+80 QPS)",
+          buyText: "Vétel",
+          toastUnlocked: "Eredmény Feloldva!",
+          breadCatchTitle: "Arany Kenyeret Kaptál!",
+          breadCatchDesc: "+50 Bónusz Hápogás!",
+          hats: {
+            none: "Nincs",
+            tophat: "Cilinder",
+            sunglasses: "Napszemüveg",
+            graduate: "ELTE Diplomás",
+            pirate: "Kalóz",
+            halo: "Angyali Glória",
+            party: "Parti Kalap"
+          },
+          skins: {
+            classic: "Klasszikus Sárga",
+            gold: "Arany Kacsa",
+            cyber: "Cyberpunk Neon",
+            ghost: "Szellem Kacsa",
+            stealth: "Lopakodó Fekete"
+          },
+          achieves: {
+            first_quack: { name: "Első Háp", desc: "Kattints először a kacsára" },
+            click_100: { name: "Centurió", desc: "Érj el 100 kattintást egy menetben" },
+            click_1000: { name: "Kacsamániás", desc: "Gyűjts össze 1,000 hápogást" },
+            speed_demon: { name: "Gyors Kezek", desc: "Érj el 8+ CPS sebességet" },
+            fashion_icon: { name: "Divatikon", desc: "Vegyen fel bármilyen kalapot vagy külsőt" },
+            tycoon: { name: "Kacsa Kapitalista", desc: "Vásárold meg az első fejlesztésed" },
+            quack_wall: { name: "Szónok", desc: "Hagyj egy üzenetet a falon" },
+            matrix_hacker: { name: "Mátrix Operátor", desc: "Nyisd meg a titkos terminált" },
+            polyglot: { name: "Poliglott", desc: "Válts át mindhárom nyelvre" },
+            golden_bread: { name: "Arany Fogás", desc: "Kattints a repülő aranykenyérre" }
+          }
         }
       };
 
       let currentLang = 'en';
       let isTransitioning = false;
+      const visitedLangs = new Set(['en']);
 
       // DOM Elements
       const mainCard = document.getElementById('mainCard');
@@ -1294,6 +2205,7 @@
       const badgeTextEl = document.getElementById('badgeText');
       const counterLabelEl = document.getElementById('counterLabel');
       const globalCounterEl = document.getElementById('globalCounter');
+      const qpsRateIndicator = document.getElementById('qpsRateIndicator');
       const comboBadgeEl = document.getElementById('comboBadge');
       const comboTextEl = document.getElementById('comboText');
       const cpsIndicatorEl = document.getElementById('cpsIndicator');
@@ -1302,6 +2214,7 @@
       const duckSvg = duckWrapper.querySelector('.duck-svg');
       const quackContainer = document.getElementById('quackContainer');
       const bubbleContainer = document.getElementById('bubbleContainer');
+      const toastContainer = document.getElementById('toastContainer');
       const langButtons = document.querySelectorAll('.lang-btn');
       const wallForm = document.getElementById('wallForm');
       const messageInput = document.getElementById('messageInput');
@@ -1310,6 +2223,22 @@
       const postBtnText = document.getElementById('postBtnText');
       const feedText = document.getElementById('feedText');
       const devBadge = document.getElementById('devBadge');
+      const soundToggleBtn = document.getElementById('soundToggleBtn');
+      const waterCanvas = document.getElementById('waterCanvas');
+
+      // Nav Buttons & Modals
+      const openWardrobeBtn = document.getElementById('openWardrobeBtn');
+      const openUpgradesBtn = document.getElementById('openUpgradesBtn');
+      const openAchievementsBtn = document.getElementById('openAchievementsBtn');
+      const openWallBtn = document.getElementById('openWallBtn');
+      const wardrobeModal = document.getElementById('wardrobeModal');
+      const upgradesModal = document.getElementById('upgradesModal');
+      const achievementsModal = document.getElementById('achievementsModal');
+      const wallModal = document.getElementById('wallModal');
+      const soundModal = document.getElementById('soundModal');
+      const clickPowerBadge = document.getElementById('clickPowerBadge');
+      const achieveBadge = document.getElementById('achieveBadge');
+      const achieveDot = document.getElementById('achieveDot');
 
       // Terminal Elements
       const terminalOverlay = document.getElementById('terminalOverlay');
@@ -1320,8 +2249,8 @@
       const termLatency = document.getElementById('termLatency');
       const terminalLogs = document.getElementById('terminalLogs');
 
-      // Session & Stats State
-      let totalGlobalQuacks = 0;
+      // Session & State
+      let totalGlobalQuacks = parseInt(localStorage.getItem('quack_total') || '0', 10);
       let sessionClicks = 0;
       let comboStreak = 0;
       let currentCPS = 0;
@@ -1329,9 +2258,106 @@
       let pendingQuacks = 0;
       let syncTimer = null;
       let measuredLatency = 0;
+      let isMuted = localStorage.getItem('quack_muted') === 'true';
+      let currentSoundPreset = localStorage.getItem('quack_sound_preset') || 'classic';
+      let currentHat = localStorage.getItem('quack_hat') || 'none';
+      let currentSkin = localStorage.getItem('quack_skin') || 'classic';
 
       // =========================================================
-      // Web Audio API Procedural Sound Synth
+      // TYCOON / UPGRADES STATE & DEFINITION
+      // =========================================================
+      const TYCOON_DATA = {
+        clickPower: {
+          level: parseInt(localStorage.getItem('tycoon_click_lvl') || '1', 10),
+          baseCost: 15,
+          scale: 1.6,
+          getPower: function() { return this.level; }
+        },
+        generators: [
+          { id: 'bread', baseCost: 25, qps: 1, count: parseInt(localStorage.getItem('tycoon_gen_bread') || '0', 10) },
+          { id: 'duckling', baseCost: 120, qps: 5, count: parseInt(localStorage.getItem('tycoon_gen_duckling') || '0', 10) },
+          { id: 'megaphone', baseCost: 500, qps: 20, count: parseInt(localStorage.getItem('tycoon_gen_megaphone') || '0', 10) },
+          { id: 'sanctuary', baseCost: 2000, qps: 80, count: parseInt(localStorage.getItem('tycoon_gen_sanctuary') || '0', 10) }
+        ]
+      };
+
+      function calculateTotalQPS() {
+        return TYCOON_DATA.generators.reduce((sum, g) => sum + (g.count * g.qps), 0);
+      }
+
+      function getGenCost(gen) {
+        return Math.floor(gen.baseCost * Math.pow(1.15, gen.count));
+      }
+
+      function getClickPowerCost() {
+        return Math.floor(TYCOON_DATA.clickPower.baseCost * Math.pow(TYCOON_DATA.clickPower.scale, TYCOON_DATA.clickPower.level - 1));
+      }
+
+      // =========================================================
+      // ACHIEVEMENTS SYSTEM
+      // =========================================================
+      const unlockedAchievements = new Set(JSON.parse(localStorage.getItem('quack_achievements') || '[]'));
+
+      function unlockAchievement(id) {
+        if (unlockedAchievements.has(id) || !i18n[currentLang].achieves[id]) return;
+        unlockedAchievements.add(id);
+        localStorage.setItem('quack_achievements', JSON.stringify([...unlockedAchievements]));
+        updateAchievementUI();
+        achieveDot.classList.add('visible');
+
+        playAchievementChime();
+
+        // Show Toast
+        const achieveInfo = i18n[currentLang].achieves[id];
+        showToast('🏆', i18n[currentLang].toastUnlocked, achieveInfo.name);
+      }
+
+      function showToast(icon, tag, title) {
+        const toast = document.createElement('div');
+        toast.className = 'toast-banner';
+        toast.innerHTML = `
+          <div class="toast-icon">${icon}</div>
+          <div class="toast-col">
+            <span class="toast-tag">${tag}</span>
+            <span class="toast-title">${title}</span>
+          </div>
+        `;
+        toastContainer.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(-20px)';
+          toast.style.transition = 'all 0.3s ease';
+          setTimeout(() => toast.remove(), 350);
+        }, 3800);
+      }
+
+      function updateAchievementUI() {
+        const count = unlockedAchievements.size;
+        achieveBadge.textContent = `${count}/10`;
+
+        const listEl = document.getElementById('achievementsList');
+        if (!listEl) return;
+        listEl.innerHTML = '';
+
+        const allKeys = Object.keys(i18n[currentLang].achieves);
+        allKeys.forEach((key) => {
+          const isUnlocked = unlockedAchievements.has(key);
+          const data = i18n[currentLang].achieves[key];
+          const item = document.createElement('div');
+          item.className = `achievement-item ${isUnlocked ? 'unlocked' : ''}`;
+          item.innerHTML = `
+            <div class="achievement-trophy">${isUnlocked ? '🏆' : '🔒'}</div>
+            <div class="achievement-text-col">
+              <div class="achievement-name">${data.name}</div>
+              <div class="achievement-desc">${data.desc}</div>
+            </div>
+          `;
+          listEl.appendChild(item);
+        });
+      }
+
+      // =========================================================
+      // WEB AUDIO API PROCEDURAL SYNTHESIZER (4 SOUND PRESETS)
       // =========================================================
       let audioCtx = null;
 
@@ -1349,46 +2375,143 @@
       }
 
       function playProceduralQuack(pitchMultiplier = 1.0) {
+        if (isMuted) return;
         try {
           const ctx = getAudioContext();
           if (!ctx) return;
-
           const now = ctx.currentTime;
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          const filter = ctx.createBiquadFilter();
 
-          // Dynamic formant simulation
-          osc.type = 'sawtooth';
-          filter.type = 'bandpass';
-          filter.Q.setValueAtTime(3.8, now);
+          switch (currentSoundPreset) {
+            case 'chiptune': {
+              // 8-Bit Arcade Square Arpeggio
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.type = 'square';
+              const base = 420 * pitchMultiplier;
+              osc.frequency.setValueAtTime(base, now);
+              osc.frequency.setValueAtTime(base * 1.5, now + 0.04);
+              osc.frequency.setValueAtTime(base * 2.0, now + 0.08);
+              osc.frequency.setValueAtTime(base * 1.25, now + 0.12);
 
-          // Dynamic pitch modulation based on CPS
-          const baseFreq = 340 * pitchMultiplier;
-          osc.frequency.setValueAtTime(baseFreq, now);
-          osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.65, now + 0.16);
-          osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.52, now + 0.26);
+              gain.gain.setValueAtTime(0.001, now);
+              gain.gain.linearRampToValueAtTime(0.18, now + 0.015);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
 
-          const filterFreq = 860 * pitchMultiplier;
-          filter.frequency.setValueAtTime(filterFreq, now);
-          filter.frequency.linearRampToValueAtTime(filterFreq * 0.7, now + 0.18);
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+              osc.start(now);
+              osc.stop(now + 0.23);
+              break;
+            }
 
-          gain.gain.setValueAtTime(0.001, now);
-          gain.gain.linearRampToValueAtTime(0.24, now + 0.025);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+            case 'squeak': {
+              // High Frequency Squeaky Rubber Duck
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.type = 'sine';
+              const base = 950 * pitchMultiplier;
+              osc.frequency.setValueAtTime(base, now);
+              osc.frequency.exponentialRampToValueAtTime(base * 1.45, now + 0.08);
+              osc.frequency.exponentialRampToValueAtTime(base * 0.9, now + 0.18);
 
-          osc.connect(filter);
-          filter.connect(gain);
-          gain.connect(ctx.destination);
+              gain.gain.setValueAtTime(0.001, now);
+              gain.gain.linearRampToValueAtTime(0.22, now + 0.02);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
 
-          osc.start(now);
-          osc.stop(now + 0.29);
-        } catch (e) {
-          // Graceful fallback if blocked by browser policy
-        }
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+              osc.start(now);
+              osc.stop(now + 0.21);
+              break;
+            }
+
+            case 'bass': {
+              // Heavy Lowpass Sub-Bass Quack
+              const osc = ctx.createOscillator();
+              const filter = ctx.createBiquadFilter();
+              const gain = ctx.createGain();
+              osc.type = 'sawtooth';
+              filter.type = 'lowpass';
+              filter.frequency.setValueAtTime(380, now);
+              filter.frequency.exponentialRampToValueAtTime(90, now + 0.28);
+
+              const base = 130 * pitchMultiplier;
+              osc.frequency.setValueAtTime(base, now);
+              osc.frequency.exponentialRampToValueAtTime(base * 0.6, now + 0.26);
+
+              gain.gain.setValueAtTime(0.001, now);
+              gain.gain.linearRampToValueAtTime(0.35, now + 0.03);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+
+              osc.connect(filter);
+              filter.connect(gain);
+              gain.connect(ctx.destination);
+              osc.start(now);
+              osc.stop(now + 0.31);
+              break;
+            }
+
+            case 'classic':
+            default: {
+              // Formant simulation natural duck
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              const filter = ctx.createBiquadFilter();
+
+              osc.type = 'sawtooth';
+              filter.type = 'bandpass';
+              filter.Q.setValueAtTime(3.8, now);
+
+              const baseFreq = 340 * pitchMultiplier;
+              osc.frequency.setValueAtTime(baseFreq, now);
+              osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.65, now + 0.16);
+              osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.52, now + 0.26);
+
+              const filterFreq = 860 * pitchMultiplier;
+              filter.frequency.setValueAtTime(filterFreq, now);
+              filter.frequency.linearRampToValueAtTime(filterFreq * 0.7, now + 0.18);
+
+              gain.gain.setValueAtTime(0.001, now);
+              gain.gain.linearRampToValueAtTime(0.24, now + 0.025);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+
+              osc.connect(filter);
+              filter.connect(gain);
+              gain.connect(ctx.destination);
+
+              osc.start(now);
+              osc.stop(now + 0.29);
+              break;
+            }
+          }
+        } catch (e) {}
+      }
+
+      function playAchievementChime() {
+        if (isMuted) return;
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+          notes.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            const now = ctx.currentTime + idx * 0.08;
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now);
+            gain.gain.setValueAtTime(0.001, now);
+            gain.gain.linearRampToValueAtTime(0.16, now + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.36);
+          });
+        } catch (e) {}
       }
 
       function playTerminalBeep() {
+        if (isMuted) return;
         try {
           const ctx = getAudioContext();
           if (!ctx) return;
@@ -1407,59 +2530,317 @@
         } catch (e) {}
       }
 
-      // =========================================================
-      // Mobile & Touch Handling (Eliminate 300ms Delay)
-      // =========================================================
-      function addTapListener(el, callback) {
-        let lastTouchTime = 0;
+      // Sound Toggle Button
+      function updateSoundBtnUI() {
+        soundToggleBtn.textContent = isMuted ? '🔇' : '🔊';
+        soundToggleBtn.classList.toggle('muted', isMuted);
+      }
+      updateSoundBtnUI();
 
-        el.addEventListener('touchstart', (e) => {
-          lastTouchTime = Date.now();
-          getAudioContext(); // Unlock audio on first touch
-          callback(e);
-        }, { passive: true });
+      soundToggleBtn.addEventListener('click', () => {
+        isMuted = !isMuted;
+        localStorage.setItem('quack_muted', isMuted);
+        updateSoundBtnUI();
+        if (!isMuted) playProceduralQuack();
+      });
 
-        el.addEventListener('click', (e) => {
-          if (Date.now() - lastTouchTime < 450) {
-            // Prevent ghost click immediately following touchstart
-            return;
-          }
-          getAudioContext();
-          callback(e);
+      // =========================================================
+      // WATER CANVAS RIPPLES EFFECT
+      // =========================================================
+      const ripples = [];
+      let canvasCtx = null;
+
+      function initWaterCanvas() {
+        waterCanvas.width = waterCanvas.offsetWidth;
+        waterCanvas.height = waterCanvas.offsetHeight;
+        canvasCtx = waterCanvas.getContext('2d');
+      }
+
+      window.addEventListener('resize', () => {
+        if (waterCanvas) {
+          waterCanvas.width = waterCanvas.offsetWidth;
+          waterCanvas.height = waterCanvas.offsetHeight;
+        }
+      });
+
+      function addWaterRipple(x, y) {
+        if (!canvasCtx) initWaterCanvas();
+        ripples.push({
+          x: x || waterCanvas.width / 2,
+          y: y || waterCanvas.height / 2,
+          radius: 12,
+          alpha: 0.65,
+          speed: 2.6
         });
       }
+
+      function renderWaterRipples() {
+        if (canvasCtx && ripples.length > 0) {
+          canvasCtx.clearRect(0, 0, waterCanvas.width, waterCanvas.height);
+          for (let i = ripples.length - 1; i >= 0; i--) {
+            const r = ripples[i];
+            r.radius += r.speed;
+            r.alpha -= 0.016;
+
+            if (r.alpha <= 0) {
+              ripples.splice(i, 1);
+              continue;
+            }
+
+            canvasCtx.beginPath();
+            canvasCtx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+            canvasCtx.strokeStyle = `rgba(255, 199, 44, ${r.alpha * 0.4})`;
+            canvasCtx.lineWidth = 2.5;
+            canvasCtx.stroke();
+          }
+        }
+        requestAnimationFrame(renderWaterRipples);
+      }
+      initWaterCanvas();
+      renderWaterRipples();
+
+      // =========================================================
+      // DUCK WARDROBE & ACCESSORIES LOGIC
+      // =========================================================
+      function applyHat(hatId) {
+        currentHat = hatId;
+        localStorage.setItem('quack_hat', hatId);
+
+        const allHats = document.querySelectorAll('#hatLayers > g');
+        allHats.forEach(g => g.style.display = 'none');
+
+        const target = document.getElementById(`hat-${hatId}`);
+        if (target) {
+          target.style.display = 'inline';
+        }
+
+        document.querySelectorAll('#hatsGrid .wardrobe-card').forEach(card => {
+          card.classList.toggle('active', card.dataset.hat === hatId);
+        });
+
+        if (hatId !== 'none') {
+          unlockAchievement('fashion_icon');
+        }
+      }
+
+      function applySkin(skinId) {
+        currentSkin = skinId;
+        localStorage.setItem('quack_skin', skinId);
+
+        duckWrapper.classList.remove('skin-gold', 'skin-cyber', 'skin-ghost', 'skin-stealth');
+        if (skinId !== 'classic') {
+          duckWrapper.classList.add(`skin-${skinId}`);
+          unlockAchievement('fashion_icon');
+        }
+
+        document.querySelectorAll('#skinsGrid .wardrobe-card').forEach(card => {
+          card.classList.toggle('active', card.dataset.skin === skinId);
+        });
+      }
+
+      document.querySelectorAll('#hatsGrid .wardrobe-card').forEach(card => {
+        card.addEventListener('click', () => {
+          applyHat(card.dataset.hat);
+          playProceduralQuack(1.3);
+        });
+      });
+
+      document.querySelectorAll('#skinsGrid .wardrobe-card').forEach(card => {
+        card.addEventListener('click', () => {
+          applySkin(card.dataset.skin);
+          playProceduralQuack(1.3);
+        });
+      });
+
+      applyHat(currentHat);
+      applySkin(currentSkin);
+
+      // =========================================================
+      // TYCOON UPGRADES RENDERING & PURCHASING
+      // =========================================================
+      function renderUpgradesList() {
+        const listEl = document.getElementById('upgradesList');
+        if (!listEl) return;
+        listEl.innerHTML = '';
+
+        const langDict = i18n[currentLang];
+        const clickCost = getClickPowerCost();
+
+        // 1. Click Power Card
+        const clickCard = document.createElement('div');
+        clickCard.className = 'upgrade-card';
+        clickCard.innerHTML = `
+          <div class="upgrade-info">
+            <div class="upgrade-icon">👆</div>
+            <div class="upgrade-details">
+              <div class="upgrade-name">${langDict.clickPowerName}</div>
+              <div class="upgrade-desc">${langDict.clickPowerDesc}</div>
+              <div class="upgrade-level">Lvl ${TYCOON_DATA.clickPower.level} (+${TYCOON_DATA.clickPower.level} Quacks/tap)</div>
+            </div>
+          </div>
+          <button type="button" class="upgrade-buy-btn" id="buyClickPowerBtn" ${totalGlobalQuacks < clickCost ? 'disabled' : ''}>
+            <span>${langDict.buyText}</span>
+            <span>${clickCost.toLocaleString()} Q</span>
+          </button>
+        `;
+        listEl.appendChild(clickCard);
+
+        const buyClickBtn = clickCard.querySelector('#buyClickPowerBtn');
+        buyClickBtn.addEventListener('click', () => {
+          if (totalGlobalQuacks >= clickCost) {
+            totalGlobalQuacks -= clickCost;
+            TYCOON_DATA.clickPower.level++;
+            localStorage.setItem('tycoon_click_lvl', TYCOON_DATA.clickPower.level);
+            clickPowerBadge.textContent = `+${TYCOON_DATA.clickPower.level}`;
+            globalCounterEl.textContent = formatNumber(totalGlobalQuacks);
+            unlockAchievement('tycoon');
+            playProceduralQuack(1.4);
+            renderUpgradesList();
+          }
+        });
+
+        // 2. QPS Generators
+        const genIcons = { bread: '🍞', duckling: '🐣', megaphone: '📢', sanctuary: '🏞️' };
+        const genNames = {
+          bread: langDict.breadGenName,
+          duckling: langDict.ducklingName,
+          megaphone: langDict.megaphoneName,
+          sanctuary: langDict.sanctuaryName
+        };
+        const genDescs = {
+          bread: langDict.breadGenDesc,
+          duckling: langDict.ducklingDesc,
+          megaphone: langDict.megaphoneDesc,
+          sanctuary: langDict.sanctuaryDesc
+        };
+
+        TYCOON_DATA.generators.forEach((gen) => {
+          const cost = getGenCost(gen);
+          const card = document.createElement('div');
+          card.className = 'upgrade-card';
+          card.innerHTML = `
+            <div class="upgrade-info">
+              <div class="upgrade-icon">${genIcons[gen.id] || '⚡'}</div>
+              <div class="upgrade-details">
+                <div class="upgrade-name">${genNames[gen.id]}</div>
+                <div class="upgrade-desc">${genDescs[gen.id]}</div>
+                <div class="upgrade-level">Owned: ${gen.count} (+${gen.count * gen.qps} QPS)</div>
+              </div>
+            </div>
+            <button type="button" class="upgrade-buy-btn" ${totalGlobalQuacks < cost ? 'disabled' : ''}>
+              <span>${langDict.buyText}</span>
+              <span>${cost.toLocaleString()} Q</span>
+            </button>
+          `;
+          listEl.appendChild(card);
+
+          const buyBtn = card.querySelector('.upgrade-buy-btn');
+          buyBtn.addEventListener('click', () => {
+            if (totalGlobalQuacks >= cost) {
+              totalGlobalQuacks -= cost;
+              gen.count++;
+              localStorage.setItem(`tycoon_gen_${gen.id}`, gen.count);
+              globalCounterEl.textContent = formatNumber(totalGlobalQuacks);
+              unlockAchievement('tycoon');
+              playProceduralQuack(1.4);
+              renderUpgradesList();
+              updateQPSDisplay();
+            }
+          });
+        });
+      }
+
+      function updateQPSDisplay() {
+        const qps = calculateTotalQPS();
+        qpsRateIndicator.textContent = `+${qps.toFixed(1)} QPS`;
+      }
+
+      clickPowerBadge.textContent = `+${TYCOON_DATA.clickPower.level}`;
+      updateQPSDisplay();
+
+      // QPS Timer Loop (Runs every 1000ms adding idle quacks)
+      setInterval(() => {
+        const qps = calculateTotalQPS();
+        if (qps > 0) {
+          totalGlobalQuacks += qps;
+          pendingQuacks += qps;
+          globalCounterEl.textContent = formatNumber(totalGlobalQuacks);
+          termGlobalQuacks.textContent = formatNumber(totalGlobalQuacks);
+          addWaterRipple();
+
+          if (totalGlobalQuacks >= 1000) {
+            unlockAchievement('click_1000');
+          }
+
+          scheduleQuackSync();
+        }
+      }, 1000);
+
+      // =========================================================
+      // FLOATING BONUS TREAT (MINI-GAME)
+      // =========================================================
+      function spawnFloatingTreat() {
+        const treat = document.createElement('div');
+        treat.className = 'floating-treat';
+        treat.textContent = Math.random() > 0.4 ? '🥖' : '🍀';
+        treat.title = 'Catch the golden bonus!';
+
+        treat.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const bonus = 50;
+          totalGlobalQuacks += bonus;
+          pendingQuacks += bonus;
+          globalCounterEl.textContent = formatNumber(totalGlobalQuacks);
+
+          unlockAchievement('golden_bread');
+          playAchievementChime();
+
+          const dict = i18n[currentLang];
+          showToast('🥖', dict.breadCatchTitle, dict.breadCatchDesc);
+
+          treat.remove();
+          scheduleQuackSync();
+        });
+
+        document.body.appendChild(treat);
+        setTimeout(() => { if (treat.parentNode) treat.remove(); }, 10500);
+      }
+
+      // Randomly spawn treat between 40s and 70s
+      setInterval(() => {
+        if (Math.random() < 0.65) spawnFloatingTreat();
+      }, 45000);
 
       // =========================================================
       // CPS Tracker & Combo Engine
       // =========================================================
       function updateCPS() {
         const now = Date.now();
-        // Keep clicks in the last 1000ms window
         clickTimestamps = clickTimestamps.filter(t => now - t <= 1000);
         currentCPS = clickTimestamps.length;
         cpsIndicatorEl.textContent = `${currentCPS.toFixed(1)} CPS`;
 
-        if (termCps) {
-          termCps.textContent = `${currentCPS.toFixed(1)} CPS`;
+        if (termCps) termCps.textContent = `${currentCPS.toFixed(1)} CPS`;
+
+        if (currentCPS >= 8) {
+          unlockAchievement('speed_demon');
         }
 
-        // Cool-down combo if user is idle for more than 1.8s
         if (clickTimestamps.length === 0 && comboStreak > 0) {
           comboStreak = Math.max(0, comboStreak - 1);
           checkMilestones();
         }
       }
-
       setInterval(updateCPS, 150);
 
       function checkMilestones() {
-        // Milestone: 50 Clicks / Combo -> Neon Cyberpunk Border
         const hasNeon = comboStreak >= 50 || sessionClicks >= 50;
         mainCard.classList.toggle('neon-glow', hasNeon);
 
-        // Milestone 3: 100 Clicks / Combo -> Golden Duck + Screen Shake
         const hasGold = comboStreak >= 100 || sessionClicks >= 100;
-        duckWrapper.classList.toggle('golden-duck', hasGold);
+        if (currentSkin === 'classic') {
+          duckWrapper.classList.toggle('skin-gold', hasGold);
+        }
 
         if (hasGold && currentCPS >= 3) {
           document.body.classList.add('screen-shaking');
@@ -1467,7 +2848,6 @@
           document.body.classList.remove('screen-shaking');
         }
 
-        // Combo Badge Text & Visual Feedback
         if (comboStreak >= 5) {
           comboBadgeEl.classList.add('active');
           if (comboStreak >= 100) {
@@ -1515,26 +2895,20 @@
             }
           }
         } catch (e) {
-          // Graceful fallback for offline / preview
           measuredLatency = 12;
           termLatency.textContent = `~12 ms (Local)`;
-          if (totalGlobalQuacks === 0) {
-            const localSaved = parseInt(localStorage.getItem('quack_total') || '42', 10);
-            totalGlobalQuacks = localSaved;
-            globalCounterEl.textContent = formatNumber(totalGlobalQuacks);
-          }
+          globalCounterEl.textContent = formatNumber(totalGlobalQuacks);
         }
       }
 
-      // Batch send quacks to prevent server overload
       function scheduleQuackSync() {
         if (syncTimer) return;
         syncTimer = setTimeout(async () => {
           syncTimer = null;
           if (pendingQuacks <= 0) return;
 
-          const toSend = pendingQuacks;
-          pendingQuacks = 0;
+          const toSend = Math.min(pendingQuacks, 250);
+          pendingQuacks -= toSend;
 
           try {
             const res = await fetch('api.php', {
@@ -1545,13 +2919,12 @@
             if (res.ok) {
               const data = await res.json();
               if (data.status === 'success' && data.total_quacks) {
-                totalGlobalQuacks = data.total_quacks;
+                totalGlobalQuacks = Math.max(totalGlobalQuacks, data.total_quacks);
                 globalCounterEl.textContent = formatNumber(totalGlobalQuacks);
                 termGlobalQuacks.textContent = formatNumber(totalGlobalQuacks);
               }
             }
           } catch (e) {
-            // Persist locally
             localStorage.setItem('quack_total', totalGlobalQuacks);
           }
         }, 600);
@@ -1574,12 +2947,7 @@
         badge.style.top = `${randomY}%`;
 
         quackContainer.appendChild(badge);
-
-        setTimeout(() => {
-          if (badge.parentNode) {
-            badge.parentNode.removeChild(badge);
-          }
-        }, 980);
+        setTimeout(() => badge.remove(), 980);
       }
 
       function spawnSpeechBubble(text) {
@@ -1590,12 +2958,7 @@
         bubble.style.top = '15%';
 
         bubbleContainer.appendChild(bubble);
-
-        setTimeout(() => {
-          if (bubble.parentNode) {
-            bubble.parentNode.removeChild(bubble);
-          }
-        }, 3600);
+        setTimeout(() => bubble.remove(), 3600);
       }
 
       // =========================================================
@@ -1606,24 +2969,28 @@
         clickTimestamps.push(now);
         sessionClicks++;
         comboStreak++;
-        totalGlobalQuacks++;
-        pendingQuacks++;
 
-        // Optimistic UI updates
+        const addAmount = TYCOON_DATA.clickPower.getPower();
+        totalGlobalQuacks += addAmount;
+        pendingQuacks += addAmount;
+
         globalCounterEl.textContent = formatNumber(totalGlobalQuacks);
         termSessionClicks.textContent = sessionClicks;
         termGlobalQuacks.textContent = formatNumber(totalGlobalQuacks);
 
-        // Procedural Audio pitch escalation based on CPS (up to 1.6x)
+        // Procedural Audio pitch escalation
         const pitchFactor = 1.0 + Math.min(currentCPS, 14) * 0.042;
         playProceduralQuack(pitchFactor);
+
+        // Water Ripple
+        addWaterRipple();
 
         // SVG Squish Physics Animation
         duckSvg.classList.remove('squishing');
         void duckSvg.offsetWidth;
         duckSvg.classList.add('squishing');
 
-        // Stage click glow effect
+        // Stage click glow
         duckStage.classList.add('clicking');
         setTimeout(() => duckStage.classList.remove('clicking'), 250);
 
@@ -1636,11 +3003,28 @@
         }
         spawnQuackBadge(offsetX);
 
+        // Achievements check
+        unlockAchievement('first_quack');
+        if (sessionClicks >= 100) unlockAchievement('click_100');
+        if (totalGlobalQuacks >= 1000) unlockAchievement('click_1000');
+
         checkMilestones();
         scheduleQuackSync();
       }
 
-      addTapListener(duckWrapper, handleDuckInteraction);
+      // Tap handling
+      let lastTouch = 0;
+      duckWrapper.addEventListener('touchstart', (e) => {
+        lastTouch = Date.now();
+        getAudioContext();
+        handleDuckInteraction(e.touches[0]);
+      }, { passive: true });
+
+      duckWrapper.addEventListener('click', (e) => {
+        if (Date.now() - lastTouch < 450) return;
+        getAudioContext();
+        handleDuckInteraction(e);
+      });
 
       duckWrapper.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -1650,7 +3034,7 @@
       });
 
       // =========================================================
-      // Guestbook / Quack Wall Submission
+      // Quack Wall Submission & Keyword Easter Eggs
       // =========================================================
       messageInput.addEventListener('input', () => {
         const len = messageInput.value.length;
@@ -1665,8 +3049,24 @@
         if (!raw) return;
 
         postBtn.disabled = true;
-        const originalBtnText = postBtnText.textContent;
+        const origText = postBtnText.textContent;
         postBtnText.textContent = '...';
+
+        // Keyword easter eggs
+        const lower = raw.toLowerCase();
+        if (lower.includes('bread') || lower.includes('хлеб') || lower.includes('kenyer')) {
+          for (let i = 0; i < 4; i++) {
+            setTimeout(spawnFloatingTreat, i * 400);
+          }
+        }
+        if (lower.includes('dance') || lower.includes('танец') || lower.includes('tanc')) {
+          duckSvg.classList.add('dancing');
+          setTimeout(() => duckSvg.classList.remove('dancing'), 4500);
+        }
+        if (lower.includes('matrix') || lower.includes('матрица')) {
+          mainCard.classList.add('neon-glow');
+          playTerminalBeep();
+        }
 
         try {
           const res = await fetch('api.php', {
@@ -1689,21 +3089,144 @@
           charCounter.textContent = '0/60';
           charCounter.classList.remove('warning', 'limit');
 
-          // Trigger duck celebration bounce
           duckSvg.classList.remove('squishing');
           void duckSvg.offsetWidth;
           duckSvg.classList.add('squishing');
           playProceduralQuack(1.2);
+
+          unlockAchievement('quack_wall');
         } catch (err) {
-          // Local fallback simulation
           spawnSpeechBubble(raw);
           feedText.textContent = `"${raw}"`;
           messageInput.value = '';
           charCounter.textContent = '0/60';
+          unlockAchievement('quack_wall');
         } finally {
           postBtn.disabled = false;
-          postBtnText.textContent = originalBtnText;
+          postBtnText.textContent = origText;
         }
+      });
+
+      // =========================================================
+      // FULL QUACK WALL MODAL & LIKE SYSTEM
+      // =========================================================
+      async function loadFullWallFeed() {
+        const container = document.getElementById('fullWallFeed');
+        container.innerHTML = '<div style="text-align:center; padding: 20px; color: var(--text-dim);">Loading quacks...</div>';
+
+        try {
+          const res = await fetch('api.php?action=get_wall');
+          if (res.ok) {
+            const data = await res.json();
+            if (data.status === 'success' && Array.isArray(data.messages)) {
+              renderWallPosts(data.messages);
+              return;
+            }
+          }
+        } catch (e) {}
+
+        // Fallback local feed
+        renderWallPosts([
+          { id: 1, message: "Welcome to the Quack Sanctuary!", likes: 12, created_at: "Recent" },
+          { id: 2, message: "ELTE Caesar rocks with PHP 8.2!", likes: 8, created_at: "Recent" }
+        ]);
+      }
+
+      function renderWallPosts(posts) {
+        const container = document.getElementById('fullWallFeed');
+        container.innerHTML = '';
+
+        if (!posts || posts.length === 0) {
+          container.innerHTML = '<div style="text-align:center; padding: 20px; color: var(--text-dim);">No quacks posted yet. Be the first!</div>';
+          return;
+        }
+
+        posts.forEach(p => {
+          const card = document.createElement('div');
+          card.className = 'wall-post-card';
+          card.innerHTML = `
+            <div class="wall-post-text">"${escapeHtml(p.message)}"</div>
+            <div class="wall-post-meta">
+              <span class="wall-post-date">${p.created_at ? p.created_at.split(' ')[0] : ''}</span>
+              <button type="button" class="wall-like-btn" data-id="${p.id}">
+                <span>🦆</span>
+                <span class="like-count">${p.likes || 0}</span>
+              </button>
+            </div>
+          `;
+          container.appendChild(card);
+
+          const likeBtn = card.querySelector('.wall-like-btn');
+          likeBtn.addEventListener('click', async () => {
+            const countEl = likeBtn.querySelector('.like-count');
+            let current = parseInt(countEl.textContent, 10) || 0;
+            countEl.textContent = current + 1;
+            likeBtn.style.color = '#ff007b';
+            playProceduralQuack(1.3);
+
+            try {
+              await fetch('api.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `action=like_message&id=${p.id}`
+              });
+            } catch (e) {}
+          });
+        });
+      }
+
+      function escapeHtml(str) {
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      // =========================================================
+      // MODAL CONTROLS & EVENT LISTENERS
+      // =========================================================
+      function openModal(modalEl) {
+        modalEl.classList.add('open');
+      }
+
+      function closeModal(modalEl) {
+        modalEl.classList.remove('open');
+      }
+
+      document.querySelectorAll('.modal-close-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetId = btn.dataset.close;
+          const modal = document.getElementById(targetId);
+          if (modal) closeModal(modal);
+        });
+      });
+
+      document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+        backdrop.addEventListener('click', (e) => {
+          if (e.target === backdrop) closeModal(backdrop);
+        });
+      });
+
+      openWardrobeBtn.addEventListener('click', () => openModal(wardrobeModal));
+      openUpgradesBtn.addEventListener('click', () => {
+        renderUpgradesList();
+        openModal(upgradesModal);
+      });
+      openAchievementsBtn.addEventListener('click', () => {
+        achieveDot.classList.remove('visible');
+        updateAchievementUI();
+        openModal(achievementsModal);
+      });
+      openWallBtn.addEventListener('click', () => {
+        loadFullWallFeed();
+        openModal(wallModal);
+      });
+
+      // Sound Preset Selection
+      document.querySelectorAll('#soundPresetsGrid .sound-preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentSoundPreset = btn.dataset.preset;
+          localStorage.setItem('quack_sound_preset', currentSoundPreset);
+          document.querySelectorAll('#soundPresetsGrid .sound-preset-btn').forEach(b => b.classList.toggle('active', b === btn));
+          playProceduralQuack();
+        });
       });
 
       // =========================================================
@@ -1713,6 +3236,10 @@
         if (lang === currentLang || isTransitioning || !i18n[lang]) return;
         isTransitioning = true;
         currentLang = lang;
+        visitedLangs.add(lang);
+        if (visitedLangs.size >= 3) {
+          unlockAchievement('polyglot');
+        }
 
         langButtons.forEach(btn => {
           const isActive = btn.dataset.lang === lang;
@@ -1723,14 +3250,48 @@
         messageEl.classList.add('fade-out');
 
         setTimeout(() => {
-          messageEl.textContent = i18n[lang].message;
-          clickHintEl.textContent = i18n[lang].hint;
-          secretHintEl.textContent = i18n[lang].secretHint;
-          counterLabelEl.textContent = i18n[lang].counterLabel;
-          badgeTextEl.textContent = i18n[lang].badgeText;
-          messageInput.setAttribute('placeholder', i18n[lang].placeholder);
-          postBtnText.textContent = i18n[lang].postBtn;
-          duckWrapper.setAttribute('aria-label', i18n[lang].ariaLabel);
+          const d = i18n[lang];
+          messageEl.textContent = d.message;
+          clickHintEl.textContent = d.hint;
+          secretHintEl.textContent = d.secretHint;
+          counterLabelEl.textContent = d.counterLabel;
+          badgeTextEl.textContent = d.badgeText;
+          messageInput.setAttribute('placeholder', d.placeholder);
+          postBtnText.textContent = d.postBtn;
+          duckWrapper.setAttribute('aria-label', d.ariaLabel);
+
+          // Nav buttons
+          document.getElementById('navWardrobeText').textContent = d.navWardrobe;
+          document.getElementById('navUpgradesText').textContent = d.navUpgrades;
+          document.getElementById('navAchievementsText').textContent = d.navAchievements;
+          document.getElementById('navWallText').textContent = d.navWall;
+
+          // Modals titles
+          document.getElementById('wardrobeTitle').textContent = d.wardrobeTitle;
+          document.getElementById('wardrobeHatsTitle').textContent = d.wardrobeHats;
+          document.getElementById('wardrobeSkinsTitle').textContent = d.wardrobeSkins;
+          document.getElementById('upgradesTitle').textContent = d.upgradesTitle;
+          document.getElementById('achievementsTitle').textContent = d.achievementsTitle;
+          document.getElementById('wallModalTitle').textContent = d.wallModalTitle;
+          document.getElementById('soundModalTitle').textContent = d.soundModalTitle;
+          document.getElementById('soundPresetTitle').textContent = d.soundPresetTitle;
+
+          // Hats names
+          document.getElementById('hatNone').textContent = d.hats.none;
+          document.getElementById('hatTopHat').textContent = d.hats.tophat;
+          document.getElementById('hatSunglasses').textContent = d.hats.sunglasses;
+          document.getElementById('hatGraduate').textContent = d.hats.graduate;
+          document.getElementById('hatPirate').textContent = d.hats.pirate;
+          document.getElementById('hatHalo').textContent = d.hats.halo;
+          document.getElementById('hatParty').textContent = d.hats.party;
+
+          // Skins names
+          document.getElementById('skinClassic').textContent = d.skins.classic;
+          document.getElementById('skinGold').textContent = d.skins.gold;
+          document.getElementById('skinCyber').textContent = d.skins.cyber;
+          document.getElementById('skinGhost').textContent = d.skins.ghost;
+          document.getElementById('skinStealth').textContent = d.skins.stealth;
+
           document.documentElement.lang = lang;
 
           messageEl.classList.remove('fade-out');
@@ -1744,11 +3305,11 @@
       }
 
       langButtons.forEach(btn => {
-        addTapListener(btn, () => switchLanguage(btn.dataset.lang));
+        btn.addEventListener('click', () => switchLanguage(btn.dataset.lang));
       });
 
       // =========================================================
-      // Easter Egg: Konami Code & Mobile 3-Tap Dev Badge
+      // Konami Code & Dev Badge Easter Egg (Matrix Terminal)
       // =========================================================
       let isTerminalOpen = false;
 
@@ -1756,6 +3317,7 @@
         isTerminalOpen = true;
         terminalOverlay.classList.add('active');
         playTerminalBeep();
+        unlockAchievement('matrix_hacker');
 
         const logEntry = document.createElement('div');
         logEntry.innerHTML = `> [${new Date().toLocaleTimeString()}] EASTER EGG UNLOCKED VIA ${triggerType}!`;
@@ -1770,7 +3332,6 @@
 
       terminalCloseBtn.addEventListener('click', closeTerminalMode);
 
-      // Konami Code Sequence: Up Up Down Down Left Right Left Right b a
       const konamiSequence = [
         'ArrowUp', 'ArrowUp',
         'ArrowDown', 'ArrowDown',
@@ -1786,10 +3347,7 @@
           return;
         }
 
-        // If user is currently typing in input field, ignore Konami keys
-        if (document.activeElement === messageInput) {
-          return;
-        }
+        if (document.activeElement === messageInput) return;
 
         const requiredKey = konamiSequence[konamiIndex];
         if (e.key === requiredKey || e.key.toLowerCase() === requiredKey) {
@@ -1799,21 +3357,19 @@
             openTerminalMode('KONAMI CODE OVERRIDE');
           }
         } else {
-          // Reset sequence on mismatch
           konamiIndex = (e.key === konamiSequence[0]) ? 1 : 0;
         }
       });
 
-      // Mobile Easter Egg: Secret 3-Tap Gesture on Dev Badge within 1.2 seconds
+      // Triple Tap on Dev Badge
       let badgeTapCount = 0;
       let badgeTapTimer = null;
-
       devBadge.addEventListener('click', (e) => {
         badgeTapCount++;
         clearTimeout(badgeTapTimer);
 
         if (badgeTapCount >= 3) {
-          e.preventDefault(); // Intercept navigation to open terminal
+          e.preventDefault();
           badgeTapCount = 0;
           openTerminalMode('TRIPLE-TAP BADGE GESTURE');
           return;
@@ -1852,7 +3408,17 @@
       document.addEventListener('mousemove', handleCardTilt);
       document.addEventListener('mouseleave', resetCardTilt);
 
-      // Initial stats fetch
+      // =========================================================
+      // Service Worker Registration for PWA
+      // =========================================================
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js').catch(() => {});
+        });
+      }
+
+      // Initial stats fetch & UI setup
+      updateAchievementUI();
       fetchStats();
 
     })();
