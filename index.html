@@ -920,12 +920,19 @@
 
     .secret-hint-text:hover { opacity: 0.95; color: #94a3b8; }
 
-    /* Developer Badge (Bottom Right) */
-    .dev-badge {
+    /* Floating badge stack (bottom right) */
+    .badge-stack {
       position: fixed;
       bottom: 18px;
       right: 20px;
       z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .dev-badge {
       display: inline-flex;
       align-items: center;
       gap: 7px;
@@ -943,6 +950,9 @@
       transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
       touch-action: manipulation;
       user-select: none;
+      max-width: min(92vw, 320px);
+      text-align: left;
+      line-height: 1.25;
     }
 
     .dev-badge:hover {
@@ -951,8 +961,28 @@
       box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 199, 44, 0.2);
     }
 
+    .dev-badge.neptun-badge {
+      border-color: rgba(0, 243, 255, 0.28);
+    }
+
+    .dev-badge.neptun-badge:hover {
+      border-color: rgba(0, 243, 255, 0.55);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 243, 255, 0.22);
+    }
+
+    .dev-badge.help-badge {
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      justify-content: center;
+      font-size: 1.05rem;
+      font-weight: 800;
+      border-radius: 50%;
+    }
+
     .dev-badge strong { color: var(--accent-yellow); font-weight: 700; }
-    .dev-badge-icon { font-size: 0.85rem; color: var(--accent-yellow); }
+    .dev-badge-icon { font-size: 0.85rem; color: var(--accent-yellow); flex-shrink: 0; }
+    .neptun-badge .dev-badge-icon { color: var(--accent-cyan); }
 
     /* ========================================================= */
     /* Modals & Backdrop UI (Glassmorphic Popups)               */
@@ -1504,7 +1534,9 @@
       .nav-pill-btn { padding: 6px 10px; font-size: 0.74rem; }
       .wardrobe-grid { grid-template-columns: repeat(2, 1fr); }
       .sound-presets-grid { grid-template-columns: 1fr; }
-      .dev-badge { bottom: 12px; right: 12px; padding: 6px 12px; font-size: 0.76rem; }
+      .badge-stack { bottom: 12px; right: 12px; gap: 6px; }
+      .dev-badge { padding: 6px 12px; font-size: 0.76rem; }
+      .dev-badge.help-badge { width: 34px; height: 34px; padding: 0; font-size: 0.95rem; }
     }
   </style>
 </head>
@@ -1766,11 +1798,18 @@
     </article>
   </main>
 
-  <!-- Sleek Developer Badge (Bottom Right) -->
-  <a href="https://nanda.is-a.dev" target="_blank" rel="noopener noreferrer" class="dev-badge" id="devBadge" title="Visit Developer Portfolio">
-    <span class="dev-badge-icon">⚡</span>
-    <span>Dev: <strong>Nanda</strong></span>
-  </a>
+  <!-- Floating badge stack: Neptun download, help, Dev Nanda -->
+  <div class="badge-stack" id="badgeStack">
+    <a href="./neptun-elte.html" class="dev-badge neptun-badge" id="neptunBadge" title="NEPTUN Mobile for ELTE">
+      <span class="dev-badge-icon">📱</span>
+      <span id="neptunBadgeText">Download <strong>NEPTUN Mobile for ELTE</strong></span>
+    </a>
+    <a href="https://nanda.is-a.dev" target="_blank" rel="noopener noreferrer" class="dev-badge help-badge" id="helpBadge" title="Message Nanda">?</a>
+    <a href="https://nanda.is-a.dev" target="_blank" rel="noopener noreferrer" class="dev-badge" id="devBadge" title="Visit Developer Portfolio">
+      <span class="dev-badge-icon">⚡</span>
+      <span>Dev: <strong>Nanda</strong></span>
+    </a>
+  </div>
 
   <!-- ========================================================= -->
   <!-- MODAL: DUCK WARDROBE (SKINS & HATS)                       -->
@@ -2000,6 +2039,8 @@
           placeholder: "Напиши что-нибудь (до 60 симв.)...",
           postBtn: "Пост",
           badgeText: "Утка Онлайн",
+          neptunBadge: "Скачать NEPTUN Mobile for ELTE",
+          helpBadgeTitle: "Напишите Nanda",
           latest: "Новое",
           emptyFeed: "Напиши что-нибудь классное!",
           navWardrobe: "Гардероб",
@@ -2067,6 +2108,8 @@
           placeholder: "Drop a thought (max 60 chars)...",
           postBtn: "Post",
           badgeText: "Live Duck",
+          neptunBadge: "Download NEPTUN Mobile for ELTE",
+          helpBadgeTitle: "Message Nanda",
           latest: "Latest",
           emptyFeed: "Quack something cool!",
           navWardrobe: "Wardrobe",
@@ -2134,6 +2177,8 @@
           placeholder: "Írj egy üzenetet (max 60 kar.)...",
           postBtn: "Küldés",
           badgeText: "Élő Kacsa",
+          neptunBadge: "NEPTUN Mobile for ELTE letöltése",
+          helpBadgeTitle: "Írjon Nandának",
           latest: "Legújabb",
           emptyFeed: "Írj valami vicceset!",
           navWardrobe: "Ruhatár",
@@ -2193,7 +2238,13 @@
         }
       };
 
-      let currentLang = 'en';
+      let currentLang = (function() {
+        try {
+          const saved = localStorage.getItem('quack_lang');
+          if (saved && i18n[saved]) return saved;
+        } catch (_) {}
+        return 'en';
+      })();
       let isTransitioning = false;
       const visitedLangs = new Set(['en']);
 
@@ -3236,6 +3287,7 @@
         if (lang === currentLang || isTransitioning || !i18n[lang]) return;
         isTransitioning = true;
         currentLang = lang;
+        try { localStorage.setItem('quack_lang', lang); } catch (_) {}
         visitedLangs.add(lang);
         if (visitedLangs.size >= 3) {
           unlockAchievement('polyglot');
@@ -3259,6 +3311,16 @@
           messageInput.setAttribute('placeholder', d.placeholder);
           postBtnText.textContent = d.postBtn;
           duckWrapper.setAttribute('aria-label', d.ariaLabel);
+
+          const neptunBadgeText = document.getElementById('neptunBadgeText');
+          const neptunBadge = document.getElementById('neptunBadge');
+          const helpBadge = document.getElementById('helpBadge');
+          if (neptunBadgeText) neptunBadgeText.textContent = d.neptunBadge;
+          if (neptunBadge) {
+            neptunBadge.setAttribute('title', d.neptunBadge);
+            neptunBadge.href = './neptun-elte.html?lang=' + lang;
+          }
+          if (helpBadge) helpBadge.setAttribute('title', d.helpBadgeTitle);
 
           // Nav buttons
           document.getElementById('navWardrobeText').textContent = d.navWardrobe;
@@ -3420,6 +3482,15 @@
       // Initial stats fetch & UI setup
       updateAchievementUI();
       fetchStats();
+
+      if (currentLang !== 'en') {
+        const bootLang = currentLang;
+        currentLang = 'en'; // allow switchLanguage to run
+        switchLanguage(bootLang);
+      } else {
+        const neptunBadge = document.getElementById('neptunBadge');
+        if (neptunBadge) neptunBadge.href = './neptun-elte.html?lang=en';
+      }
 
     })();
   </script>

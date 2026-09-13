@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="NEPTUN Mobile for ELTE — unofficial ELTE Neptun client by Nanda. Install guides for Windows, macOS, and iPhone.">
+  <meta name="theme-color" content="#ffc72c">
+  <title>NEPTUN Mobile for ELTE — Install</title>
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      --bg-dark: #0d0f12;
+      --card-bg: rgba(23, 27, 34, 0.78);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --card-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.75), 0 0 45px -10px rgba(255, 199, 44, 0.12);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --accent-yellow: #ffc72c;
+      --accent-orange: #ff7a00;
+      --btn-active-bg: rgba(255, 199, 44, 0.18);
+      --btn-active-border: rgba(255, 199, 44, 0.55);
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.2rem 1rem 3.5rem;
+      position: relative;
+    }
+
+    .background-container {
+      position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0;
+    }
+    .glow-orb {
+      position: absolute; border-radius: 50%; filter: blur(95px); opacity: 0.32;
+      animation: orbFloat 22s ease-in-out infinite alternate;
+    }
+    .orb-1 {
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, #ff9f00, #ff5e00 70%);
+      top: -12%; left: 10%; animation-duration: 24s;
+    }
+    .orb-2 {
+      width: 520px; height: 520px;
+      background: radial-gradient(circle, #3b82f6, #6366f1 70%);
+      bottom: -15%; right: 5%; animation-duration: 28s; animation-delay: -6s; opacity: 0.22;
+    }
+    .orb-3 {
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, #ec4899, #8b5cf6 70%);
+      top: 38%; right: 22%; animation-duration: 20s; animation-delay: -11s; opacity: 0.18;
+    }
+    .noise-overlay {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 0);
+      background-size: 26px 26px; opacity: 0.6;
+    }
+    @keyframes orbFloat {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(45px, -55px) scale(1.08); }
+      100% { transform: translate(-40px, 40px) scale(0.92); }
+    }
+
+    .page-wrap {
+      position: relative; z-index: 2;
+      width: 100%; max-width: 820px; margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 14px; flex-wrap: wrap;
+    }
+
+    .back-link, .dev-link {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(18, 22, 29, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      color: #e2e8f0; font-size: 0.82rem; font-weight: 600;
+      padding: 7px 15px; border-radius: 999px; text-decoration: none;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+    .back-link:hover, .dev-link:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 199, 44, 0.45);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 199, 44, 0.2);
+    }
+    .back-link strong, .dev-link strong { color: var(--accent-yellow); }
+
+    .lang-switcher {
+      display: inline-flex; background: rgba(0, 0, 0, 0.4);
+      padding: 3px; border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08); gap: 3px;
+    }
+    .lang-btn {
+      background: transparent; border: 1px solid transparent;
+      color: var(--text-muted); font-family: inherit; font-size: 0.78rem;
+      font-weight: 700; padding: 5px 10px; border-radius: 8px; cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .lang-btn:hover:not(.active) { color: var(--text-main); background: rgba(255, 255, 255, 0.05); }
+    .lang-btn.active {
+      background: var(--btn-active-bg); border-color: var(--btn-active-border);
+      color: var(--accent-yellow); box-shadow: 0 2px 10px rgba(255, 199, 44, 0.18);
+    }
+
+    .card {
+      position: relative; width: 100%;
+      background: var(--card-bg);
+      backdrop-filter: blur(28px) saturate(175%);
+      -webkit-backdrop-filter: blur(28px) saturate(175%);
+      border: 1px solid var(--card-border);
+      border-radius: 30px; padding: 28px 26px 32px;
+      box-shadow: var(--card-shadow);
+    }
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.05); padding: 6px 14px;
+      border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 14px;
+    }
+    .hero-badge .dot {
+      width: 7px; height: 7px; border-radius: 50%; background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+    }
+
+    h1 {
+      font-size: clamp(1.45rem, 3.5vw, 2rem); font-weight: 800;
+      letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 10px;
+    }
+    h1 span { color: var(--accent-yellow); }
+    .lede {
+      color: var(--text-muted); font-size: 0.98rem; line-height: 1.65;
+      margin-bottom: 18px; max-width: 62ch;
+    }
+
+    .action-row {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px;
+    }
+    .btn-primary, .btn-ghost {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      font-family: inherit; font-size: 0.88rem; font-weight: 700;
+      padding: 11px 18px; border-radius: 999px; text-decoration: none;
+      cursor: pointer; border: 1px solid transparent; transition: all 0.2s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, rgba(255, 199, 44, 0.95), rgba(255, 122, 0, 0.9));
+      color: #111827; border-color: rgba(255, 199, 44, 0.55);
+      box-shadow: 0 8px 24px rgba(255, 122, 0, 0.25);
+    }
+    .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.05); }
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.12); color: #e2e8f0;
+    }
+    .btn-ghost:hover {
+      border-color: rgba(255, 199, 44, 0.4); color: var(--accent-yellow);
+    }
+
+    .notice {
+      background: rgba(255, 199, 44, 0.08);
+      border: 1px solid rgba(255, 199, 44, 0.28);
+      border-radius: 16px; padding: 14px 16px;
+      color: #fde68a; font-size: 0.9rem; line-height: 1.55;
+      margin-bottom: 22px;
+    }
+    .notice strong { color: var(--accent-yellow); }
+
+    .platform-tabs {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 18px;
+      padding: 4px; background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px;
+    }
+    .tab-btn {
+      flex: 1 1 140px; min-width: 120px;
+      background: transparent; border: 1px solid transparent;
+      color: var(--text-muted); font-family: inherit; font-size: 0.84rem;
+      font-weight: 700; padding: 10px 12px; border-radius: 12px; cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .tab-btn:hover:not(.active) { color: var(--text-main); background: rgba(255, 255, 255, 0.05); }
+    .tab-btn.active {
+      background: var(--btn-active-bg); border-color: var(--btn-active-border);
+      color: var(--accent-yellow); box-shadow: 0 2px 10px rgba(255, 199, 44, 0.18);
+    }
+
+    .panel { display: none; }
+    .panel.active { display: block; animation: fadeIn 0.25s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    h2 {
+      font-size: 1.15rem; font-weight: 800; margin: 8px 0 12px;
+      color: var(--accent-yellow);
+    }
+    h3 {
+      font-size: 0.98rem; font-weight: 700; margin: 18px 0 8px; color: #e2e8f0;
+    }
+    p, li {
+      color: var(--text-muted); font-size: 0.92rem; line-height: 1.65;
+    }
+    p { margin-bottom: 10px; }
+    ul, ol { margin: 0 0 12px 1.15rem; }
+    li { margin-bottom: 6px; }
+    li strong, p strong { color: #e2e8f0; font-weight: 700; }
+    a.inline {
+      color: var(--accent-yellow); text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    a.inline:hover { color: #ffe08a; }
+
+    .mono {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.82rem; background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px; padding: 2px 7px; color: #fde68a;
+      word-break: break-all;
+    }
+
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px; margin: 14px 0 18px;
+    }
+    .stat {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px; padding: 12px 14px;
+    }
+    .stat .k { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); font-weight: 700; }
+    .stat .v { margin-top: 4px; font-size: 1.05rem; font-weight: 800; color: var(--accent-yellow); }
+    .stat .s { margin-top: 4px; font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
+
+    .divider {
+      height: 1px; margin: 22px 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+    }
+
+    .footer-note {
+      margin-top: 22px; padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.8rem; color: var(--text-dim); line-height: 1.5;
+    }
+
+    @media (max-width: 560px) {
+      body { padding: 0.8rem 0.65rem 2.5rem; }
+      .card { padding: 20px 16px 24px; border-radius: 24px; }
+      .tab-btn { flex: 1 1 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="background-container" aria-hidden="true">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+    <div class="noise-overlay"></div>
+  </div>
+
+  <div class="page-wrap">
+    <div class="topbar">
+      <a class="back-link" href="./" id="backLink"><span>←</span> <span id="backText">Back to duck</span></a>
+      <nav class="lang-switcher" aria-label="Language selector">
+        <button type="button" class="lang-btn" data-lang="ru" aria-pressed="false">RU</button>
+        <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" class="lang-btn" data-lang="hu" aria-pressed="false">HU</button>
+      </nav>
+      <a class="dev-link" href="https://nanda.is-a.dev" target="_blank" rel="noopener noreferrer">
+        <span>⚡</span> Dev: <strong>Nanda</strong>
+      </a>
+    </div>
+
+    <article class="card">
+      <div class="hero-badge"><span class="dot"></span> <span id="heroBadge">Unofficial · ELTE only</span></div>
+      <h1 id="pageTitle">Download <span>NEPTUN Mobile</span> for ELTE</h1>
+      <p class="lede" id="pageLede"></p>
+
+      <div class="action-row">
+        <a class="btn-primary" id="ipaBtn" href="https://github.com/Nanda070/Neptun-ELTE/releases" target="_blank" rel="noopener noreferrer"></a>
+        <a class="btn-ghost" id="githubBtn" href="https://github.com/Nanda070/Neptun-ELTE" target="_blank" rel="noopener noreferrer"></a>
+      </div>
+
+      <div class="notice" id="ipaNotice"></div>
+
+      <div class="stat-grid">
+        <div class="stat">
+          <div class="k" id="statOwnerK">Owner</div>
+          <div class="v">Nanda</div>
+          <div class="s" id="statOwnerS"></div>
+        </div>
+        <div class="stat">
+          <div class="k" id="statAndroidK">Android status</div>
+          <div class="v" id="statAndroidV">~85–90%</div>
+          <div class="s" id="statAndroidS"></div>
+        </div>
+        <div class="stat">
+          <div class="k" id="statIosK">iOS install</div>
+          <div class="v" id="statIosV">Sideload</div>
+          <div class="s" id="statIosS"></div>
+        </div>
+        <div class="stat">
+          <div class="k" id="statLicenseK">License</div>
+          <div class="v">LGPL-3.0</div>
+          <div class="s" id="statLicenseS"></div>
+        </div>
+      </div>
+
+      <nav class="platform-tabs" role="tablist" aria-label="Install platform">
+        <button type="button" class="tab-btn active" data-tab="windows" role="tab" aria-selected="true" id="tabWindows">Windows</button>
+        <button type="button" class="tab-btn" data-tab="macos" role="tab" aria-selected="false" id="tabMacos">macOS</button>
+        <button type="button" class="tab-btn" data-tab="phone" role="tab" aria-selected="false" id="tabPhone">Phone</button>
+      </nav>
+
+      <section class="panel active" id="panel-windows" role="tabpanel"></section>
+      <section class="panel" id="panel-macos" role="tabpanel"></section>
+      <section class="panel" id="panel-phone" role="tabpanel"></section>
+
+      <div class="divider"></div>
+      <div id="sharedBlock"></div>
+
+      <p class="footer-note" id="footerNote"></p>
+    </article>
+  </div>
+
+  <script>
+    const i18n = {
+      en: {
+        back: "Back to duck",
+        heroBadge: "Unofficial · ELTE only",
+        titleHtml: 'Download <span>NEPTUN Mobile</span> for ELTE',
+        lede: "Detailed install & usage guide for the unofficial ELTE Neptun mobile client by Nanda. Same visual style as this site — pick your platform below anytime.",
+        ipaBtn: "IPA / Releases (GitHub)",
+        githubBtn: "Open GitHub repo",
+        ipaNotice: "<strong>IPA download:</strong> no <span class=\"mono\">.ipa</span> is hosted on this site yet (planned path later: <span class=\"mono\">/downloads/neptun-elte.ipa</span>). Use <a class=\"inline\" href=\"https://github.com/Nanda070/Neptun-ELTE/releases\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub Releases</a> when Nanda publishes a build, or ask Nanda directly. Do not trust random third-party IPA mirrors.",
+        statOwnerS: "Independent project · not affiliated with ELTE IT / Neptun vendor",
+        statAndroidS: "Rough feature-parity with the intended client surface (core workflows + GitHub APK updater/CI). Not Play Store–ready. Live ELTE login still depends on portal / Student web health.",
+        statIosS: "No App Store / TestFlight. Use Sideloadly or AltStore with your own Apple ID.",
+        statLicenseS: "Source on GitHub · LGPL-3.0-only",
+        tabWindows: "Windows",
+        tabMacos: "macOS",
+        tabPhone: "Phone only",
+        windows: `
+          <h2>Install via Windows (Sideloadly + your Apple ID)</h2>
+          <p>Best path if you have a Windows PC and an iPhone. You sign the IPA with <strong>your own free Apple ID</strong> — no paid Apple Developer account required for personal sideloading (7-day resign cycle on free accounts).</p>
+          <h3>What you need</h3>
+          <ul>
+            <li>Windows PC + USB cable (or Wi-Fi after first pair, if Sideloadly supports it for your setup)</li>
+            <li><a class="inline" href="https://sideloadly.io/" target="_blank" rel="noopener noreferrer">Sideloadly</a> + iTunes / Apple Devices drivers as Sideloadly docs require</li>
+            <li>Your Apple ID (used only to sign the app on your device)</li>
+            <li>The <span class="mono">.ipa</span> from <a class="inline" href="https://github.com/Nanda070/Neptun-ELTE/releases" target="_blank" rel="noopener noreferrer">GitHub Releases</a> (when available) or from Nanda</li>
+          </ul>
+          <h3>Steps</h3>
+          <ol>
+            <li>Install Sideloadly on Windows; trust / allow drivers if prompted.</li>
+            <li>Unlock the iPhone, connect USB, tap <strong>Trust</strong> this computer.</li>
+            <li>Open Sideloadly → drag the IPA in → enter your Apple ID → Start.</li>
+            <li>On the iPhone: <strong>Settings → General → VPN &amp; Device Management</strong> → trust the developer profile for your Apple ID.</li>
+            <li>Launch <strong>Neptun ELTE</strong>. Prefer a <strong>release</strong> IPA — on iOS 14+, debug builds often will not open from the home-screen icon.</li>
+            <li><strong>Free Apple ID note:</strong> apps typically expire after ~7 days. Re-sideload (or use a tool that auto-refreshes) to keep using it. Paid Developer Program lasts longer (~1 year).</li>
+          </ol>
+          <h3>Honesty</h3>
+          <ul>
+            <li>This is <strong>not</strong> an App Store install. Apple may show “Untrusted Developer” until you trust the profile.</li>
+            <li>Never enter your Apple ID password on unknown websites — only in Sideloadly / Apple’s own prompts.</li>
+          </ul>
+        `,
+        macos: `
+          <h2>Install via macOS (Sideloadly / AltStore + your Apple ID)</h2>
+          <p>On a Mac you can use <strong>Sideloadly</strong> (same idea as Windows) or <strong>AltStore</strong> (Mac + AltServer, then refresh from the phone while on the same network).</p>
+          <h3>Option A — Sideloadly</h3>
+          <ol>
+            <li>Download <a class="inline" href="https://sideloadly.io/" target="_blank" rel="noopener noreferrer">Sideloadly</a> for macOS.</li>
+            <li>Get the IPA from <a class="inline" href="https://github.com/Nanda070/Neptun-ELTE/releases" target="_blank" rel="noopener noreferrer">Releases</a> (or Nanda).</li>
+            <li>Connect iPhone → drag IPA → Apple ID → install → trust the profile under Settings → General → VPN &amp; Device Management.</li>
+          </ol>
+          <h3>Option B — AltStore / AltServer</h3>
+          <ol>
+            <li>Install AltServer on the Mac from the official AltStore site; install AltStore on the iPhone via AltServer.</li>
+            <li>Use AltStore to sideload the IPA (or “My Apps” / sideload flow depending on AltStore version).</li>
+            <li>Keep AltServer running occasionally so free-account apps can refresh before the 7-day expiry.</li>
+          </ol>
+          <h3>Xcode path (developers)</h3>
+          <p>If you build from source: clone <a class="inline" href="https://github.com/Nanda070/Neptun-ELTE" target="_blank" rel="noopener noreferrer">Neptun-ELTE</a>, <span class="mono">flutter pub get</span>, open <span class="mono">ios/Runner.xcworkspace</span>, Automatic Signing + your Team, then <span class="mono">flutter run --release -d &lt;device&gt;</span>. Bundle ID: <span class="mono">com.nanda070.neptunmobile</span>.</p>
+        `,
+        phone: `
+          <h2>Install “from the phone only”</h2>
+          <p><strong>Honest limit:</strong> without a computer (or a paid enterprise/TestFlight distribution that this project does <em>not</em> currently offer), pure on-phone install of a third-party IPA is <strong>very limited</strong> on modern iOS. There is no official App Store listing for Neptun ELTE.</p>
+          <h3>What is realistic</h3>
+          <ul>
+            <li><strong>Best:</strong> borrow a Windows/Mac once, install via Sideloadly/AltStore, then refresh later.</li>
+            <li><strong>AltStore-style refresh:</strong> after the first install with a computer, AltStore can refresh apps from the phone while AltServer is reachable on the LAN — still not “zero computer forever” on a free Apple ID.</li>
+            <li><strong>UDID.tech / config profiles:</strong> sites that ask for your UDID or install a configuration profile do <strong>not</strong> magically give you App Store distribution. They are usually for device registration with a developer account or dubious third-party stores. <strong>Do not</strong> install random profiles claiming “install any IPA”. Risk of malware / credential theft is real.</li>
+            <li><strong>Shortcuts / on-device only tricks:</strong> Apple Shortcuts cannot legitimately sideload unsigned IPAs the way Sideloadly does. Ignore “one-tap IPA install” claims that skip Apple ID signing.</li>
+            <li><strong>Android phone:</strong> if you use Android, prefer the GitHub <span class="mono">.apk</span> when published (Android often has the GitHub auto-updater). This guide’s IPA tabs are for iPhone.</li>
+          </ul>
+          <h3>Practical recommendation</h3>
+          <p>Use the <strong>Windows</strong> or <strong>macOS</strong> tab once. After that, keep the free signing refreshed, or ask Nanda when a new Release IPA appears.</p>
+        `,
+        shared: `
+          <h2>What this project is</h2>
+          <p><strong>Neptun ELTE</strong> (marketing version <strong>1.3.1</strong>) is an unofficial mobile client for <strong>ELTE Neptun only</strong>, developed by <strong>Nanda</strong>. It is <strong>not</strong> an official ELTE / SDA / Neptun product. Hub: <span class="mono">https://neptun.elte.hu</span> — not Obuda/BME-style <span class="mono">/ujhallgato</span>.</p>
+          <h3>How login works</h3>
+          <ol>
+            <li>Portal login with Neptun ID + password (credentials stay on device in secure storage after login).</li>
+            <li><strong>2FA</strong> when required — authenticator <strong>TOTP</strong> in the app UI (email OTP on the website may be thinner in-app).</li>
+            <li>Bridge via <strong>Student web / OuterLogin</strong> → JWT on the assigned <span class="mono">hallgatoN.neptun.elte.hu</span> node (load-balanced; do not hardcode one host).</li>
+            <li>If Student web is <strong>full</strong>, login stops after 2FA with an honest “full / try later” message — <strong>not</strong> “invalid password”.</li>
+          </ol>
+          <h3>Features / capabilities</h3>
+          <ul>
+            <li>Bottom tabs: <strong>Calendar | Markbook | Periods | Mail</strong>; <strong>Payments</strong> in the drawer above Settings</li>
+            <li>Timetable, grades (átlag / /30 honesty notes), messages (optional machine translate), fees, registration periods</li>
+            <li>Themes Light/Dark; languages EN/HU built-in, RU/TR downloadable from GitHub</li>
+            <li>Local notifications (classes / exams / payments / periods) — no creator push server</li>
+            <li><strong>10-minute</strong> session wall-clock auto-logout after entering the main session (also if backgrounded ≥10 min)</li>
+            <li>Academic cache kept after logout so tabs can paint quickly; banner when serving stale/offline data</li>
+          </ul>
+          <h3>Special notes</h3>
+          <ul>
+            <li><strong>ELTE-only</strong> — no multi-university picker</li>
+            <li><strong>Android ~85–90%</strong> of the intended client surface for day-to-day use (core features + APK updater/CI advantages vs iOS). <strong>Not store-ready</strong>. iOS is the same Flutter product shell with weaker distribution (no IPA auto-updater / no App Store yet).</li>
+            <li>License: <strong>LGPL-3.0-only</strong></li>
+            <li>Bug reports / ideas: <a class="inline" href="https://nanda.is-a.dev" target="_blank" rel="noopener noreferrer">nanda.is-a.dev</a></li>
+            <li>Repo: <a class="inline" href="https://github.com/Nanda070/Neptun-ELTE" target="_blank" rel="noopener noreferrer">github.com/Nanda070/Neptun-ELTE</a></li>
+          </ul>
+          <h3>Short project history</h3>
+          <ul>
+            <li>Grew from earlier Neptun Mobile foundations; product identity is now <strong>Neptun ELTE</strong> by <strong>Nanda</strong>.</li>
+            <li>2026-09: iOS project brought up; hub locked to ELTE; modern portal + 2FA + Student-web bridge; docs (EN/RU) + LGPL; nav IA = 4 bottom tabs + Payments in drawer; session/cache foundation (1a–1c); markbook math honesty; version line <strong>1.3.x</strong>.</li>
+            <li>Historical credits (not product identity): domedav, zoligamer — earlier related work.</li>
+          </ul>
+        `,
+        footer: "Unofficial client · Owner Nanda · Site also hosts the Random Duck tycoon game. Installing Neptun does not modify the duck game."
+      },
+      ru: {
+        back: "Назад к утке",
+        heroBadge: "Неофициально · только ELTE",
+        titleHtml: 'Скачать <span>NEPTUN Mobile</span> for ELTE',
+        lede: "Подробная инструкция по установке и работе с неофициальным мобильным клиентом ELTE Neptun от Nanda. Тот же стиль сайта — платформу можно переключать сверху в любой момент.",
+        ipaBtn: "IPA / Releases (GitHub)",
+        githubBtn: "Репозиторий на GitHub",
+        ipaNotice: "<strong>Скачивание IPA:</strong> на этом сайте пока нет файла <span class=\"mono\">.ipa</span> (позже планируется <span class=\"mono\">/downloads/neptun-elte.ipa</span>). Берите сборку с <a class=\"inline\" href=\"https://github.com/Nanda070/Neptun-ELTE/releases\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub Releases</a>, когда Nanda её публикует, или спросите у Nanda. Не доверяйте случайным зеркалам IPA.",
+        statOwnerS: "Независимый проект · не связан с IT ELTE / вендором Neptun",
+        statAndroidS: "Оценка feature-parity с задуманным клиентом (основные сценарии + GitHub APK updater/CI). Не готово к Play Store. Живой логин зависит от портала / Student web.",
+        statIosS: "Нет App Store / TestFlight. Sideloadly или AltStore со своим Apple ID.",
+        statLicenseS: "Исходники на GitHub · LGPL-3.0-only",
+        tabWindows: "Windows",
+        tabMacos: "macOS",
+        tabPhone: "Только телефон",
+        windows: `
+          <h2>Установка через Windows (Sideloadly + свой Apple ID)</h2>
+          <p>Лучший путь, если есть ПК на Windows и iPhone. IPA подписывается <strong>вашим бесплатным Apple ID</strong> — платный Developer Account не обязателен для личного sideload (на бесплатном аккаунте обычно ~7 дней до переподписи).</p>
+          <h3>Что нужно</h3>
+          <ul>
+            <li>Windows PC + USB (Wi‑Fi — если Sideloadly это поддерживает у вас)</li>
+            <li><a class="inline" href="https://sideloadly.io/" target="_blank" rel="noopener noreferrer">Sideloadly</a> и драйверы iTunes / Apple Devices по их инструкции</li>
+            <li>Ваш Apple ID (только для подписи на устройстве)</li>
+            <li>Файл <span class="mono">.ipa</span> с <a class="inline" href="https://github.com/Nanda070/Neptun-ELTE/releases" target="_blank" rel="noopener noreferrer">GitHub Releases</a> (когда есть) или от Nanda</li>
+          </ul>
+          <h3>Шаги</h3>
+          <ol>
+            <li>Установите Sideloadly; разрешите драйверы при запросе.</li>
+            <li>Разблокируйте iPhone, подключите USB, нажмите <strong>Доверять</strong>.</li>
+            <li>Откройте Sideloadly → перетащите IPA → Apple ID → Start.</li>
+            <li>На iPhone: <strong>Настройки → Основные → VPN и управление устройством</strong> → доверьте профиль разработчика вашего Apple ID.</li>
+            <li>Запустите <strong>Neptun ELTE</strong>. Лучше <strong>release</strong> IPA — на iOS 14+ debug часто не открывается с иконки на домашнем экране.</li>
+            <li><strong>Бесплатный Apple ID:</strong> приложение обычно истекает через ~7 дней. Переустановите / обновите подпись. Платный Developer Program держит дольше (~1 год).</li>
+          </ol>
+          <h3>Честно</h3>
+          <ul>
+            <li>Это <strong>не</strong> установка из App Store. Apple покажет «Недоверенный разработчик», пока не доверите профиль.</li>
+            <li>Никогда не вводите пароль Apple ID на неизвестных сайтах — только в Sideloadly / официальных окнах Apple.</li>
+          </ul>
+        `,
+        macos: `
+          <h2>Установка через macOS (Sideloadly / AltStore + свой Apple ID)</h2>
+          <p>На Mac удобны <strong>Sideloadly</strong> (как на Windows) или <strong>AltStore</strong> (Mac + AltServer, затем обновление с телефона в одной сети).</p>
+          <h3>Вариант A — Sideloadly</h3>
+          <ol>
+            <li>Скачайте <a class="inline" href="https://sideloadly.io/" target="_blank" rel="noopener noreferrer">Sideloadly</a> для macOS.</li>
+            <li>Возьмите IPA с <a class="inline" href="https://github.com/Nanda070/Neptun-ELTE/releases" target="_blank" rel="noopener noreferrer">Releases</a> (или у Nanda).</li>
+            <li>Подключите iPhone → перетащите IPA → Apple ID → установка → доверьте профиль в Настройки → Основные → VPN и управление устройством.</li>
+          </ol>
+          <h3>Вариант B — AltStore / AltServer</h3>
+          <ol>
+            <li>Установите AltServer на Mac с официального сайта AltStore; поставьте AltStore на iPhone через AltServer.</li>
+            <li>Загрузите IPA через AltStore.</li>
+            <li>Периодически держите AltServer включённым, чтобы на бесплатном аккаунте обновить приложение до истечения ~7 дней.</li>
+          </ol>
+          <h3>Путь через Xcode (для разработчиков)</h3>
+          <p>Сборка из исходников: клон <a class="inline" href="https://github.com/Nanda070/Neptun-ELTE" target="_blank" rel="noopener noreferrer">Neptun-ELTE</a>, <span class="mono">flutter pub get</span>, открыть <span class="mono">ios/Runner.xcworkspace</span>, Automatic Signing + ваша Team, затем <span class="mono">flutter run --release -d &lt;device&gt;</span>. Bundle ID: <span class="mono">com.nanda070.neptunmobile</span>.</p>
+        `,
+        phone: `
+          <h2>«Только с телефона»</h2>
+          <p><strong>Честный предел:</strong> без компьютера (и без платного enterprise/TestFlight, которого у проекта сейчас нет) чистая установка стороннего IPA на современном iOS <strong>сильно ограничена</strong>. Официальной страницы в App Store у Neptun ELTE нет.</p>
+          <h3>Что реально</h3>
+          <ul>
+            <li><strong>Лучше всего:</strong> один раз Windows/Mac + Sideloadly/AltStore, потом обновлять подпись.</li>
+            <li><strong>Обновление AltStore:</strong> после первой установки с ПК AltStore может обновлять приложения с телефона, пока AltServer доступен в LAN — это всё равно не «навсегда без компьютера» на бесплатном Apple ID.</li>
+            <li><strong>UDID.tech / профили конфигурации:</strong> сайты с запросом UDID или установкой профиля <strong>не</strong> дают магическую раздачу как App Store. Часто это регистрация устройства у разработчика или сомнительные сторы. <strong>Не ставьте</strong> случайные профили «установи любой IPA» — риск malware / кражи учёток реален.</li>
+            <li><strong>Shortcuts / трюки только на устройстве:</strong> Shortcuts не умеют легально sideload-ить неподписанные IPA как Sideloadly. Игнорируйте обещания «одной кнопкой без Apple ID».</li>
+            <li><strong>Android:</strong> лучше GitHub <span class="mono">.apk</span> (часто есть auto-updater). Вкладки IPA здесь — для iPhone.</li>
+          </ul>
+          <h3>Практический совет</h3>
+          <p>Один раз вкладка <strong>Windows</strong> или <strong>macOS</strong>. Дальше обновляйте подпись или ждите новый IPA в Releases у Nanda.</p>
+        `,
+        shared: `
+          <h2>Что это за проект</h2>
+          <p><strong>Neptun ELTE</strong> (маркетинговая версия <strong>1.3.1</strong>) — неофициальный мобильный клиент <strong>только для ELTE Neptun</strong> от <strong>Nanda</strong>. Это <strong>не</strong> продукт ELTE / SDA / Neptun. Хаб: <span class="mono">https://neptun.elte.hu</span> — не схема Obuda/BME <span class="mono">/ujhallgato</span>.</p>
+          <h3>Как работает вход</h3>
+          <ol>
+            <li>Логин на портале: Neptun ID + пароль (после входа данные на устройстве в secure storage).</li>
+            <li><strong>2FA</strong> при необходимости — <strong>TOTP</strong> authenticator в UI (email OTP с сайта в приложении может быть тоньше).</li>
+            <li>Мост через <strong>Student web / OuterLogin</strong> → JWT на узле <span class="mono">hallgatoN.neptun.elte.hu</span> (балансировка; один хост не хардкодить).</li>
+            <li>Если Student web <strong>переполнен (full)</strong>, после 2FA честное «полный / попробуйте позже» — <strong>не</strong> «неверный пароль».</li>
+          </ol>
+          <h3>Возможности</h3>
+          <ul>
+            <li>Нижние вкладки: <strong>Calendar | Markbook | Periods | Mail</strong>; <strong>Payments</strong> в drawer над Settings</li>
+            <li>Расписание, оценки (átlag / /30 с честными пояснениями), сообщения (опциональный машинный перевод), оплаты, периоды</li>
+            <li>Темы Light/Dark; языки EN/HU встроены, RU/TR с GitHub</li>
+            <li>Локальные уведомления — без push-сервера автора</li>
+            <li>Автовыход по <strong>10 минутам</strong> после входа в основную сессию (и если фон ≥10 мин)</li>
+            <li>Академический кэш сохраняется после logout; баннер при устаревших/офлайн данных</li>
+          </ul>
+          <h3>Особые заметки</h3>
+          <ul>
+            <li><strong>Только ELTE</strong> — без списка вузов</li>
+            <li><strong>Android ~85–90%</strong> от задуманной поверхности клиента (основные сценарии + APK updater/CI сильнее, чем на iOS). <strong>Не готово к сторам</strong>. iOS — та же Flutter-оболочка со слабее дистрибуцией.</li>
+            <li>Лицензия: <strong>LGPL-3.0-only</strong></li>
+            <li>Баги / идеи: <a class="inline" href="https://nanda.is-a.dev" target="_blank" rel="noopener noreferrer">nanda.is-a.dev</a></li>
+            <li>Репозиторий: <a class="inline" href="https://github.com/Nanda070/Neptun-ELTE" target="_blank" rel="noopener noreferrer">github.com/Nanda070/Neptun-ELTE</a></li>
+          </ul>
+          <h3>Краткая история</h3>
+          <ul>
+            <li>Вырос из более ранних Neptun Mobile foundations; сейчас продукт — <strong>Neptun ELTE</strong> от <strong>Nanda</strong>.</li>
+            <li>2026-09: поднят iOS; хаб только ELTE; современный портал + 2FA + Student web; docs EN/RU + LGPL; IA = 4 вкладки + Payments в drawer; foundation сессии/кэша; markbook math; линия <strong>1.3.x</strong>.</li>
+            <li>Исторические credits (не identity продукта): domedav, zoligamer.</li>
+          </ul>
+        `,
+        footer: "Неофициальный клиент · Владелец Nanda · На этом же сайте — игра Random Duck. Установка Neptun не ломает утку."
+      },
+      hu: {
+        back: "Vissza a kacsához",
+        heroBadge: "Nem hivatalos · csak ELTE",
+        titleHtml: '<span>NEPTUN Mobile</span> for ELTE letöltése',
+        lede: "Részletes telepítési és használati útmutató Nanda nem hivatalos ELTE Neptun mobil klienséhez. Ugyanaz a vizuális stílus — a platformot bármikor válthatod fent.",
+        ipaBtn: "IPA / Releases (GitHub)",
+        githubBtn: "GitHub repo megnyitása",
+        ipaNotice: "<strong>IPA letöltés:</strong> ezen a webhelyen még nincs <span class=\"mono\">.ipa</span> (később tervezett út: <span class=\"mono\">/downloads/neptun-elte.ipa</span>). A build a <a class=\"inline\" href=\"https://github.com/Nanda070/Neptun-ELTE/releases\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub Releases</a> oldalon lesz, amikor Nanda publikálja — vagy kérdezd meg Nandát. Ne bízz véletlen IPA-tüköroldalakban.",
+        statOwnerS: "Független projekt · nem ELTE IT / Neptun vendor",
+        statAndroidS: "Kb. feature-parity a tervezett kliensfelülettel (alapfolyamatok + GitHub APK updater/CI). Nem Play Store-kész. Az élő ELTE belépés a portál / Student web állapotától függ.",
+        statIosS: "Nincs App Store / TestFlight. Sideloadly vagy AltStore saját Apple ID-val.",
+        statLicenseS: "Forráskód GitHubon · LGPL-3.0-only",
+        tabWindows: "Windows",
+        tabMacos: "macOS",
+        tabPhone: "Csak telefon",
+        windows: `
+          <h2>Telepítés Windowsról (Sideloadly + saját Apple ID)</h2>
+          <p>Legjobb út, ha van Windows PC és iPhone. Az IPA-t <strong>saját ingyenes Apple ID-ddal</strong> írod alá — fizetős Developer Account nem kötelező személyes sideloadhoz (ingyenes fióknál tipikusan ~7 napos újraaláírás).</p>
+          <h3>Szükséges</h3>
+          <ul>
+            <li>Windows PC + USB (Wi‑Fi, ha a Sideloadly támogatja a beállításodnál)</li>
+            <li><a class="inline" href="https://sideloadly.io/" target="_blank" rel="noopener noreferrer">Sideloadly</a> + iTunes / Apple Devices driverek a dokumentáció szerint</li>
+            <li>Apple ID (csak az aláíráshoz az eszközön)</li>
+            <li>A <span class="mono">.ipa</span> a <a class="inline" href="https://github.com/Nanda070/Neptun-ELTE/releases" target="_blank" rel="noopener noreferrer">GitHub Releases</a> oldalról (ha van) vagy Nandától</li>
+          </ul>
+          <h3>Lépések</h3>
+          <ol>
+            <li>Telepítsd a Sideloadlyt; engedélyezd a drivereket, ha kéri.</li>
+            <li>Oldd fel az iPhone-t, kösd be USB-n, koppints a <strong>Megbízás</strong> gombra.</li>
+            <li>Sideloadly → húzd be az IPA-t → Apple ID → Start.</li>
+            <li>iPhone: <strong>Beállítások → Általános → VPN és eszközfelügyelet</strong> → bízd meg a fejlesztői profilt.</li>
+            <li>Indítsd a <strong>Neptun ELTE</strong> appot. Inkább <strong>release</strong> IPA — iOS 14+ debug gyakran nem nyílik a kezdőképernyő ikonjáról.</li>
+            <li><strong>Ingyenes Apple ID:</strong> az app tipikusan ~7 nap múlva lejár. Újra sideloadolj / frissíts. Fizetős Developer Program tovább tart (~1 év).</li>
+          </ol>
+          <h3>Őszintén</h3>
+          <ul>
+            <li>Ez <strong>nem</strong> App Store telepítés. Az Apple „Nem megbízható fejlesztő” figyelmeztetést ad, amíg meg nem bízol a profilban.</li>
+            <li>Soha ne add meg az Apple ID jelszavad idegen weboldalon — csak Sideloadly / hivatalos Apple párbeszédekben.</li>
+          </ul>
+        `,
+        macos: `
+          <h2>Telepítés macOS-ről (Sideloadly / AltStore + saját Apple ID)</h2>
+          <p>Macen a <strong>Sideloadly</strong> (mint Windowson) vagy az <strong>AltStore</strong> (Mac + AltServer, majd frissítés a telefonról ugyanazon a hálón) működik.</p>
+          <h3>A lehetőség — Sideloadly</h3>
+          <ol>
+            <li>Töltsd le a <a class="inline" href="https://sideloadly.io/" target="_blank" rel="noopener noreferrer">Sideloadlyt</a> macOS-re.</li>
+            <li>Szerezd meg az IPA-t a <a class="inline" href="https://github.com/Nanda070/Neptun-ELTE/releases" target="_blank" rel="noopener noreferrer">Releases</a> oldalról (vagy Nandától).</li>
+            <li>iPhone csatlakoztatása → IPA behúzása → Apple ID → telepítés → profil megbíza Beállítások → Általános → VPN és eszközfelügyelet alatt.</li>
+          </ol>
+          <h3>B lehetőség — AltStore / AltServer</h3>
+          <ol>
+            <li>Telepítsd az AltServer-t Macre a hivatalos AltStore oldalról; telepítsd az AltStore-t az iPhone-ra AltServerrel.</li>
+            <li>Sideloadold az IPA-t AltStore-ból.</li>
+            <li>Időnként futtasd az AltServer-t, hogy az ingyenes fiókos appok frissüljenek a ~7 napos lejárat előtt.</li>
+          </ol>
+          <h3>Xcode út (fejlesztőknek)</h3>
+          <p>Forrásból: klónozd a <a class="inline" href="https://github.com/Nanda070/Neptun-ELTE" target="_blank" rel="noopener noreferrer">Neptun-ELTE</a> repót, <span class="mono">flutter pub get</span>, nyisd meg az <span class="mono">ios/Runner.xcworkspace</span> fájlt, Automatic Signing + Team, majd <span class="mono">flutter run --release -d &lt;device&gt;</span>. Bundle ID: <span class="mono">com.nanda070.neptunmobile</span>.</p>
+        `,
+        phone: `
+          <h2>Telepítés „csak telefonról”</h2>
+          <p><strong>Őszinte korlát:</strong> számítógép nélkül (és fizetős enterprise/TestFlight nélkül, amit a projekt jelenleg nem ad) a harmadik féltől származó IPA tiszta telefonos telepítése modern iOS-en <strong>nagyon korlátozott</strong>. Nincs hivatalos App Store lista a Neptun ELTE-hez.</p>
+          <h3>Mi reális</h3>
+          <ul>
+            <li><strong>Legjobb:</strong> egyszer Windows/Mac + Sideloadly/AltStore, utána aláírás-frissítés.</li>
+            <li><strong>AltStore frissítés:</strong> az első PC-s telepítés után az AltStore frissíthet telefonról, amíg az AltServer elérhető a LAN-on — ez még mindig nem „örökre gép nélkül” ingyenes Apple ID-val.</li>
+            <li><strong>UDID.tech / konfigurációs profilok:</strong> az UDID-t kérő vagy profilt telepítő oldalak <strong>nem</strong> varázsolnak App Store-szerű terjesztést. Gyakran eszközregisztráció vagy kétes store. <strong>Ne telepíts</strong> véletlen „telepíts bármilyen IPA-t” profilokat — malware / adatlopás kockázata valós.</li>
+            <li><strong>Shortcuts / csak telefonos trükkök:</strong> a Shortcuts nem tudja legálisan úgy sideloadolni az aláíratlan IPA-t, mint a Sideloadly. Hagyd figyelmen kívül az „egy gombos IPA Apple ID nélkül” állításokat.</li>
+            <li><strong>Android:</strong> inkább GitHub <span class="mono">.apk</span> (gyakran van auto-updater). Az IPA fülek iPhone-ra vonatkoznak.</li>
+          </ul>
+          <h3>Gyakorlati javaslat</h3>
+          <p>Egyszer a <strong>Windows</strong> vagy <strong>macOS</strong> fül. Utána frissítsd az aláírást, vagy várj új IPA-ra a Releases oldalon.</p>
+        `,
+        shared: `
+          <h2>Mi ez a projekt</h2>
+          <p>A <strong>Neptun ELTE</strong> (marketing verzió <strong>1.3.1</strong>) nem hivatalos mobil kliens <strong>csak az ELTE Neptunhoz</strong>, fejlesztő: <strong>Nanda</strong>. <strong>Nem</strong> hivatalos ELTE / SDA / Neptun termék. Hub: <span class="mono">https://neptun.elte.hu</span> — nem Obuda/BME-szerű <span class="mono">/ujhallgato</span>.</p>
+          <h3>Belépés menete</h3>
+          <ol>
+            <li>Portál belépés Neptun ID + jelszó (belépés után secure storage az eszközön).</li>
+            <li><strong>2FA</strong> ha kell — authenticator <strong>TOTP</strong> az app UI-ban (a webes email OTP az appban vékonyabb lehet).</li>
+            <li>Híd: <strong>Student web / OuterLogin</strong> → JWT a kiosztott <span class="mono">hallgatoN.neptun.elte.hu</span> csomópontra (terheléselosztás; ne hardkódolj egy hostot).</li>
+            <li>Ha a Student web <strong>tele (full)</strong>, a 2FA után őszinte „tele / próbáld később” üzenet — <strong>nem</strong> „hibás jelszó”.</li>
+          </ol>
+          <h3>Funkciók</h3>
+          <ul>
+            <li>Alsó fülek: <strong>Calendar | Markbook | Periods | Mail</strong>; <strong>Payments</strong> a drawerben a Settings felett</li>
+            <li>Órarend, jegyek (átlag / /30 őszinte megjegyzésekkel), üzenetek (opcionális gépi fordítás), díjak, időszakok</li>
+            <li>Light/Dark témák; EN/HU beépítve, RU/TR GitHubról</li>
+            <li>Helyi értesítések — nincs szerzői push szerver</li>
+            <li><strong>10 perces</strong> munkamenet-kiléptetés a fő session belépése után (háttér ≥10 perc esetén is)</li>
+            <li>Akadémiai cache megmarad logout után; banner elavult/offline adatnál</li>
+          </ul>
+          <h3>Különleges megjegyzések</h3>
+          <ul>
+            <li><strong>Csak ELTE</strong> — nincs többegyetemes lista</li>
+            <li><strong>Android ~85–90%</strong> a tervezett kliensfelülethez (alapfolyamatok + APK updater/CI erősebb, mint iOS-en). <strong>Nem store-kész</strong>. Az iOS ugyanaz a Flutter héj gyengébb disztribúcióval.</li>
+            <li>Licenc: <strong>LGPL-3.0-only</strong></li>
+            <li>Hibajelentés / ötletek: <a class="inline" href="https://nanda.is-a.dev" target="_blank" rel="noopener noreferrer">nanda.is-a.dev</a></li>
+            <li>Repo: <a class="inline" href="https://github.com/Nanda070/Neptun-ELTE" target="_blank" rel="noopener noreferrer">github.com/Nanda070/Neptun-ELTE</a></li>
+          </ul>
+          <h3>Rövid történet</h3>
+          <ul>
+            <li>Korábbi Neptun Mobile alapokból nőtt; a termékidentitás most: <strong>Neptun ELTE</strong>, <strong>Nanda</strong>.</li>
+            <li>2026-09: iOS felhúzva; ELTE-only hub; modern portál + 2FA + Student web; docs EN/RU + LGPL; IA = 4 alsó fül + Payments drawer; session/cache foundation; markbook math; <strong>1.3.x</strong> vonal.</li>
+            <li>Történeti credits (nem termékidentitás): domedav, zoligamer.</li>
+          </ul>
+        `,
+        footer: "Nem hivatalos kliens · Tulajdonos: Nanda · Ezen az oldalon a Random Duck tycoon játék is fut. A Neptun telepítése nem töri el a kacsát."
+      }
+    };
+
+    let currentLang = 'en';
+
+    function applyLang(lang) {
+      if (!i18n[lang]) return;
+      currentLang = lang;
+      try { localStorage.setItem('quack_lang', lang); } catch (_) {}
+      document.documentElement.lang = lang;
+      const d = i18n[lang];
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        const on = btn.dataset.lang === lang;
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+
+      document.getElementById('backText').textContent = d.back;
+      document.getElementById('heroBadge').textContent = d.heroBadge;
+      document.getElementById('pageTitle').innerHTML = d.titleHtml;
+      document.getElementById('pageLede').textContent = d.lede;
+      document.getElementById('ipaBtn').textContent = d.ipaBtn;
+      document.getElementById('githubBtn').textContent = d.githubBtn;
+      document.getElementById('ipaNotice').innerHTML = d.ipaNotice;
+      document.getElementById('statOwnerS').textContent = d.statOwnerS;
+      document.getElementById('statAndroidS').textContent = d.statAndroidS;
+      document.getElementById('statIosS').textContent = d.statIosS;
+      document.getElementById('statLicenseS').textContent = d.statLicenseS;
+      document.getElementById('tabWindows').textContent = d.tabWindows;
+      document.getElementById('tabMacos').textContent = d.tabMacos;
+      document.getElementById('tabPhone').textContent = d.tabPhone;
+      document.getElementById('panel-windows').innerHTML = d.windows;
+      document.getElementById('panel-macos').innerHTML = d.macos;
+      document.getElementById('panel-phone').innerHTML = d.phone;
+      document.getElementById('sharedBlock').innerHTML = d.shared;
+      document.getElementById('footerNote').textContent = d.footer;
+      document.title = lang === 'ru'
+        ? 'Скачать NEPTUN Mobile for ELTE'
+        : lang === 'hu'
+          ? 'NEPTUN Mobile for ELTE letöltése'
+          : 'Download NEPTUN Mobile for ELTE';
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+    });
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => {
+          b.classList.toggle('active', b === btn);
+          b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
+        });
+        document.querySelectorAll('.panel').forEach(p => {
+          p.classList.toggle('active', p.id === 'panel-' + btn.dataset.tab);
+        });
+      });
+    });
+
+    const params = new URLSearchParams(location.search);
+    const fromQuery = params.get('lang');
+    let fromStore = null;
+    try { fromStore = localStorage.getItem('quack_lang'); } catch (_) {}
+    applyLang(['ru', 'en', 'hu'].includes(fromQuery) ? fromQuery : (['ru', 'en', 'hu'].includes(fromStore) ? fromStore : 'en'));
+  </script>
+</body>
+</html>
