@@ -970,16 +970,6 @@
       box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 243, 255, 0.22);
     }
 
-    .dev-badge.help-badge {
-      width: 38px;
-      height: 38px;
-      padding: 0;
-      justify-content: center;
-      font-size: 1.05rem;
-      font-weight: 800;
-      border-radius: 50%;
-    }
-
     .dev-badge strong { color: var(--accent-yellow); font-weight: 700; }
     .dev-badge-icon { font-size: 0.85rem; color: var(--accent-yellow); flex-shrink: 0; }
     .neptun-badge .dev-badge-icon { color: var(--accent-cyan); }
@@ -1536,7 +1526,6 @@
       .sound-presets-grid { grid-template-columns: 1fr; }
       .badge-stack { bottom: 12px; right: 12px; gap: 6px; }
       .dev-badge { padding: 6px 12px; font-size: 0.76rem; }
-      .dev-badge.help-badge { width: 34px; height: 34px; padding: 0; font-size: 0.95rem; }
     }
   </style>
 </head>
@@ -1798,13 +1787,12 @@
     </article>
   </main>
 
-  <!-- Floating badge stack: Neptun download, help, Dev Nanda -->
+  <!-- Floating badge stack: Neptun download, Dev Nanda -->
   <div class="badge-stack" id="badgeStack">
     <a href="./neptun-elte.html" class="dev-badge neptun-badge" id="neptunBadge" title="NEPTUN Mobile for ELTE">
       <span class="dev-badge-icon">📱</span>
       <span id="neptunBadgeText">Download <strong>NEPTUN Mobile for ELTE</strong></span>
     </a>
-    <a href="https://nanda.is-a.dev" target="_blank" rel="noopener noreferrer" class="dev-badge help-badge" id="helpBadge" title="Message Nanda">?</a>
     <a href="https://nanda.is-a.dev" target="_blank" rel="noopener noreferrer" class="dev-badge" id="devBadge" title="Visit Developer Portfolio">
       <span class="dev-badge-icon">⚡</span>
       <span>Dev: <strong>Nanda</strong></span>
@@ -2040,7 +2028,6 @@
           postBtn: "Пост",
           badgeText: "Утка Онлайн",
           neptunBadge: "Скачать NEPTUN Mobile for ELTE",
-          helpBadgeTitle: "Напишите Nanda",
           latest: "Новое",
           emptyFeed: "Напиши что-нибудь классное!",
           navWardrobe: "Гардероб",
@@ -2109,7 +2096,6 @@
           postBtn: "Post",
           badgeText: "Live Duck",
           neptunBadge: "Download NEPTUN Mobile for ELTE",
-          helpBadgeTitle: "Message Nanda",
           latest: "Latest",
           emptyFeed: "Quack something cool!",
           navWardrobe: "Wardrobe",
@@ -2178,7 +2164,6 @@
           postBtn: "Küldés",
           badgeText: "Élő Kacsa",
           neptunBadge: "NEPTUN Mobile for ELTE letöltése",
-          helpBadgeTitle: "Írjon Nandának",
           latest: "Legújabb",
           emptyFeed: "Írj valami vicceset!",
           navWardrobe: "Ruhatár",
@@ -3314,13 +3299,11 @@
 
           const neptunBadgeText = document.getElementById('neptunBadgeText');
           const neptunBadge = document.getElementById('neptunBadge');
-          const helpBadge = document.getElementById('helpBadge');
           if (neptunBadgeText) neptunBadgeText.textContent = d.neptunBadge;
           if (neptunBadge) {
             neptunBadge.setAttribute('title', d.neptunBadge);
             neptunBadge.href = './neptun-elte.html?lang=' + lang;
           }
-          if (helpBadge) helpBadge.setAttribute('title', d.helpBadgeTitle);
 
           // Nav buttons
           document.getElementById('navWardrobeText').textContent = d.navWardrobe;

@@ -270,10 +270,81 @@
       font-size: 0.8rem; color: var(--text-dim); line-height: 1.5;
     }
 
+    .help-fab {
+      position: fixed; bottom: 18px; right: 20px; z-index: 100;
+      width: 42px; height: 42px; padding: 0;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: rgba(18, 22, 29, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      color: var(--accent-yellow); font-family: inherit;
+      font-size: 1.15rem; font-weight: 800; border-radius: 50%;
+      cursor: pointer; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+    .help-fab:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 199, 44, 0.45);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 199, 44, 0.2);
+    }
+
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 800;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px; opacity: 0; pointer-events: none;
+      transition: opacity 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .modal-backdrop.open { opacity: 1; pointer-events: auto; }
+    .modal-window {
+      background: rgba(18, 22, 29, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px; width: 100%; max-width: 420px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 199, 44, 0.1);
+      transform: scale(0.92) translateY(12px);
+      transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+      overflow: hidden;
+    }
+    .modal-backdrop.open .modal-window { transform: scale(1) translateY(0); }
+    .modal-header {
+      padding: 16px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .modal-title {
+      font-size: 1.05rem; font-weight: 800; color: var(--text-main);
+    }
+    .modal-close-btn {
+      background: rgba(255, 255, 255, 0.08); border: none; color: var(--text-muted);
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1.2rem; font-weight: bold; line-height: 1;
+      transition: all 0.2s ease;
+    }
+    .modal-close-btn:hover { background: rgba(255, 255, 255, 0.18); color: #fff; }
+    .modal-body {
+      padding: 20px; display: flex; flex-direction: column; gap: 18px;
+    }
+    .modal-body p {
+      color: var(--text-muted); font-size: 0.98rem; line-height: 1.6; margin: 0;
+    }
+    .modal-go-btn {
+      align-self: flex-start;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: inherit; font-size: 0.9rem; font-weight: 700;
+      padding: 11px 22px; border-radius: 999px; text-decoration: none;
+      background: linear-gradient(135deg, rgba(255, 199, 44, 0.95), rgba(255, 122, 0, 0.9));
+      color: #111827; border: 1px solid rgba(255, 199, 44, 0.55);
+      box-shadow: 0 8px 24px rgba(255, 122, 0, 0.25);
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    .modal-go-btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+
     @media (max-width: 560px) {
       body { padding: 0.8rem 0.65rem 2.5rem; }
       .card { padding: 20px 16px 24px; border-radius: 24px; }
       .tab-btn { flex: 1 1 100%; }
+      .help-fab { bottom: 14px; right: 14px; width: 38px; height: 38px; font-size: 1.05rem; }
     }
   </style>
 </head>
@@ -348,6 +419,21 @@
 
       <p class="footer-note" id="footerNote"></p>
     </article>
+  </div>
+
+  <button type="button" class="help-fab" id="helpFab" title="?" aria-haspopup="dialog" aria-controls="helpModal">?</button>
+
+  <div class="modal-backdrop" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle">
+    <div class="modal-window" role="document">
+      <div class="modal-header">
+        <div class="modal-title" id="helpModalTitle">?</div>
+        <button type="button" class="modal-close-btn" id="helpModalClose" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="helpModalText"></p>
+        <a class="modal-go-btn" id="helpModalGo" href="https://nanda.is-a.dev" target="_blank" rel="noopener noreferrer"></a>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -458,7 +544,12 @@
             <li>Historical credits (not product identity): domedav, zoligamer — earlier related work.</li>
           </ul>
         `,
-        footer: "Unofficial client · Owner Nanda · Site also hosts the Random Duck tycoon game. Installing Neptun does not modify the duck game."
+        footer: "Unofficial client · Owner Nanda · Site also hosts the Random Duck tycoon game. Installing Neptun does not modify the duck game.",
+        helpTitle: "Help",
+        helpText: "Having trouble installing? Message Nanda",
+        helpGo: "Go",
+        helpFabTitle: "Install help",
+        helpClose: "Close"
       },
       ru: {
         back: "Назад к утке",
@@ -566,7 +657,12 @@
             <li>Исторические credits (не identity продукта): domedav, zoligamer.</li>
           </ul>
         `,
-        footer: "Неофициальный клиент · Владелец Nanda · На этом же сайте — игра Random Duck. Установка Neptun не ломает утку."
+        footer: "Неофициальный клиент · Владелец Nanda · На этом же сайте — игра Random Duck. Установка Neptun не ломает утку.",
+        helpTitle: "Помощь",
+        helpText: "Возникла проблема при установке? Напиши Nanda",
+        helpGo: "перейти",
+        helpFabTitle: "Помощь с установкой",
+        helpClose: "Закрыть"
       },
       hu: {
         back: "Vissza a kacsához",
@@ -674,7 +770,12 @@
             <li>Történeti credits (nem termékidentitás): domedav, zoligamer.</li>
           </ul>
         `,
-        footer: "Nem hivatalos kliens · Tulajdonos: Nanda · Ezen az oldalon a Random Duck tycoon játék is fut. A Neptun telepítése nem töri el a kacsát."
+        footer: "Nem hivatalos kliens · Tulajdonos: Nanda · Ezen az oldalon a Random Duck tycoon játék is fut. A Neptun telepítése nem töri el a kacsát.",
+        helpTitle: "Segítség",
+        helpText: "Gond van a telepítéssel? Írj Nandának",
+        helpGo: "Tovább",
+        helpFabTitle: "Telepítési segítség",
+        helpClose: "Bezárás"
       }
     };
 
@@ -712,12 +813,40 @@
       document.getElementById('panel-phone').innerHTML = d.phone;
       document.getElementById('sharedBlock').innerHTML = d.shared;
       document.getElementById('footerNote').textContent = d.footer;
+      document.getElementById('helpModalTitle').textContent = d.helpTitle;
+      document.getElementById('helpModalText').textContent = d.helpText;
+      document.getElementById('helpModalGo').textContent = d.helpGo;
+      document.getElementById('helpFab').setAttribute('title', d.helpFabTitle);
+      document.getElementById('helpFab').setAttribute('aria-label', d.helpFabTitle);
+      document.getElementById('helpModalClose').setAttribute('aria-label', d.helpClose);
       document.title = lang === 'ru'
         ? 'Скачать NEPTUN Mobile for ELTE'
         : lang === 'hu'
           ? 'NEPTUN Mobile for ELTE letöltése'
           : 'Download NEPTUN Mobile for ELTE';
     }
+
+    const helpModal = document.getElementById('helpModal');
+    const helpFab = document.getElementById('helpFab');
+
+    function openHelpModal() {
+      helpModal.classList.add('open');
+      document.getElementById('helpModalClose').focus();
+    }
+    function closeHelpModal() {
+      helpModal.classList.remove('open');
+      helpFab.focus();
+    }
+
+    helpFab.addEventListener('click', openHelpModal);
+    document.getElementById('helpModalClose').addEventListener('click', closeHelpModal);
+    helpModal.addEventListener('click', (e) => {
+      if (e.target === helpModal) closeHelpModal();
+    });
+    helpModal.querySelector('.modal-window').addEventListener('click', (e) => e.stopPropagation());
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && helpModal.classList.contains('open')) closeHelpModal();
+    });
 
     document.querySelectorAll('.lang-btn').forEach(btn => {
       btn.addEventListener('click', () => applyLang(btn.dataset.lang));
