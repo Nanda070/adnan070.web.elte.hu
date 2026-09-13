@@ -477,6 +477,24 @@
             <li>This is <strong>not</strong> an App Store install. Apple may show “Untrusted Developer” until you trust the profile.</li>
             <li>Never enter your Apple ID password on unknown websites — only in Sideloadly / Apple’s own prompts.</li>
           </ul>
+          <h3>Developer Mode (iOS 16+)</h3>
+          <p>After installing via Sideloadly/AltStore and trusting the developer profile, newer iPhones often need <strong>Developer Mode</strong> before the app will launch.</p>
+          <ol>
+            <li>Open <strong>Settings → Privacy &amp; Security → Developer Mode</strong>.</li>
+            <li>Turn <strong>Developer Mode</strong> <strong>On</strong>.</li>
+            <li>Restart the iPhone when prompted.</li>
+            <li>After reboot, confirm <strong>Turn On</strong> in the system alert.</li>
+          </ol>
+          <h3>If there is no “Developer Mode”</h3>
+          <p>Honestly: the toggle often appears only after a development / sideloaded app was installed at least once. It can also be missing if the phone needs a reboot, iOS is too old (&lt;16), the device is supervised / MDM-restricted, or the developer profile is not installed and trusted yet.</p>
+          <ol>
+            <li>Install the IPA once via Sideloadly (or AltStore).</li>
+            <li>Unlock the phone, open <strong>Settings</strong> again, and look under Privacy &amp; Security for Developer Mode.</li>
+            <li>Reboot the iPhone, then check again.</li>
+            <li>Confirm <strong>Settings → General → VPN &amp; Device Management</strong> lists your developer profile and that it is trusted.</li>
+            <li>If iOS is older than 16, update when you can — Developer Mode is an iOS 16+ control.</li>
+          </ol>
+          <p>Without Developer Mode, some sideloaded apps will not launch on newer iOS.</p>
         `,
         macos: `
           <h2>Install via macOS (Sideloadly / AltStore + your Apple ID)</h2>
@@ -495,6 +513,14 @@
           </ol>
           <h3>Xcode path (developers)</h3>
           <p>If you build from source: clone <a class="inline" href="https://github.com/Nanda070/Neptun-ELTE" target="_blank" rel="noopener noreferrer">Neptun-ELTE</a>, <span class="mono">flutter pub get</span>, open <span class="mono">ios/Runner.xcworkspace</span>, Automatic Signing + your Team, then <span class="mono">flutter run --release -d &lt;device&gt;</span>. Bundle ID: <span class="mono">com.nanda070.neptunmobile</span>.</p>
+          <h3>Developer Mode (iOS 16+)</h3>
+          <p>After Sideloadly/AltStore (and trusting the developer profile), enable Developer Mode if the app will not open:</p>
+          <ol>
+            <li><strong>Settings → Privacy &amp; Security → Developer Mode → On</strong>.</li>
+            <li>Restart when asked, then confirm <strong>Turn On</strong>.</li>
+          </ol>
+          <h3>If there is no “Developer Mode”</h3>
+          <p>The option often shows up only after a sideloaded / development app was installed once. Also check: reboot, iOS &lt;16 (update), MDM/supervised restrictions, or missing trusted profile under <strong>VPN &amp; Device Management</strong>. Install the IPA once → unlock → reopen Settings; without Developer Mode some sideloaded apps will not launch on newer iOS.</p>
         `,
         phone: `
           <h2>Install “from the phone only”</h2>
@@ -509,6 +535,8 @@
           </ul>
           <h3>Practical recommendation</h3>
           <p>Use the <strong>Windows</strong> or <strong>macOS</strong> tab once. After that, keep the free signing refreshed, or ask Nanda when a new Release IPA appears.</p>
+          <h3>After the first install — Developer Mode</h3>
+          <p>On iOS 16+, after Sideloadly/AltStore + trusting the profile, turn on <strong>Settings → Privacy &amp; Security → Developer Mode</strong> (restart + confirm). If the toggle is missing, install the IPA once, reboot, confirm the profile under VPN &amp; Device Management, and update iOS if it is older than 16 — without Developer Mode some sideloaded apps will not launch.</p>
         `,
         shared: `
           <h2>What this project is</h2>
@@ -590,6 +618,24 @@
             <li>Это <strong>не</strong> установка из App Store. Apple покажет «Недоверенный разработчик», пока не доверите профиль.</li>
             <li>Никогда не вводите пароль Apple ID на неизвестных сайтах — только в Sideloadly / официальных окнах Apple.</li>
           </ul>
+          <h3>Режим разработчика (Developer Mode, iOS 16+)</h3>
+          <p>После установки через Sideloadly/AltStore и доверия профилю разработчика на новых iPhone часто нужен <strong>режим разработчика</strong>, иначе приложение не запустится.</p>
+          <ol>
+            <li>Откройте <strong>Настройки → Конфиденциальность и безопасность → Режим разработчика</strong> (Privacy &amp; Security → Developer Mode).</li>
+            <li>Включите <strong>Режим разработчика</strong> / <strong>On</strong>.</li>
+            <li>Перезагрузите iPhone по запросу.</li>
+            <li>После перезагрузки подтвердите включение в системном предупреждении.</li>
+          </ol>
+          <h3>Если пункта «Режим разработчика» нет</h3>
+          <p>Честно: опция часто появляется только после того, как хотя бы раз было установлено development / sideload-приложение. Её также может не быть, если нужен reboot, iOS слишком старая (&lt;16), устройство под MDM / supervised, или профиль разработчика ещё не установлен и не доверен.</p>
+          <ol>
+            <li>Один раз установите IPA через Sideloadly (или AltStore).</li>
+            <li>Разблокируйте телефон, снова откройте <strong>Настройки</strong> и поищите Developer Mode в «Конфиденциальность и безопасность».</li>
+            <li>Перезагрузите iPhone и проверьте снова.</li>
+            <li>Убедитесь, что в <strong>Настройки → Основные → VPN и управление устройством</strong> есть профиль разработчика и он доверен.</li>
+            <li>Если iOS старше 16 — обновите, когда сможете: Developer Mode есть начиная с iOS 16.</li>
+          </ol>
+          <p>Без режима разработчика часть sideload-приложений на новых iOS просто не запустится.</p>
         `,
         macos: `
           <h2>Установка через macOS (Sideloadly / AltStore + свой Apple ID)</h2>
@@ -608,6 +654,14 @@
           </ol>
           <h3>Путь через Xcode (для разработчиков)</h3>
           <p>Сборка из исходников: клон <a class="inline" href="https://github.com/Nanda070/Neptun-ELTE" target="_blank" rel="noopener noreferrer">Neptun-ELTE</a>, <span class="mono">flutter pub get</span>, открыть <span class="mono">ios/Runner.xcworkspace</span>, Automatic Signing + ваша Team, затем <span class="mono">flutter run --release -d &lt;device&gt;</span>. Bundle ID: <span class="mono">com.nanda070.neptunmobile</span>.</p>
+          <h3>Режим разработчика (Developer Mode, iOS 16+)</h3>
+          <p>После Sideloadly/AltStore (и доверия профилю), если приложение не открывается:</p>
+          <ol>
+            <li><strong>Настройки → Конфиденциальность и безопасность → Режим разработчика → Вкл.</strong></li>
+            <li>Перезагрузка по запросу, затем подтверждение включения.</li>
+          </ol>
+          <h3>Если пункта нет</h3>
+          <p>Опция часто появляется только после первой установки sideload / development-приложения. Также проверьте: reboot, iOS &lt;16 (обновить), ограничения MDM/supervised, или недоверенный профиль в <strong>VPN и управление устройством</strong>. Установите IPA один раз → разблокируйте → снова откройте Настройки; без Developer Mode часть sideload-приложений на новых iOS не запустится.</p>
         `,
         phone: `
           <h2>«Только с телефона»</h2>
@@ -622,6 +676,8 @@
           </ul>
           <h3>Практический совет</h3>
           <p>Один раз вкладка <strong>Windows</strong> или <strong>macOS</strong>. Дальше обновляйте подпись или ждите новый IPA в Releases у Nanda.</p>
+          <h3>После первой установки — Developer Mode</h3>
+          <p>На iOS 16+ после Sideloadly/AltStore и доверия профилю включите <strong>Настройки → Конфиденциальность и безопасность → Режим разработчика</strong> (перезагрузка + подтверждение). Если пункта нет: установите IPA один раз, reboot, проверьте профиль в VPN и управление устройством, обновите iOS если &lt;16 — без Developer Mode часть sideload-приложений не запустится.</p>
         `,
         shared: `
           <h2>Что это за проект</h2>
@@ -703,6 +759,24 @@
             <li>Ez <strong>nem</strong> App Store telepítés. Az Apple „Nem megbízható fejlesztő” figyelmeztetést ad, amíg meg nem bízol a profilban.</li>
             <li>Soha ne add meg az Apple ID jelszavad idegen weboldalon — csak Sideloadly / hivatalos Apple párbeszédekben.</li>
           </ul>
+          <h3>Fejlesztői mód (Developer Mode, iOS 16+)</h3>
+          <p>Sideloadly/AltStore telepítés és a fejlesztői profil megbíza után az újabb iPhone-okon gyakran kell a <strong>Fejlesztői mód</strong>, különben az app nem indul.</p>
+          <ol>
+            <li>Nyisd meg: <strong>Beállítások → Adatvédelem és biztonság → Fejlesztői mód</strong> (Privacy &amp; Security → Developer Mode).</li>
+            <li>Kapcsold <strong>Be</strong> / <strong>On</strong> a Fejlesztői módot.</li>
+            <li>Indítsd újra az iPhone-t, ha kéri.</li>
+            <li>Újraindítás után erősítsd meg a rendszerfigyelmeztetésben.</li>
+          </ol>
+          <h3>Ha nincs „Fejlesztői mód” / Developer Mode</h3>
+          <p>Őszintén: a kapcsoló gyakran csak azután jelenik meg, hogy legalább egyszer települt egy development / sideload app. Hiányozhat reboot nélkül, ha az iOS túl régi (&lt;16), az eszköz MDM / supervised alatt van, vagy a fejlesztői profil még nincs telepítve és megbízva.</p>
+          <ol>
+            <li>Telepítsd az IPA-t egyszer Sideloadlyval (vagy AltStore-ral).</li>
+            <li>Oldd fel a telefont, nyisd meg újra a <strong>Beállításokat</strong>, és keresd a Fejlesztői módot az Adatvédelem és biztonság alatt.</li>
+            <li>Indítsd újra az iPhone-t, majd nézd meg újra.</li>
+            <li>Ellenőrizd: <strong>Beállítások → Általános → VPN és eszközfelügyelet</strong> — legyen ott a fejlesztői profil, és legyen megbízva.</li>
+            <li>Ha az iOS 16-nál régebbi, frissíts, amikor tudsz — a Developer Mode iOS 16+ funkció.</li>
+          </ol>
+          <p>Fejlesztői mód nélkül egyes sideloadolt appok újabb iOS-en nem indulnak el.</p>
         `,
         macos: `
           <h2>Telepítés macOS-ről (Sideloadly / AltStore + saját Apple ID)</h2>
@@ -721,6 +795,14 @@
           </ol>
           <h3>Xcode út (fejlesztőknek)</h3>
           <p>Forrásból: klónozd a <a class="inline" href="https://github.com/Nanda070/Neptun-ELTE" target="_blank" rel="noopener noreferrer">Neptun-ELTE</a> repót, <span class="mono">flutter pub get</span>, nyisd meg az <span class="mono">ios/Runner.xcworkspace</span> fájlt, Automatic Signing + Team, majd <span class="mono">flutter run --release -d &lt;device&gt;</span>. Bundle ID: <span class="mono">com.nanda070.neptunmobile</span>.</p>
+          <h3>Fejlesztői mód (Developer Mode, iOS 16+)</h3>
+          <p>Sideloadly/AltStore (és profil-megbízás) után, ha az app nem nyílik:</p>
+          <ol>
+            <li><strong>Beállítások → Adatvédelem és biztonság → Fejlesztői mód → Be</strong>.</li>
+            <li>Újraindítás kérésre, majd megerősítés.</li>
+          </ol>
+          <h3>Ha nincs ilyen pont</h3>
+          <p>A kapcsoló gyakran csak az első sideload / development telepítés után jelenik meg. Ellenőrizd: reboot, iOS &lt;16 (frissítés), MDM/supervised korlátozás, vagy hiányzó megbízott profil a <strong>VPN és eszközfelügyelet</strong> alatt. Telepítsd az IPA-t egyszer → oldd fel → nyisd meg újra a Beállításokat; Fejlesztői mód nélkül egyes sideloadolt appok újabb iOS-en nem indulnak.</p>
         `,
         phone: `
           <h2>Telepítés „csak telefonról”</h2>
@@ -735,6 +817,8 @@
           </ul>
           <h3>Gyakorlati javaslat</h3>
           <p>Egyszer a <strong>Windows</strong> vagy <strong>macOS</strong> fül. Utána frissítsd az aláírást, vagy várj új IPA-ra a Releases oldalon.</p>
+          <h3>Az első telepítés után — Fejlesztői mód</h3>
+          <p>iOS 16+ esetén Sideloadly/AltStore + profil-megbízás után kapcsold be: <strong>Beállítások → Adatvédelem és biztonság → Fejlesztői mód</strong> (újraindítás + megerősítés). Ha nincs a kapcsoló: telepítsd az IPA-t egyszer, reboot, ellenőrizd a profilt a VPN és eszközfelügyelet alatt, frissítsd az iOS-t ha &lt;16 — Fejlesztői mód nélkül egyes sideloadolt appok nem indulnak.</p>
         `,
         shared: `
           <h2>Mi ez a projekt</h2>
