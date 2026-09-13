@@ -543,9 +543,9 @@
           <p><strong>Neptun ELTE</strong> (marketing version <strong>1.3.1</strong>) is an unofficial mobile client for <strong>ELTE Neptun only</strong>, developed by <strong>Nanda</strong>. It is <strong>not</strong> an official ELTE / SDA / Neptun product. Hub: <span class="mono">https://neptun.elte.hu</span> — not Obuda/BME-style <span class="mono">/ujhallgato</span>.</p>
           <h3>How login works</h3>
           <ol>
-            <li>Portal login with Neptun ID + password (credentials stay on device in secure storage after login).</li>
-            <li><strong>2FA</strong> when required — authenticator <strong>TOTP</strong> in the app UI (email OTP on the website may be thinner in-app).</li>
-            <li>Bridge via <strong>Student web / OuterLogin</strong> → JWT on the assigned <span class="mono">hallgatoN.neptun.elte.hu</span> node (load-balanced; do not hardcode one host).</li>
+            <li>Portal login with Neptun ID + password.</li>
+            <li><strong>2FA</strong> when required — authenticator <strong>TOTP</strong> in the app UI.</li>
+            <li>Bridge via <strong>Student web / OuterLogin</strong> → JWT on the assigned <span class="mono">hallgatoN.neptun.elte.hu</span> node.</li>
             <li>If Student web is <strong>full</strong>, login stops after 2FA with an honest “full / try later” message — <strong>not</strong> “invalid password”.</li>
           </ol>
           <h3>Features / capabilities</h3>
@@ -684,10 +684,10 @@
           <p><strong>Neptun ELTE</strong> (маркетинговая версия <strong>1.3.1</strong>) — неофициальный мобильный клиент <strong>только для ELTE Neptun</strong> от <strong>Nanda</strong>. Это <strong>не</strong> продукт ELTE / SDA / Neptun. Хаб: <span class="mono">https://neptun.elte.hu</span> — не схема Obuda/BME <span class="mono">/ujhallgato</span>.</p>
           <h3>Как работает вход</h3>
           <ol>
-            <li>Логин на портале: Neptun ID + пароль (после входа данные на устройстве в secure storage).</li>
-            <li><strong>2FA</strong> при необходимости — <strong>TOTP</strong> authenticator в UI (email OTP с сайта в приложении может быть тоньше).</li>
-            <li>Мост через <strong>Student web / OuterLogin</strong> → JWT на узле <span class="mono">hallgatoN.neptun.elte.hu</span> (балансировка; один хост не хардкодить).</li>
-            <li>Если Student web <strong>переполнен (full)</strong>, после 2FA честное «полный / попробуйте позже» — <strong>не</strong> «неверный пароль».</li>
+            <li>Логин на портале: Neptun ID + пароль.</li>
+            <li><strong>2FA</strong> при необходимости — <strong>TOTP</strong> authenticator в UI.</li>
+            <li>Мост через <strong>Student web / OuterLogin</strong> → JWT на узле <span class="mono">hallgatoN.neptun.elte.hu</span>.</li>
+            <li>Если Student web <strong>переполнен</strong>, после 2FA честное «полный / попробуйте позже» — <strong>не</strong> «неверный пароль».</li>
           </ol>
           <h3>Возможности</h3>
           <ul>
@@ -825,10 +825,10 @@
           <p>A <strong>Neptun ELTE</strong> (marketing verzió <strong>1.3.1</strong>) nem hivatalos mobil kliens <strong>csak az ELTE Neptunhoz</strong>, fejlesztő: <strong>Nanda</strong>. <strong>Nem</strong> hivatalos ELTE / SDA / Neptun termék. Hub: <span class="mono">https://neptun.elte.hu</span> — nem Obuda/BME-szerű <span class="mono">/ujhallgato</span>.</p>
           <h3>Belépés menete</h3>
           <ol>
-            <li>Portál belépés Neptun ID + jelszó (belépés után secure storage az eszközön).</li>
-            <li><strong>2FA</strong> ha kell — authenticator <strong>TOTP</strong> az app UI-ban (a webes email OTP az appban vékonyabb lehet).</li>
-            <li>Híd: <strong>Student web / OuterLogin</strong> → JWT a kiosztott <span class="mono">hallgatoN.neptun.elte.hu</span> csomópontra (terheléselosztás; ne hardkódolj egy hostot).</li>
-            <li>Ha a Student web <strong>tele (full)</strong>, a 2FA után őszinte „tele / próbáld később” üzenet — <strong>nem</strong> „hibás jelszó”.</li>
+            <li>Portál belépés Neptun ID + jelszó.</li>
+            <li><strong>2FA</strong> ha kell — authenticator <strong>TOTP</strong> az app UI-ban.</li>
+            <li>Híd: <strong>Student web / OuterLogin</strong> → JWT a kiosztott <span class="mono">hallgatoN.neptun.elte.hu</span> csomópontra.</li>
+            <li>Ha a Student web <strong>tele</strong>, a 2FA után őszinte „tele / próbáld később” üzenet — <strong>nem</strong> „hibás jelszó”.</li>
           </ol>
           <h3>Funkciók</h3>
           <ul>
