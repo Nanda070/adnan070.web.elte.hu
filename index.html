@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="description" content="Random Duck Sanctuary - Interactive procedural audio quack clicker, tycoon upgrades, duck wardrobe, and global quack wall.">
+  <meta name="description" content="Random Duck Sanctuary - Interactive procedural audio quack clicker, developer tools, and global quack wall.">
   <meta name="theme-color" content="#e11d48">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Random Duck | Quack Sanctuary & Tycoon</title>
+  <title>Random Duck | Quack Sanctuary & Tools</title>
   
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/svg+xml" href="icon.svg">
@@ -64,7 +64,7 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      padding: 1.2rem 1rem 4rem;
+      padding: 1.2rem 1rem calc(5.5rem + env(safe-area-inset-bottom, 0px));
     }
 
     @supports not (zoom: 0.9) {
@@ -320,71 +320,85 @@
       box-shadow: 0 2px 10px rgba(225, 29, 72, 0.18);
     }
 
-    /* Floating Feature Toolbar (Wardrobe, Tycoon, Achievements, Wall) */
-    .feature-nav-bar {
-      width: 100%;
+    /* Fixed bottom nav — Tools + Wall (thumb-friendly, safe-area aware) */
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      z-index: 700;
+      width: min(100%, 560px);
       display: flex;
+      align-items: stretch;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px));
+      background: linear-gradient(180deg, rgba(10, 10, 11, 0) 0%, rgba(10, 10, 11, 0.92) 28%, rgba(10, 10, 11, 0.98) 100%);
+      pointer-events: none;
+    }
+
+    .bottom-nav-inner {
+      pointer-events: auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 8px;
+      border-radius: 20px;
+      background: rgba(18, 20, 24, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(22px) saturate(160%);
+      -webkit-backdrop-filter: blur(22px) saturate(160%);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(225, 29, 72, 0.08);
+    }
+
+    .bottom-nav-btn {
+      appearance: none;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #cbd5e1;
+      font-family: inherit;
+      font-size: 0.84rem;
+      font-weight: 700;
+      min-height: 48px;
+      border-radius: 14px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-    }
-
-    .nav-pill-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #cbd5e1;
-      font-family: inherit;
-      font-size: 0.8rem;
-      font-weight: 700;
-      padding: 7px 13px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
       cursor: pointer;
-      backdrop-filter: blur(10px);
-      transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
       user-select: none;
-      position: relative;
+      touch-action: manipulation;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
     }
 
-    .nav-pill-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(225, 29, 72, 0.4);
-      color: var(--accent-yellow);
-      transform: translateY(-1px);
+    .bottom-nav-btn:hover {
+      background: rgba(225, 29, 72, 0.12);
+      border-color: rgba(225, 29, 72, 0.35);
+      color: #fff;
     }
 
-    .nav-pill-btn:active {
-      transform: translateY(1px);
+    .bottom-nav-btn:active {
+      transform: scale(0.97);
     }
 
-    .nav-pill-badge {
-      font-size: 0.68rem;
-      font-family: 'JetBrains Mono', monospace;
-      padding: 1px 6px;
-      border-radius: 999px;
-      background: rgba(225, 29, 72, 0.2);
-      border: 1px solid rgba(225, 29, 72, 0.4);
-      color: var(--accent-yellow);
+    .bottom-nav-btn .nav-ico {
+      font-size: 1.05rem;
+      line-height: 1;
     }
 
-    .nav-pill-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #ff007b;
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      box-shadow: 0 0 6px #ff007b;
-      display: none;
+    body.modal-open .bottom-nav,
+    body.keyboard-open .bottom-nav {
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
     }
 
-    .nav-pill-dot.visible {
-      display: block;
+    body.modal-open .badge-stack,
+    body.keyboard-open .badge-stack {
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
     }
 
     /* Global Quack Counter & Combo HUD */
@@ -419,13 +433,6 @@
       text-shadow: 0 2px 20px rgba(225, 29, 72, 0.2);
     }
 
-    .qps-rate-indicator {
-      font-size: 0.8rem;
-      font-family: 'JetBrains Mono', monospace;
-      color: #10b981;
-      font-weight: 700;
-      margin-top: 1px;
-    }
 
     .combo-bar-wrapper {
       display: flex;
@@ -923,13 +930,14 @@
     /* Floating badge stack (bottom right) */
     .badge-stack {
       position: fixed;
-      bottom: 18px;
-      right: 20px;
+      bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+      right: max(12px, env(safe-area-inset-right, 0px));
       z-index: 100;
       display: flex;
       flex-direction: column;
       align-items: flex-end;
       gap: 8px;
+      transition: opacity 0.22s ease, visibility 0.22s ease;
     }
 
     .dev-badge {
@@ -990,14 +998,14 @@
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.72);
+      background: rgba(0, 0, 0, 0.78);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      z-index: 800;
+      z-index: 900;
       display: flex;
-      align-items: center;
+      align-items: stretch;
       justify-content: center;
-      padding: 16px;
+      padding: max(10px, env(safe-area-inset-top, 0px)) 12px max(12px, env(safe-area-inset-bottom, 0px));
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -1011,16 +1019,23 @@
     .modal-window {
       background: var(--modal-bg);
       border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 24px;
+      border-radius: 22px;
       width: 100%;
-      max-width: 480px;
-      max-height: 85vh;
+      max-width: 520px;
+      max-height: min(85vh, 100%);
       display: flex;
       flex-direction: column;
       box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(225, 29, 72, 0.1);
-      transform: scale(0.92) translateY(12px);
+      transform: scale(0.96) translateY(10px);
       transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
       overflow: hidden;
+      margin: auto;
+    }
+
+    #toolsModal .modal-window {
+      max-width: 720px;
+      height: min(920px, 100%);
+      max-height: 100%;
     }
 
     .modal-backdrop.open .modal-window {
@@ -1028,34 +1043,46 @@
     }
 
     .modal-header {
-      padding: 16px 20px;
+      padding: 14px 16px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 10px;
+      flex-shrink: 0;
+      background: rgba(10, 10, 11, 0.55);
     }
 
     .modal-title {
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       font-weight: 800;
       color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 8px;
+      min-width: 0;
+    }
+
+    .modal-title span:last-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .modal-close-btn {
       background: rgba(255, 255, 255, 0.08);
       border: none;
       color: var(--text-muted);
-      width: 30px;
-      height: 30px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       font-weight: bold;
+      font-size: 1.2rem;
+      flex-shrink: 0;
       transition: all 0.2s ease;
     }
 
@@ -1065,15 +1092,18 @@
     }
 
     .modal-body {
-      padding: 18px 20px;
+      padding: 16px;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       display: flex;
       flex-direction: column;
       gap: 14px;
+      flex: 1;
+      min-height: 0;
     }
 
-    /* Wardrobe UI */
-    .wardrobe-section-title {
+    /* Shared section label (sound presets, tools) */
+    .section-title {
       font-size: 0.78rem;
       font-weight: 700;
       text-transform: uppercase;
@@ -1081,178 +1111,349 @@
       color: var(--text-dim);
     }
 
-    .wardrobe-grid {
+    /* ---- Tools (it-tools inspired catalog) ---- */
+    .tools-search-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: linear-gradient(180deg, rgba(18, 22, 29, 0.98) 70%, rgba(18, 22, 29, 0));
+      padding-bottom: 10px;
+    }
+
+    .tools-search-inner {
+      position: relative;
+    }
+
+    .tools-search-ico {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-dim);
+      font-size: 1rem;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .tools-search {
+      position: relative;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.95rem;
+      padding: 12px 14px 12px 42px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .tools-search:focus {
+      border-color: rgba(225, 29, 72, 0.55);
+      box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.15);
+    }
+
+    .tools-catalog {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
     }
 
-    .wardrobe-card {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      padding: 12px 8px;
+    .tool-card {
+      appearance: none;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 16px;
+      padding: 14px 12px;
+      cursor: pointer;
+      color: inherit;
+      font-family: inherit;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s ease;
+      gap: 8px;
+      min-height: 118px;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
       user-select: none;
     }
 
-    .wardrobe-card:hover {
-      background: rgba(255, 255, 255, 0.09);
+    .tool-card:hover {
+      background: rgba(225, 29, 72, 0.1);
       border-color: rgba(225, 29, 72, 0.4);
       transform: translateY(-2px);
     }
 
-    .wardrobe-card.active {
-      background: rgba(225, 29, 72, 0.14);
-      border-color: var(--accent-yellow);
-      box-shadow: 0 0 14px rgba(225, 29, 72, 0.25);
-    }
+    .tool-card:active { transform: translateY(0); }
 
-    .wardrobe-icon { font-size: 1.6rem; }
-    .wardrobe-name { font-size: 0.78rem; font-weight: 700; color: #f1f5f9; }
-
-    /* Tycoon Upgrades UI */
-    .upgrade-card {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      transition: all 0.2s ease;
-    }
-
-    .upgrade-card:hover {
-      border-color: rgba(225, 29, 72, 0.35);
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    .upgrade-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .upgrade-icon {
-      font-size: 1.8rem;
-      background: rgba(0, 0, 0, 0.3);
-      width: 44px;
-      height: 44px;
+    .tool-card-icon {
+      width: 40px;
+      height: 40px;
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
+      font-size: 1.25rem;
+      background: rgba(225, 29, 72, 0.14);
+      border: 1px solid rgba(225, 29, 72, 0.28);
     }
 
-    .upgrade-details {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .upgrade-name {
-      font-size: 0.88rem;
-      font-weight: 700;
+    .tool-card-name {
+      font-size: 0.9rem;
+      font-weight: 800;
       color: #f8fafc;
+      line-height: 1.25;
     }
 
-    .upgrade-desc {
-      font-size: 0.75rem;
+    .tool-card-desc {
+      font-size: 0.74rem;
       color: var(--text-muted);
+      line-height: 1.35;
     }
 
-    .upgrade-level {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      color: #10b981;
-      font-weight: 700;
+    .tools-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: var(--text-dim);
+      padding: 28px 10px;
+      font-size: 0.9rem;
     }
 
-    .upgrade-buy-btn {
-      background: linear-gradient(135deg, #e11d48, #dc2626);
-      border: none;
-      color: #0d0f12;
-      font-family: 'JetBrains Mono', monospace;
+    .tools-detail {
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .tools-detail.active { display: flex; }
+    .tools-home.hidden { display: none; }
+
+    .tools-back-btn {
+      appearance: none;
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      font-family: inherit;
       font-size: 0.8rem;
       font-weight: 700;
-      padding: 8px 14px;
-      border-radius: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tools-back-btn:hover {
+      border-color: rgba(225, 29, 72, 0.4);
+      color: #fff;
+    }
+
+    .tool-panel {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .tool-panel.active { display: flex; }
+
+    .tool-panel-head {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 2px;
-      transition: all 0.2s ease;
-      user-select: none;
-      white-space: nowrap;
+      gap: 4px;
     }
 
-    .upgrade-buy-btn:hover:not(:disabled) {
-      filter: brightness(1.1);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 14px rgba(255, 153, 0, 0.4);
+    .tool-panel-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
     }
 
-    .upgrade-buy-btn:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-      filter: grayscale(0.5);
-    }
-
-    /* Achievements List UI */
-    .achievement-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      padding: 12px 16px;
-      opacity: 0.55;
-      transition: all 0.22s ease;
-    }
-
-    .achievement-item.unlocked {
-      opacity: 1;
-      border-color: rgba(225, 29, 72, 0.45);
-      background: rgba(225, 29, 72, 0.06);
-    }
-
-    .achievement-trophy {
-      font-size: 1.8rem;
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: rgba(0, 0, 0, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .achievement-text-col {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .achievement-name {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: #f8fafc;
-    }
-
-    .achievement-desc {
-      font-size: 0.76rem;
+    .tool-panel-desc {
+      font-size: 0.82rem;
       color: var(--text-muted);
+    }
+
+    .tool-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .tool-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .tool-input,
+    .tool-textarea,
+    .tool-select {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      color: var(--text-main);
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.86rem;
+      padding: 11px 12px;
+      outline: none;
+    }
+
+    .tool-textarea {
+      min-height: 120px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    .tool-input:focus,
+    .tool-textarea:focus,
+    .tool-select:focus {
+      border-color: rgba(225, 29, 72, 0.55);
+      box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.12);
+    }
+
+    .tool-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .tool-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tool-btn {
+      appearance: none;
+      border: none;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 750;
+      padding: 11px 16px;
+      cursor: pointer;
+      transition: filter 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
+      user-select: none;
+    }
+
+    .tool-btn:active { transform: scale(0.98); }
+
+    .tool-btn-primary {
+      background: linear-gradient(135deg, #e11d48, #be123c);
+      color: #fff;
+    }
+
+    .tool-btn-primary:hover { filter: brightness(1.08); }
+
+    .tool-btn-ghost {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #e2e8f0;
+    }
+
+    .tool-btn-ghost:hover {
+      border-color: rgba(225, 29, 72, 0.4);
+      color: #fff;
+    }
+
+    .tool-output {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 12px;
+      min-height: 64px;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.82rem;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.45;
+    }
+
+    .tool-output.html-preview {
+      font-family: inherit;
+      white-space: normal;
+      background: #0f1115;
+      border-color: rgba(225, 29, 72, 0.25);
+    }
+
+    .tool-hint {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      line-height: 1.4;
+    }
+
+    .tool-hint a {
+      color: #fb7185;
+      text-decoration: none;
+    }
+
+    .tool-hint a:hover { text-decoration: underline; }
+
+    .pw-meter {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .pw-meter > span {
+      display: block;
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: #e11d48;
+      transition: width 0.25s ease, background 0.25s ease;
+    }
+
+    .qr-canvas-wrap {
+      display: flex;
+      justify-content: center;
+      padding: 12px;
+      background: #fff;
+      border-radius: 14px;
+      align-self: center;
+    }
+
+    .qr-canvas-wrap canvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .temp-unit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    @media (min-width: 640px) {
+      .tools-catalog {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      #toolsModal .modal-window {
+        max-width: 820px;
+        height: min(860px, 92vh);
+      }
+    }
+
+    @media (max-width: 420px) {
+      .tools-catalog {
+        grid-template-columns: 1fr;
+      }
+      .tool-row {
+        grid-template-columns: 1fr;
+      }
+      .temp-unit-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     /* Full Quack Wall Modal Feed */
@@ -1353,7 +1554,7 @@
     .sound-preset-name { font-size: 0.86rem; font-weight: 700; color: #fff; }
     .sound-preset-desc { font-size: 0.72rem; color: var(--text-muted); }
 
-    /* Toast Notification Banner (Achievements & Bread Bonanza) */
+    /* Toast Notification Banner */
     .toast-container {
       position: fixed;
       top: 20px;
@@ -1523,19 +1724,37 @@
 
     /* Mobile Responsive Adjustments */
     @media (max-width: 520px) {
-      body { padding: 0.8rem 0.6rem 5rem; }
+      body { padding: 0.8rem 0.6rem calc(6.2rem + env(safe-area-inset-bottom, 0px)); }
       .card { padding: 20px 16px 22px; border-radius: 24px; }
       .duck-stage { width: 195px; height: 195px; margin: 4px 0 14px; }
       .duck-wrapper { width: 155px; height: 155px; }
       .counter-value { font-size: 1.85rem; }
       .message-text { font-size: 0.92rem; line-height: 1.5; }
       .content-area { min-height: 70px; }
-      .feature-nav-bar { gap: 6px; }
-      .nav-pill-btn { padding: 6px 10px; font-size: 0.74rem; }
-      .wardrobe-grid { grid-template-columns: repeat(2, 1fr); }
       .sound-presets-grid { grid-template-columns: 1fr; }
-      .badge-stack { bottom: 12px; right: 12px; gap: 6px; }
+      .badge-stack {
+        bottom: calc(74px + env(safe-area-inset-bottom, 0px));
+        right: 10px;
+        gap: 6px;
+      }
       .dev-badge { padding: 6px 12px; font-size: 0.76rem; }
+      .modal-backdrop {
+        padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);
+      }
+      .modal-window {
+        max-width: 100%;
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+      }
+      #toolsModal .modal-window {
+        height: 100%;
+        max-width: 100%;
+      }
+      .bottom-nav { width: 100%; padding-left: 10px; padding-right: 10px; }
     }
   </style>
 </head>
@@ -1576,37 +1795,10 @@
         </div>
       </header>
 
-      <!-- Floating Feature Toolbar -->
-      <nav class="feature-nav-bar" aria-label="Features toolbar">
-        <button type="button" class="nav-pill-btn" id="openWardrobeBtn">
-          <span>🎨</span>
-          <span id="navWardrobeText">Wardrobe</span>
-        </button>
-
-        <button type="button" class="nav-pill-btn" id="openUpgradesBtn">
-          <span>⚡</span>
-          <span id="navUpgradesText">Tycoon</span>
-          <span class="nav-pill-badge" id="clickPowerBadge">+1</span>
-        </button>
-
-        <button type="button" class="nav-pill-btn" id="openAchievementsBtn">
-          <span>🏆</span>
-          <span id="navAchievementsText">Trophies</span>
-          <span class="nav-pill-badge" id="achieveBadge">0/10</span>
-          <span class="nav-pill-dot" id="achieveDot"></span>
-        </button>
-
-        <button type="button" class="nav-pill-btn" id="openWallBtn">
-          <span>💬</span>
-          <span id="navWallText">Wall</span>
-        </button>
-      </nav>
-
-      <!-- Global Quack Counter & Tycoon HUD -->
+      <!-- Global Quack Counter & Combo HUD -->
       <section class="hud-container" aria-live="polite">
         <div class="counter-label" id="counterLabel">Global Quacks</div>
         <div class="counter-value" id="globalCounter">0</div>
-        <div class="qps-rate-indicator" id="qpsRateIndicator">+0.0 QPS</div>
         <div class="combo-bar-wrapper">
           <div class="combo-badge" id="comboBadge">
             <span id="comboIcon">🔥</span>
@@ -1616,7 +1808,7 @@
         </div>
       </section>
 
-      <!-- Central Stage: Interactive Duck with Accessories & Canvas Ripples -->
+      <!-- Central Stage: Interactive Duck & Canvas Ripples -->
       <section class="duck-stage" id="duckStage" aria-label="Interactive Duck">
         <canvas class="water-canvas" id="waterCanvas"></canvas>
         <div class="duck-glow-bg" aria-hidden="true"></div>
@@ -1627,7 +1819,7 @@
         <div class="quack-container" id="quackContainer" aria-live="polite" aria-atomic="true"></div>
 
         <div class="duck-wrapper" id="duckInteractive" role="button" tabindex="0" title="Click or Tap to Quack!" aria-label="Rubber duck (tap to quack)">
-          <!-- Handcrafted Vector Duck SVG with Dynamic Accessories -->
+          <!-- Handcrafted Vector Duck SVG -->
           <svg class="duck-svg" viewBox="0 0 220 200" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="duckBody" x1="40" y1="20" x2="190" y2="190" gradientUnits="userSpaceOnUse">
@@ -1700,58 +1892,6 @@
               <path d="M106 138 C116 148 130 148 140 142" stroke="#FFF8E1" stroke-width="2.5" stroke-linecap="round" opacity="0.3" />
             </g>
 
-            <!-- ============================================== -->
-            <!-- DYNAMIC ACCESSORIES LAYER (HATS & GLASSES)     -->
-            <!-- ============================================== -->
-            <g id="hatLayers">
-              <!-- Top Hat (Цилиндр) -->
-              <g id="hat-tophat" style="display:none;">
-                <ellipse cx="108" cy="22" rx="34" ry="7" fill="#111827" />
-                <path d="M88 20 L92 -15 L124 -15 L128 20 Z" fill="#1f2937" />
-                <rect x="91" y="10" width="34" height="6" fill="#e11d48" />
-                <rect x="105" y="9" width="6" height="8" fill="#ffd700" rx="1" />
-              </g>
-
-              <!-- Thug Life / Cool Sunglasses -->
-              <g id="hat-sunglasses" style="display:none;">
-                <path d="M72 40 L108 40 L102 54 L76 54 Z" fill="#090d16" stroke="#ffffff" stroke-width="1.2" />
-                <path d="M76 43 L84 43 L80 50 L74 50 Z" fill="#ffffff" opacity="0.75" />
-                <path d="M90 43 L98 43 L94 50 L88 50 Z" fill="#ffffff" opacity="0.75" />
-                <path d="M72 42 L64 38" stroke="#090d16" stroke-width="2.5" stroke-linecap="round" />
-              </g>
-
-              <!-- ELTE Academic Graduation Cap -->
-              <g id="hat-graduate" style="display:none;">
-                <polygon points="106,-8 144,8 106,20 68,8" fill="#1e293b" stroke="#0f172a" stroke-width="1.5" />
-                <rect x="94" y="14" width="24" height="12" fill="#0f172a" rx="2" />
-                <circle cx="106" cy="6" r="3" fill="#fbbf24" />
-                <path d="M106 6 Q122 10 132 26" stroke="#fbbf24" stroke-width="2" fill="none" />
-                <circle cx="132" cy="26" r="2.5" fill="#f59e0b" />
-              </g>
-
-              <!-- Pirate Tricorn & Eyepatch -->
-              <g id="hat-pirate" style="display:none;">
-                <path d="M68 22 C78 -4 134 -4 144 22 C134 16 78 16 68 22 Z" fill="#0f172a" stroke="#d97706" stroke-width="1.5" />
-                <circle cx="106" cy="10" r="4" fill="#ffffff" />
-                <!-- Eyepatch -->
-                <ellipse cx="88" cy="46" rx="9" ry="10" fill="#0b0f19" stroke="#374151" stroke-width="1.2" />
-                <path d="M70 38 L106 54" stroke="#111827" stroke-width="2" />
-              </g>
-
-              <!-- Angel Halo -->
-              <g id="hat-halo" style="display:none;">
-                <ellipse cx="108" cy="-2" rx="28" ry="7" fill="none" stroke="#ffd700" stroke-width="4" filter="drop-shadow(0 0 8px #ffeb3b)" />
-              </g>
-
-              <!-- Festive Party Cone -->
-              <g id="hat-party" style="display:none;">
-                <polygon points="108,-18 86,20 130,20" fill="#ec4899" />
-                <path d="M92 10 L124 10" stroke="#fbbf24" stroke-width="3" />
-                <path d="M98 0 L118 0" stroke="#00f3ff" stroke-width="3" />
-                <circle cx="108" cy="-20" r="4" fill="#fbbf24" />
-              </g>
-            </g>
-
           </svg>
         </div>
       </section>
@@ -1813,110 +1953,233 @@
     </a>
   </div>
 
-  <!-- ========================================================= -->
-  <!-- MODAL: DUCK WARDROBE (SKINS & HATS)                       -->
-  <!-- ========================================================= -->
-  <div class="modal-backdrop" id="wardrobeModal" role="dialog" aria-modal="true" aria-label="Duck Wardrobe">
-    <div class="modal-window">
-      <div class="modal-header">
-        <div class="modal-title">
-          <span>🎨</span>
-          <span id="wardrobeTitle">Duck Wardrobe</span>
-        </div>
-        <button type="button" class="modal-close-btn" data-close="wardrobeModal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="wardrobe-section-title" id="wardrobeHatsTitle">Hats & Accessories</div>
-        <div class="wardrobe-grid" id="hatsGrid">
-          <div class="wardrobe-card active" data-hat="none">
-            <div class="wardrobe-icon">🚫</div>
-            <div class="wardrobe-name" id="hatNone">None</div>
-          </div>
-          <div class="wardrobe-card" data-hat="tophat">
-            <div class="wardrobe-icon">🎩</div>
-            <div class="wardrobe-name" id="hatTopHat">Top Hat</div>
-          </div>
-          <div class="wardrobe-card" data-hat="sunglasses">
-            <div class="wardrobe-icon">🕶️</div>
-            <div class="wardrobe-name" id="hatSunglasses">Thug Shades</div>
-          </div>
-          <div class="wardrobe-card" data-hat="graduate">
-            <div class="wardrobe-icon">🎓</div>
-            <div class="wardrobe-name" id="hatGraduate">ELTE Scholar</div>
-          </div>
-          <div class="wardrobe-card" data-hat="pirate">
-            <div class="wardrobe-icon">🏴‍☠️</div>
-            <div class="wardrobe-name" id="hatPirate">Pirate</div>
-          </div>
-          <div class="wardrobe-card" data-hat="halo">
-            <div class="wardrobe-icon">😇</div>
-            <div class="wardrobe-name" id="hatHalo">Angel Halo</div>
-          </div>
-          <div class="wardrobe-card" data-hat="party">
-            <div class="wardrobe-icon">🎉</div>
-            <div class="wardrobe-name" id="hatParty">Party Cone</div>
-          </div>
-        </div>
-
-        <div class="wardrobe-section-title" id="wardrobeSkinsTitle" style="margin-top:10px;">Duck Skins</div>
-        <div class="wardrobe-grid" id="skinsGrid">
-          <div class="wardrobe-card active" data-skin="classic">
-            <div class="wardrobe-icon">🦆</div>
-            <div class="wardrobe-name" id="skinClassic">Classic Rubber</div>
-          </div>
-          <div class="wardrobe-card" data-skin="gold">
-            <div class="wardrobe-icon">✨</div>
-            <div class="wardrobe-name" id="skinGold">Golden Duck</div>
-          </div>
-          <div class="wardrobe-card" data-skin="cyber">
-            <div class="wardrobe-icon">⚡</div>
-            <div class="wardrobe-name" id="skinCyber">Cyberpunk</div>
-          </div>
-          <div class="wardrobe-card" data-skin="ghost">
-            <div class="wardrobe-icon">👻</div>
-            <div class="wardrobe-name" id="skinGhost">Spectral Ghost</div>
-          </div>
-          <div class="wardrobe-card" data-skin="stealth">
-            <div class="wardrobe-icon">🥷</div>
-            <div class="wardrobe-name" id="skinStealth">Stealth Matte</div>
-          </div>
-        </div>
-      </div>
+  <!-- Fixed bottom nav: Tools + Wall -->
+  <nav class="bottom-nav" id="bottomNav" aria-label="Main navigation">
+    <div class="bottom-nav-inner">
+      <button type="button" class="bottom-nav-btn" id="openToolsBtn">
+        <span class="nav-ico" aria-hidden="true">🧰</span>
+        <span id="navToolsText">Tools</span>
+      </button>
+      <button type="button" class="bottom-nav-btn" id="openWallBtn">
+        <span class="nav-ico" aria-hidden="true">💬</span>
+        <span id="navWallText">Wall</span>
+      </button>
     </div>
-  </div>
+  </nav>
+
+
 
   <!-- ========================================================= -->
-  <!-- MODAL: TYCOON UPGRADES (CLICK POWER & QPS GENERATORS)     -->
+  <!-- MODAL: DEVELOPER TOOLS (it-tools inspired)                 -->
   <!-- ========================================================= -->
-  <div class="modal-backdrop" id="upgradesModal" role="dialog" aria-modal="true" aria-label="Duck Tycoon Upgrades">
+  <div class="modal-backdrop" id="toolsModal" role="dialog" aria-modal="true" aria-label="Developer Tools">
     <div class="modal-window">
       <div class="modal-header">
         <div class="modal-title">
-          <span>⚡</span>
-          <span id="upgradesTitle">Duck Tycoon & QPS</span>
+          <span aria-hidden="true">🧰</span>
+          <span id="toolsTitle">Tools</span>
         </div>
-        <button type="button" class="modal-close-btn" data-close="upgradesModal">&times;</button>
+        <button type="button" class="modal-close-btn" data-close="toolsModal" aria-label="Close">&times;</button>
       </div>
-      <div class="modal-body" id="upgradesList">
-        <!-- Upgrades dynamically rendered via JS -->
-      </div>
-    </div>
-  </div>
+      <div class="modal-body" id="toolsModalBody">
+        <div class="tools-home" id="toolsHome">
+          <div class="tools-search-wrap">
+            <div class="tools-search-inner">
+              <span class="tools-search-ico" aria-hidden="true">⌕</span>
+              <input type="search" class="tools-search" id="toolsSearch" placeholder="Search tools..." autocomplete="off" enterkeyhint="search">
+            </div>
+          </div>
+          <div class="tools-catalog" id="toolsCatalog"></div>
+        </div>
 
-  <!-- ========================================================= -->
-  <!-- MODAL: ACHIEVEMENTS & TROPHIES                            -->
-  <!-- ========================================================= -->
-  <div class="modal-backdrop" id="achievementsModal" role="dialog" aria-modal="true" aria-label="Achievements Showcase">
-    <div class="modal-window">
-      <div class="modal-header">
-        <div class="modal-title">
-          <span>🏆</span>
-          <span id="achievementsTitle">Achievements Showcase</span>
+        <div class="tools-detail" id="toolsDetail">
+          <button type="button" class="tools-back-btn" id="toolsBackBtn">← <span id="toolsBackText">All tools</span></button>
+
+          <!-- Markdown -->
+          <div class="tool-panel" data-tool="markdown" id="panel-markdown">
+            <div class="tool-panel-head">
+              <div class="tool-panel-title" data-i18n-tool-title="markdown"></div>
+              <div class="tool-panel-desc" data-i18n-tool-desc="markdown"></div>
+            </div>
+            <div class="tool-field">
+              <label class="tool-label" for="mdInput" id="mdInputLabel">Markdown</label>
+              <textarea class="tool-textarea" id="mdInput" spellcheck="false" placeholder="# Hello&#10;**bold** and _italic_"></textarea>
+            </div>
+            <div class="tool-actions">
+              <button type="button" class="tool-btn tool-btn-primary" id="mdRenderBtn">Preview</button>
+              <button type="button" class="tool-btn tool-btn-ghost" id="mdCopyHtmlBtn">Copy HTML</button>
+            </div>
+            <div class="tool-field">
+              <div class="tool-label" id="mdPreviewLabel">Preview</div>
+              <div class="tool-output html-preview" id="mdPreview"></div>
+            </div>
+            <div class="tool-field">
+              <div class="tool-label" id="mdHtmlLabel">HTML</div>
+              <div class="tool-output" id="mdHtmlOut"></div>
+            </div>
+          </div>
+
+          <!-- QR -->
+          <div class="tool-panel" data-tool="qr" id="panel-qr">
+            <div class="tool-panel-head">
+              <div class="tool-panel-title" data-i18n-tool-title="qr"></div>
+              <div class="tool-panel-desc" data-i18n-tool-desc="qr"></div>
+            </div>
+            <div class="tool-field">
+              <label class="tool-label" for="qrInput" id="qrInputLabel">Text / URL</label>
+              <textarea class="tool-textarea" id="qrInput" rows="3" placeholder="https://example.com"></textarea>
+            </div>
+            <div class="tool-actions">
+              <button type="button" class="tool-btn tool-btn-primary" id="qrGenerateBtn">Generate</button>
+              <button type="button" class="tool-btn tool-btn-ghost" id="qrDownloadBtn">Download PNG</button>
+            </div>
+            <div class="qr-canvas-wrap" id="qrCanvasWrap" hidden>
+              <canvas id="qrCanvas" width="220" height="220"></canvas>
+            </div>
+          </div>
+
+          <!-- Temperature -->
+          <div class="tool-panel" data-tool="temp" id="panel-temp">
+            <div class="tool-panel-head">
+              <div class="tool-panel-title" data-i18n-tool-title="temp"></div>
+              <div class="tool-panel-desc" data-i18n-tool-desc="temp"></div>
+            </div>
+            <div class="temp-unit-grid">
+              <div class="tool-field">
+                <label class="tool-label" for="tempC">°C</label>
+                <input class="tool-input" id="tempC" type="number" step="any" inputmode="decimal">
+              </div>
+              <div class="tool-field">
+                <label class="tool-label" for="tempF">°F</label>
+                <input class="tool-input" id="tempF" type="number" step="any" inputmode="decimal">
+              </div>
+              <div class="tool-field">
+                <label class="tool-label" for="tempK">K</label>
+                <input class="tool-input" id="tempK" type="number" step="any" inputmode="decimal">
+              </div>
+            </div>
+          </div>
+
+          <!-- Percentage -->
+          <div class="tool-panel" data-tool="percent" id="panel-percent">
+            <div class="tool-panel-head">
+              <div class="tool-panel-title" data-i18n-tool-title="percent"></div>
+              <div class="tool-panel-desc" data-i18n-tool-desc="percent"></div>
+            </div>
+            <div class="tool-field">
+              <label class="tool-label" for="pctMode" id="pctModeLabel">Operation</label>
+              <select class="tool-select" id="pctMode">
+                <option value="of">X% of Y</option>
+                <option value="is">What % is X of Y</option>
+                <option value="inc">Increase Y by X%</option>
+                <option value="dec">Decrease Y by X%</option>
+              </select>
+            </div>
+            <div class="tool-row">
+              <div class="tool-field">
+                <label class="tool-label" for="pctX" id="pctXLabel">X</label>
+                <input class="tool-input" id="pctX" type="number" step="any" inputmode="decimal" value="20">
+              </div>
+              <div class="tool-field">
+                <label class="tool-label" for="pctY" id="pctYLabel">Y</label>
+                <input class="tool-input" id="pctY" type="number" step="any" inputmode="decimal" value="150">
+              </div>
+            </div>
+            <div class="tool-actions">
+              <button type="button" class="tool-btn tool-btn-primary" id="pctCalcBtn">Calculate</button>
+              <button type="button" class="tool-btn tool-btn-ghost" id="pctCopyBtn">Copy</button>
+            </div>
+            <div class="tool-output" id="pctOut">—</div>
+          </div>
+
+          <!-- MAC -->
+          <div class="tool-panel" data-tool="mac" id="panel-mac">
+            <div class="tool-panel-head">
+              <div class="tool-panel-title" data-i18n-tool-title="mac"></div>
+              <div class="tool-panel-desc" data-i18n-tool-desc="mac"></div>
+            </div>
+            <div class="tool-field">
+              <label class="tool-label" for="macInput" id="macInputLabel">MAC address</label>
+              <input class="tool-input" id="macInput" type="text" placeholder="aa:bb:cc:dd:ee:ff" autocomplete="off" spellcheck="false">
+            </div>
+            <div class="tool-actions">
+              <button type="button" class="tool-btn tool-btn-primary" id="macFormatBtn">Format</button>
+              <button type="button" class="tool-btn tool-btn-ghost" id="macLookupBtn">Lookup vendor</button>
+              <button type="button" class="tool-btn tool-btn-ghost" id="macCopyBtn">Copy</button>
+            </div>
+            <div class="tool-output" id="macOut">—</div>
+            <p class="tool-hint" id="macHint">
+              OUI lookup uses a public API when available.
+              Fallback:
+              <a href="https://www.wireshark.org/tools/oui-lookup.html" target="_blank" rel="noopener noreferrer">Wireshark OUI Lookup</a>
+            </p>
+          </div>
+
+          <!-- Bcrypt -->
+          <div class="tool-panel" data-tool="bcrypt" id="panel-bcrypt">
+            <div class="tool-panel-head">
+              <div class="tool-panel-title" data-i18n-tool-title="bcrypt"></div>
+              <div class="tool-panel-desc" data-i18n-tool-desc="bcrypt"></div>
+            </div>
+            <div class="tool-field">
+              <label class="tool-label" for="bcryptText" id="bcryptTextLabel">Text</label>
+              <input class="tool-input" id="bcryptText" type="password" autocomplete="off">
+            </div>
+            <div class="tool-row">
+              <div class="tool-field">
+                <label class="tool-label" for="bcryptRounds" id="bcryptRoundsLabel">Rounds</label>
+                <input class="tool-input" id="bcryptRounds" type="number" min="4" max="12" value="10">
+              </div>
+              <div class="tool-field">
+                <label class="tool-label" for="bcryptCompare" id="bcryptCompareLabel">Hash to compare</label>
+                <input class="tool-input" id="bcryptCompare" type="text" spellcheck="false" placeholder="$2a$10$...">
+              </div>
+            </div>
+            <div class="tool-actions">
+              <button type="button" class="tool-btn tool-btn-primary" id="bcryptHashBtn">Hash</button>
+              <button type="button" class="tool-btn tool-btn-ghost" id="bcryptCompareBtn">Compare</button>
+              <button type="button" class="tool-btn tool-btn-ghost" id="bcryptCopyBtn">Copy hash</button>
+            </div>
+            <div class="tool-output" id="bcryptOut">—</div>
+          </div>
+
+          <!-- Password strength -->
+          <div class="tool-panel" data-tool="password" id="panel-password">
+            <div class="tool-panel-head">
+              <div class="tool-panel-title" data-i18n-tool-title="password"></div>
+              <div class="tool-panel-desc" data-i18n-tool-desc="password"></div>
+            </div>
+            <div class="tool-field">
+              <label class="tool-label" for="pwInput" id="pwInputLabel">Password</label>
+              <input class="tool-input" id="pwInput" type="password" autocomplete="off">
+            </div>
+            <div class="pw-meter" aria-hidden="true"><span id="pwMeterBar"></span></div>
+            <div class="tool-output" id="pwOut">—</div>
+          </div>
+
+          <!-- Encrypt / decrypt -->
+          <div class="tool-panel" data-tool="crypto" id="panel-crypto">
+            <div class="tool-panel-head">
+              <div class="tool-panel-title" data-i18n-tool-title="crypto"></div>
+              <div class="tool-panel-desc" data-i18n-tool-desc="crypto"></div>
+            </div>
+            <div class="tool-field">
+              <label class="tool-label" for="cryptoPass" id="cryptoPassLabel">Passphrase</label>
+              <input class="tool-input" id="cryptoPass" type="password" autocomplete="off">
+            </div>
+            <div class="tool-field">
+              <label class="tool-label" for="cryptoText" id="cryptoTextLabel">Text</label>
+              <textarea class="tool-textarea" id="cryptoText" spellcheck="false"></textarea>
+            </div>
+            <div class="tool-actions">
+              <button type="button" class="tool-btn tool-btn-primary" id="cryptoEncBtn">Encrypt</button>
+              <button type="button" class="tool-btn tool-btn-ghost" id="cryptoDecBtn">Decrypt</button>
+              <button type="button" class="tool-btn tool-btn-ghost" id="cryptoCopyBtn">Copy</button>
+            </div>
+            <div class="tool-output" id="cryptoOut">—</div>
+            <p class="tool-hint" id="cryptoHint">AES-GCM via Web Crypto. Output is base64(iv + ciphertext).</p>
+          </div>
         </div>
-        <button type="button" class="modal-close-btn" data-close="achievementsModal">&times;</button>
-      </div>
-      <div class="modal-body" id="achievementsList">
-        <!-- Achievements dynamically rendered via JS -->
       </div>
     </div>
   </div>
@@ -1954,7 +2217,7 @@
         <button type="button" class="modal-close-btn" data-close="soundModal">&times;</button>
       </div>
       <div class="modal-body">
-        <div class="wardrobe-section-title" id="soundPresetTitle">Procedural Sound Profiles</div>
+        <div class="section-title" id="soundPresetTitle">Procedural Sound Profiles</div>
         <div class="sound-presets-grid" id="soundPresetsGrid">
           <div class="sound-preset-btn active" data-preset="classic">
             <div class="sound-preset-name">Classic Duck</div>
@@ -2023,6 +2286,10 @@
     </div>
   </div>
 
+
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
   <script>
     (function() {
       'use strict';
@@ -2046,59 +2313,40 @@
           aboutBadge: "Обо мне",
           latest: "Новое",
           emptyFeed: "Напиши что-нибудь классное!",
-          navWardrobe: "Гардероб",
-          navUpgrades: "Ферма",
-          navAchievements: "Награды",
+          navTools: "Инструменты",
           navWall: "Стена",
-          wardrobeTitle: "Утиный Гардероб",
-          wardrobeHats: "Шляпы и Очки",
-          wardrobeSkins: "Скины Утки",
-          upgradesTitle: "Утиная Ферма & Доход",
-          achievementsTitle: "Зал Славы и Трофеи",
+          toolsTitle: "Инструменты",
+          toolsSearch: "Поиск инструментов...",
+          toolsBack: "Все инструменты",
+          toolsEmpty: "Ничего не найдено",
           wallModalTitle: "Стена Кряков",
           soundModalTitle: "Настройки Звука",
           soundPresetTitle: "Профили Звука",
-          clickPowerName: "Сила Клика",
-          clickPowerDesc: "Увеличивает кряки за один клик",
-          breadGenName: "Хлебные Крошки",
-          breadGenDesc: "Приманивает уток (+1 кряк/сек)",
-          ducklingName: "Утёнок-Помощник",
-          ducklingDesc: "Крякает за вас (+5 кряк/сек)",
-          megaphoneName: "Мегафон Кряка",
-          megaphoneDesc: "Громкое эхо (+20 кряк/сек)",
-          sanctuaryName: "Утиный Пруд ELTE",
-          sanctuaryDesc: "Рай для сотен уток (+80 кряк/сек)",
-          buyText: "Купить",
-          toastUnlocked: "Достижение Получено!",
           breadCatchTitle: "Золотой Хлебушек!",
           breadCatchDesc: "+50 Бонусных кряков!",
-          hats: {
-            none: "Без шляпы",
-            tophat: "Цилиндр",
-            sunglasses: "Очки Thug Life",
-            graduate: "Выпускник ELTE",
-            pirate: "Пират",
-            halo: "Нимб Ангела",
-            party: "Праздничный Колпак"
-          },
-          skins: {
-            classic: "Классическая Жёлтая",
-            gold: "Золотая Утка",
-            cyber: "Киберпанк Неон",
-            ghost: "Призрак",
-            stealth: "Стелс Нуар"
-          },
-          achieves: {
-            first_quack: { name: "Первое Кря", desc: "Сделайте свой первый клик по утке" },
-            click_100: { name: "Центурион", desc: "Сделайте 100 кликов за сессию" },
-            click_1000: { name: "Утиный Маньяк", desc: "Накопите 1,000 кряков" },
-            speed_demon: { name: "Пулемётчик", desc: "Разогоните скорость кликов до 8+ CPS" },
-            fashion_icon: { name: "Модник", desc: "Наденьте любую шляпу или скин" },
-            tycoon: { name: "Капиталист", desc: "Приобретите первое улучшение" },
-            quack_wall: { name: "Оратор", desc: "Оставьте сообщение на стене" },
-            matrix_hacker: { name: "Оператор Матрицы", desc: "Откройте секретный терминал" },
-            polyglot: { name: "Полиглот", desc: "Попробуйте все языки интерфейса" },
-            golden_bread: { name: "Утиная Охота", desc: "Поймайте пролетающий золотой хлеб" }
+          btnPreview: "Превью",
+          btnCopyHtml: "Копировать HTML",
+          btnGenerate: "Создать",
+          btnDownload: "Скачать PNG",
+          btnCalculate: "Рассчитать",
+          btnCopy: "Копировать",
+          btnFormat: "Формат",
+          btnLookup: "Вендор",
+          btnHash: "Хеш",
+          btnCompare: "Сравнить",
+          btnCopyHash: "Копировать хеш",
+          btnEncrypt: "Шифровать",
+          btnDecrypt: "Расшифровать",
+          copied: "Скопировано",
+          tools: {
+            markdown: { name: "Markdown → HTML", desc: "Превью и копирование HTML" },
+            qr: { name: "QR-код", desc: "Текст или URL в QR" },
+            temp: { name: "Температура", desc: "C ↔ F ↔ K" },
+            percent: { name: "Проценты", desc: "Доли, прирост и снижение" },
+            mac: { name: "MAC-адрес", desc: "Формат и OUI-поиск" },
+            bcrypt: { name: "Bcrypt", desc: "Хеш и сравнение" },
+            password: { name: "Надёжность пароля", desc: "Оценка и энтропия" },
+            crypto: { name: "Шифр AES", desc: "Шифрование парольной фразой" }
           }
         },
         en: {
@@ -2116,59 +2364,40 @@
           aboutBadge: "About me",
           latest: "Latest",
           emptyFeed: "Quack something cool!",
-          navWardrobe: "Wardrobe",
-          navUpgrades: "Tycoon",
-          navAchievements: "Trophies",
+          navTools: "Tools",
           navWall: "Wall",
-          wardrobeTitle: "Duck Wardrobe",
-          wardrobeHats: "Hats & Accessories",
-          wardrobeSkins: "Duck Skins",
-          upgradesTitle: "Duck Tycoon & QPS",
-          achievementsTitle: "Achievements Showcase",
+          toolsTitle: "Tools",
+          toolsSearch: "Search tools...",
+          toolsBack: "All tools",
+          toolsEmpty: "No tools match your search",
           wallModalTitle: "Quack Wall Sanctuary",
           soundModalTitle: "Sound Synthesizer",
           soundPresetTitle: "Procedural Sound Profiles",
-          clickPowerName: "Click Power",
-          clickPowerDesc: "Increases quacks produced per tap",
-          breadGenName: "Bread Crumbs",
-          breadGenDesc: "Attracts hungry ducks (+1 QPS)",
-          ducklingName: "Duckling Assistant",
-          ducklingDesc: "Helps you quack along (+5 QPS)",
-          megaphoneName: "Quack Megaphone",
-          megaphoneDesc: "Amplified quack resonance (+20 QPS)",
-          sanctuaryName: "ELTE Duck Sanctuary",
-          sanctuaryDesc: "A bustling pond sanctuary (+80 QPS)",
-          buyText: "Buy",
-          toastUnlocked: "Achievement Unlocked!",
           breadCatchTitle: "Golden Catch!",
           breadCatchDesc: "+50 Bonus Quacks Awarded!",
-          hats: {
-            none: "None",
-            tophat: "Top Hat",
-            sunglasses: "Thug Shades",
-            graduate: "ELTE Scholar",
-            pirate: "Pirate Bicorne",
-            halo: "Angel Halo",
-            party: "Party Cone"
-          },
-          skins: {
-            classic: "Classic Rubber",
-            gold: "Golden Duck",
-            cyber: "Cyberpunk Neon",
-            ghost: "Spectral Ghost",
-            stealth: "Stealth Matte"
-          },
-          achieves: {
-            first_quack: { name: "First Quack", desc: "Perform your first tap on the duck" },
-            click_100: { name: "Centurion", desc: "Reach 100 session clicks" },
-            click_1000: { name: "Duck Obsessed", desc: "Amass 1,000 total quacks" },
-            speed_demon: { name: "Speed Demon", desc: "Reach a click speed of 8+ CPS" },
-            fashion_icon: { name: "Dapper Duck", desc: "Equip any accessory or skin" },
-            tycoon: { name: "Duck Capitalist", desc: "Purchase your first upgrade" },
-            quack_wall: { name: "Public Speaker", desc: "Post a thought on the wall" },
-            matrix_hacker: { name: "The Matrix Operator", desc: "Unlock the secret terminal" },
-            polyglot: { name: "Polyglot", desc: "Switch across all 3 languages" },
-            golden_bread: { name: "Golden Hunter", desc: "Catch the flying golden treat" }
+          btnPreview: "Preview",
+          btnCopyHtml: "Copy HTML",
+          btnGenerate: "Generate",
+          btnDownload: "Download PNG",
+          btnCalculate: "Calculate",
+          btnCopy: "Copy",
+          btnFormat: "Format",
+          btnLookup: "Lookup vendor",
+          btnHash: "Hash",
+          btnCompare: "Compare",
+          btnCopyHash: "Copy hash",
+          btnEncrypt: "Encrypt",
+          btnDecrypt: "Decrypt",
+          copied: "Copied",
+          tools: {
+            markdown: { name: "Markdown to HTML", desc: "Preview and copy rendered HTML" },
+            qr: { name: "QR Code", desc: "Turn text or a URL into a QR" },
+            temp: { name: "Temperature", desc: "Convert between C, F and K" },
+            percent: { name: "Percentage", desc: "Common percent calculations" },
+            mac: { name: "MAC Lookup", desc: "Normalize MAC and OUI vendor lookup" },
+            bcrypt: { name: "Bcrypt", desc: "Hash text and compare hashes" },
+            password: { name: "Password Strength", desc: "Score, charset and entropy" },
+            crypto: { name: "Encrypt / Decrypt", desc: "AES-GCM with a passphrase" }
           }
         },
         hu: {
@@ -2186,59 +2415,40 @@
           aboutBadge: "Rólam",
           latest: "Legújabb",
           emptyFeed: "Írj valami vicceset!",
-          navWardrobe: "Ruhatár",
-          navUpgrades: "Fejlesztés",
-          navAchievements: "Trófeák",
+          navTools: "Eszközök",
           navWall: "Üzenőfal",
-          wardrobeTitle: "Kacsa Ruhatár",
-          wardrobeHats: "Kalapok & Kiegészítők",
-          wardrobeSkins: "Kacsa Külsők",
-          upgradesTitle: "Kacsa Gazdaság (QPS)",
-          achievementsTitle: "Dicsőségcsarnok",
+          toolsTitle: "Eszközök",
+          toolsSearch: "Eszközök keresése...",
+          toolsBack: "Összes eszköz",
+          toolsEmpty: "Nincs találat",
           wallModalTitle: "Kacsa Fal",
           soundModalTitle: "Hangszintetizátor",
           soundPresetTitle: "Hangprofilok",
-          clickPowerName: "Kattintási Erő",
-          clickPowerDesc: "Több hápogás kattintásonként",
-          breadGenName: "Kenyérmorzsák",
-          breadGenDesc: "Éhes kacsákat vonz (+1 QPS)",
-          ducklingName: "Kiskacsa Segéd",
-          ducklingDesc: "Segít hápogni (+5 QPS)",
-          megaphoneName: "Megafon",
-          megaphoneDesc: "Felerősített hápogás (+20 QPS)",
-          sanctuaryName: "ELTE Kacsa Tavacska",
-          sanctuaryDesc: "Nyüzsgő szentély (+80 QPS)",
-          buyText: "Vétel",
-          toastUnlocked: "Eredmény Feloldva!",
           breadCatchTitle: "Arany Kenyeret Kaptál!",
           breadCatchDesc: "+50 Bónusz Hápogás!",
-          hats: {
-            none: "Nincs",
-            tophat: "Cilinder",
-            sunglasses: "Napszemüveg",
-            graduate: "ELTE Diplomás",
-            pirate: "Kalóz",
-            halo: "Angyali Glória",
-            party: "Parti Kalap"
-          },
-          skins: {
-            classic: "Klasszikus Sárga",
-            gold: "Arany Kacsa",
-            cyber: "Cyberpunk Neon",
-            ghost: "Szellem Kacsa",
-            stealth: "Lopakodó Fekete"
-          },
-          achieves: {
-            first_quack: { name: "Első Háp", desc: "Kattints először a kacsára" },
-            click_100: { name: "Centurió", desc: "Érj el 100 kattintást egy menetben" },
-            click_1000: { name: "Kacsamániás", desc: "Gyűjts össze 1,000 hápogást" },
-            speed_demon: { name: "Gyors Kezek", desc: "Érj el 8+ CPS sebességet" },
-            fashion_icon: { name: "Divatikon", desc: "Vegyen fel bármilyen kalapot vagy külsőt" },
-            tycoon: { name: "Kacsa Kapitalista", desc: "Vásárold meg az első fejlesztésed" },
-            quack_wall: { name: "Szónok", desc: "Hagyj egy üzenetet a falon" },
-            matrix_hacker: { name: "Mátrix Operátor", desc: "Nyisd meg a titkos terminált" },
-            polyglot: { name: "Poliglott", desc: "Válts át mindhárom nyelvre" },
-            golden_bread: { name: "Arany Fogás", desc: "Kattints a repülő aranykenyérre" }
+          btnPreview: "Előnézet",
+          btnCopyHtml: "HTML másolása",
+          btnGenerate: "Generálás",
+          btnDownload: "PNG letöltés",
+          btnCalculate: "Számítás",
+          btnCopy: "Másolás",
+          btnFormat: "Formázás",
+          btnLookup: "Gyártó",
+          btnHash: "Hash",
+          btnCompare: "Összehasonlítás",
+          btnCopyHash: "Hash másolása",
+          btnEncrypt: "Titkosítás",
+          btnDecrypt: "Visszafejtés",
+          copied: "Másolva",
+          tools: {
+            markdown: { name: "Markdown → HTML", desc: "Előnézet és HTML másolás" },
+            qr: { name: "QR-kód", desc: "Szöveg vagy URL → QR" },
+            temp: { name: "Hőmérséklet", desc: "C ↔ F ↔ K" },
+            percent: { name: "Százalék", desc: "Gyakori százalékműveletek" },
+            mac: { name: "MAC cím", desc: "Formázás és OUI keresés" },
+            bcrypt: { name: "Bcrypt", desc: "Hash és összehasonlítás" },
+            password: { name: "Jelszóerősség", desc: "Pontszám és entrópia" },
+            crypto: { name: "Titkosítás", desc: "AES-GCM jelszóval" }
           }
         }
       };
@@ -2261,7 +2471,6 @@
       const badgeTextEl = document.getElementById('badgeText');
       const counterLabelEl = document.getElementById('counterLabel');
       const globalCounterEl = document.getElementById('globalCounter');
-      const qpsRateIndicator = document.getElementById('qpsRateIndicator');
       const comboBadgeEl = document.getElementById('comboBadge');
       const comboTextEl = document.getElementById('comboText');
       const cpsIndicatorEl = document.getElementById('cpsIndicator');
@@ -2281,22 +2490,14 @@
       const devBadge = document.getElementById('devBadge');
       const soundToggleBtn = document.getElementById('soundToggleBtn');
       const waterCanvas = document.getElementById('waterCanvas');
+      const badgeStack = document.getElementById('badgeStack');
 
-      // Nav Buttons & Modals
-      const openWardrobeBtn = document.getElementById('openWardrobeBtn');
-      const openUpgradesBtn = document.getElementById('openUpgradesBtn');
-      const openAchievementsBtn = document.getElementById('openAchievementsBtn');
+      const openToolsBtn = document.getElementById('openToolsBtn');
       const openWallBtn = document.getElementById('openWallBtn');
-      const wardrobeModal = document.getElementById('wardrobeModal');
-      const upgradesModal = document.getElementById('upgradesModal');
-      const achievementsModal = document.getElementById('achievementsModal');
+      const toolsModal = document.getElementById('toolsModal');
       const wallModal = document.getElementById('wallModal');
       const soundModal = document.getElementById('soundModal');
-      const clickPowerBadge = document.getElementById('clickPowerBadge');
-      const achieveBadge = document.getElementById('achieveBadge');
-      const achieveDot = document.getElementById('achieveDot');
 
-      // Terminal Elements
       const terminalOverlay = document.getElementById('terminalOverlay');
       const terminalCloseBtn = document.getElementById('terminalCloseBtn');
       const termCps = document.getElementById('termCps');
@@ -2305,7 +2506,6 @@
       const termLatency = document.getElementById('termLatency');
       const terminalLogs = document.getElementById('terminalLogs');
 
-      // Session & State
       let totalGlobalQuacks = parseInt(localStorage.getItem('quack_total') || '0', 10);
       let sessionClicks = 0;
       let comboStreak = 0;
@@ -2316,57 +2516,6 @@
       let measuredLatency = 0;
       let isMuted = localStorage.getItem('quack_muted') === 'true';
       let currentSoundPreset = localStorage.getItem('quack_sound_preset') || 'classic';
-      let currentHat = localStorage.getItem('quack_hat') || 'none';
-      let currentSkin = localStorage.getItem('quack_skin') || 'classic';
-
-      // =========================================================
-      // TYCOON / UPGRADES STATE & DEFINITION
-      // =========================================================
-      const TYCOON_DATA = {
-        clickPower: {
-          level: parseInt(localStorage.getItem('tycoon_click_lvl') || '1', 10),
-          baseCost: 15,
-          scale: 1.6,
-          getPower: function() { return this.level; }
-        },
-        generators: [
-          { id: 'bread', baseCost: 25, qps: 1, count: parseInt(localStorage.getItem('tycoon_gen_bread') || '0', 10) },
-          { id: 'duckling', baseCost: 120, qps: 5, count: parseInt(localStorage.getItem('tycoon_gen_duckling') || '0', 10) },
-          { id: 'megaphone', baseCost: 500, qps: 20, count: parseInt(localStorage.getItem('tycoon_gen_megaphone') || '0', 10) },
-          { id: 'sanctuary', baseCost: 2000, qps: 80, count: parseInt(localStorage.getItem('tycoon_gen_sanctuary') || '0', 10) }
-        ]
-      };
-
-      function calculateTotalQPS() {
-        return TYCOON_DATA.generators.reduce((sum, g) => sum + (g.count * g.qps), 0);
-      }
-
-      function getGenCost(gen) {
-        return Math.floor(gen.baseCost * Math.pow(1.15, gen.count));
-      }
-
-      function getClickPowerCost() {
-        return Math.floor(TYCOON_DATA.clickPower.baseCost * Math.pow(TYCOON_DATA.clickPower.scale, TYCOON_DATA.clickPower.level - 1));
-      }
-
-      // =========================================================
-      // ACHIEVEMENTS SYSTEM
-      // =========================================================
-      const unlockedAchievements = new Set(JSON.parse(localStorage.getItem('quack_achievements') || '[]'));
-
-      function unlockAchievement(id) {
-        if (unlockedAchievements.has(id) || !i18n[currentLang].achieves[id]) return;
-        unlockedAchievements.add(id);
-        localStorage.setItem('quack_achievements', JSON.stringify([...unlockedAchievements]));
-        updateAchievementUI();
-        achieveDot.classList.add('visible');
-
-        playAchievementChime();
-
-        // Show Toast
-        const achieveInfo = i18n[currentLang].achieves[id];
-        showToast('🏆', i18n[currentLang].toastUnlocked, achieveInfo.name);
-      }
 
       function showToast(icon, tag, title) {
         const toast = document.createElement('div');
@@ -2387,29 +2536,27 @@
         }, 3800);
       }
 
-      function updateAchievementUI() {
-        const count = unlockedAchievements.size;
-        achieveBadge.textContent = `${count}/10`;
-
-        const listEl = document.getElementById('achievementsList');
-        if (!listEl) return;
-        listEl.innerHTML = '';
-
-        const allKeys = Object.keys(i18n[currentLang].achieves);
-        allKeys.forEach((key) => {
-          const isUnlocked = unlockedAchievements.has(key);
-          const data = i18n[currentLang].achieves[key];
-          const item = document.createElement('div');
-          item.className = `achievement-item ${isUnlocked ? 'unlocked' : ''}`;
-          item.innerHTML = `
-            <div class="achievement-trophy">${isUnlocked ? '🏆' : '🔒'}</div>
-            <div class="achievement-text-col">
-              <div class="achievement-name">${data.name}</div>
-              <div class="achievement-desc">${data.desc}</div>
-            </div>
-          `;
-          listEl.appendChild(item);
-        });
+      function playCatchChime() {
+        if (isMuted) return;
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const notes = [523.25, 659.25, 783.99, 1046.50];
+          notes.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            const now = ctx.currentTime + idx * 0.08;
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now);
+            gain.gain.setValueAtTime(0.001, now);
+            gain.gain.linearRampToValueAtTime(0.16, now + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.36);
+          });
+        } catch (e) {}
       }
 
       // =========================================================
@@ -2543,29 +2690,6 @@
         } catch (e) {}
       }
 
-      function playAchievementChime() {
-        if (isMuted) return;
-        try {
-          const ctx = getAudioContext();
-          if (!ctx) return;
-          const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
-          notes.forEach((freq, idx) => {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            const now = ctx.currentTime + idx * 0.08;
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(freq, now);
-            gain.gain.setValueAtTime(0.001, now);
-            gain.gain.linearRampToValueAtTime(0.16, now + 0.02);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start(now);
-            osc.stop(now + 0.36);
-          });
-        } catch (e) {}
-      }
-
       function playTerminalBeep() {
         if (isMuted) return;
         try {
@@ -2656,183 +2780,6 @@
       renderWaterRipples();
 
       // =========================================================
-      // DUCK WARDROBE & ACCESSORIES LOGIC
-      // =========================================================
-      function applyHat(hatId) {
-        currentHat = hatId;
-        localStorage.setItem('quack_hat', hatId);
-
-        const allHats = document.querySelectorAll('#hatLayers > g');
-        allHats.forEach(g => g.style.display = 'none');
-
-        const target = document.getElementById(`hat-${hatId}`);
-        if (target) {
-          target.style.display = 'inline';
-        }
-
-        document.querySelectorAll('#hatsGrid .wardrobe-card').forEach(card => {
-          card.classList.toggle('active', card.dataset.hat === hatId);
-        });
-
-        if (hatId !== 'none') {
-          unlockAchievement('fashion_icon');
-        }
-      }
-
-      function applySkin(skinId) {
-        currentSkin = skinId;
-        localStorage.setItem('quack_skin', skinId);
-
-        duckWrapper.classList.remove('skin-gold', 'skin-cyber', 'skin-ghost', 'skin-stealth');
-        if (skinId !== 'classic') {
-          duckWrapper.classList.add(`skin-${skinId}`);
-          unlockAchievement('fashion_icon');
-        }
-
-        document.querySelectorAll('#skinsGrid .wardrobe-card').forEach(card => {
-          card.classList.toggle('active', card.dataset.skin === skinId);
-        });
-      }
-
-      document.querySelectorAll('#hatsGrid .wardrobe-card').forEach(card => {
-        card.addEventListener('click', () => {
-          applyHat(card.dataset.hat);
-          playProceduralQuack(1.3);
-        });
-      });
-
-      document.querySelectorAll('#skinsGrid .wardrobe-card').forEach(card => {
-        card.addEventListener('click', () => {
-          applySkin(card.dataset.skin);
-          playProceduralQuack(1.3);
-        });
-      });
-
-      applyHat(currentHat);
-      applySkin(currentSkin);
-
-      // =========================================================
-      // TYCOON UPGRADES RENDERING & PURCHASING
-      // =========================================================
-      function renderUpgradesList() {
-        const listEl = document.getElementById('upgradesList');
-        if (!listEl) return;
-        listEl.innerHTML = '';
-
-        const langDict = i18n[currentLang];
-        const clickCost = getClickPowerCost();
-
-        // 1. Click Power Card
-        const clickCard = document.createElement('div');
-        clickCard.className = 'upgrade-card';
-        clickCard.innerHTML = `
-          <div class="upgrade-info">
-            <div class="upgrade-icon">👆</div>
-            <div class="upgrade-details">
-              <div class="upgrade-name">${langDict.clickPowerName}</div>
-              <div class="upgrade-desc">${langDict.clickPowerDesc}</div>
-              <div class="upgrade-level">Lvl ${TYCOON_DATA.clickPower.level} (+${TYCOON_DATA.clickPower.level} Quacks/tap)</div>
-            </div>
-          </div>
-          <button type="button" class="upgrade-buy-btn" id="buyClickPowerBtn" ${totalGlobalQuacks < clickCost ? 'disabled' : ''}>
-            <span>${langDict.buyText}</span>
-            <span>${clickCost.toLocaleString()} Q</span>
-          </button>
-        `;
-        listEl.appendChild(clickCard);
-
-        const buyClickBtn = clickCard.querySelector('#buyClickPowerBtn');
-        buyClickBtn.addEventListener('click', () => {
-          if (totalGlobalQuacks >= clickCost) {
-            totalGlobalQuacks -= clickCost;
-            TYCOON_DATA.clickPower.level++;
-            localStorage.setItem('tycoon_click_lvl', TYCOON_DATA.clickPower.level);
-            clickPowerBadge.textContent = `+${TYCOON_DATA.clickPower.level}`;
-            globalCounterEl.textContent = formatNumber(totalGlobalQuacks);
-            unlockAchievement('tycoon');
-            playProceduralQuack(1.4);
-            renderUpgradesList();
-          }
-        });
-
-        // 2. QPS Generators
-        const genIcons = { bread: '🍞', duckling: '🐣', megaphone: '📢', sanctuary: '🏞️' };
-        const genNames = {
-          bread: langDict.breadGenName,
-          duckling: langDict.ducklingName,
-          megaphone: langDict.megaphoneName,
-          sanctuary: langDict.sanctuaryName
-        };
-        const genDescs = {
-          bread: langDict.breadGenDesc,
-          duckling: langDict.ducklingDesc,
-          megaphone: langDict.megaphoneDesc,
-          sanctuary: langDict.sanctuaryDesc
-        };
-
-        TYCOON_DATA.generators.forEach((gen) => {
-          const cost = getGenCost(gen);
-          const card = document.createElement('div');
-          card.className = 'upgrade-card';
-          card.innerHTML = `
-            <div class="upgrade-info">
-              <div class="upgrade-icon">${genIcons[gen.id] || '⚡'}</div>
-              <div class="upgrade-details">
-                <div class="upgrade-name">${genNames[gen.id]}</div>
-                <div class="upgrade-desc">${genDescs[gen.id]}</div>
-                <div class="upgrade-level">Owned: ${gen.count} (+${gen.count * gen.qps} QPS)</div>
-              </div>
-            </div>
-            <button type="button" class="upgrade-buy-btn" ${totalGlobalQuacks < cost ? 'disabled' : ''}>
-              <span>${langDict.buyText}</span>
-              <span>${cost.toLocaleString()} Q</span>
-            </button>
-          `;
-          listEl.appendChild(card);
-
-          const buyBtn = card.querySelector('.upgrade-buy-btn');
-          buyBtn.addEventListener('click', () => {
-            if (totalGlobalQuacks >= cost) {
-              totalGlobalQuacks -= cost;
-              gen.count++;
-              localStorage.setItem(`tycoon_gen_${gen.id}`, gen.count);
-              globalCounterEl.textContent = formatNumber(totalGlobalQuacks);
-              unlockAchievement('tycoon');
-              playProceduralQuack(1.4);
-              renderUpgradesList();
-              updateQPSDisplay();
-            }
-          });
-        });
-      }
-
-      function updateQPSDisplay() {
-        const qps = calculateTotalQPS();
-        qpsRateIndicator.textContent = `+${qps.toFixed(1)} QPS`;
-      }
-
-      clickPowerBadge.textContent = `+${TYCOON_DATA.clickPower.level}`;
-      updateQPSDisplay();
-
-      // QPS Timer Loop (Runs every 1000ms adding idle quacks)
-      setInterval(() => {
-        const qps = calculateTotalQPS();
-        if (qps > 0) {
-          totalGlobalQuacks += qps;
-          pendingQuacks += qps;
-          globalCounterEl.textContent = formatNumber(totalGlobalQuacks);
-          termGlobalQuacks.textContent = formatNumber(totalGlobalQuacks);
-          addWaterRipple();
-
-          if (totalGlobalQuacks >= 1000) {
-            unlockAchievement('click_1000');
-          }
-
-          scheduleQuackSync();
-        }
-      }, 1000);
-
-      // =========================================================
       // FLOATING BONUS TREAT (MINI-GAME)
       // =========================================================
       function spawnFloatingTreat() {
@@ -2848,8 +2795,7 @@
           pendingQuacks += bonus;
           globalCounterEl.textContent = formatNumber(totalGlobalQuacks);
 
-          unlockAchievement('golden_bread');
-          playAchievementChime();
+          playCatchChime();
 
           const dict = i18n[currentLang];
           showToast('🥖', dict.breadCatchTitle, dict.breadCatchDesc);
@@ -2878,10 +2824,6 @@
 
         if (termCps) termCps.textContent = `${currentCPS.toFixed(1)} CPS`;
 
-        if (currentCPS >= 8) {
-          unlockAchievement('speed_demon');
-        }
-
         if (clickTimestamps.length === 0 && comboStreak > 0) {
           comboStreak = Math.max(0, comboStreak - 1);
           checkMilestones();
@@ -2894,9 +2836,7 @@
         mainCard.classList.toggle('neon-glow', hasNeon);
 
         const hasGold = comboStreak >= 100 || sessionClicks >= 100;
-        if (currentSkin === 'classic') {
-          duckWrapper.classList.toggle('skin-gold', hasGold);
-        }
+        duckWrapper.classList.toggle('skin-gold', hasGold);
 
         if (hasGold && currentCPS >= 3) {
           document.body.classList.add('screen-shaking');
@@ -3026,9 +2966,8 @@
         sessionClicks++;
         comboStreak++;
 
-        const addAmount = TYCOON_DATA.clickPower.getPower();
-        totalGlobalQuacks += addAmount;
-        pendingQuacks += addAmount;
+        totalGlobalQuacks += 1;
+        pendingQuacks += 1;
 
         globalCounterEl.textContent = formatNumber(totalGlobalQuacks);
         termSessionClicks.textContent = sessionClicks;
@@ -3058,11 +2997,6 @@
           offsetX = (relativeX - 0.5) * 25;
         }
         spawnQuackBadge(offsetX);
-
-        // Achievements check
-        unlockAchievement('first_quack');
-        if (sessionClicks >= 100) unlockAchievement('click_100');
-        if (totalGlobalQuacks >= 1000) unlockAchievement('click_1000');
 
         checkMilestones();
         scheduleQuackSync();
@@ -3098,6 +3032,10 @@
         charCounter.classList.toggle('warning', len > 45 && len < 60);
         charCounter.classList.toggle('limit', len >= 60);
       });
+
+      // Hide bottom nav / badges while typing on Wall (mobile keyboard)
+      messageInput.addEventListener('focus', () => document.body.classList.add('keyboard-open'));
+      messageInput.addEventListener('blur', () => document.body.classList.remove('keyboard-open'));
 
       wallForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -3150,13 +3088,11 @@
           duckSvg.classList.add('squishing');
           playProceduralQuack(1.2);
 
-          unlockAchievement('quack_wall');
         } catch (err) {
           spawnSpeechBubble(raw);
           feedText.textContent = `"${raw}"`;
           messageInput.value = '';
           charCounter.textContent = '0/60';
-          unlockAchievement('quack_wall');
         } finally {
           postBtn.disabled = false;
           postBtnText.textContent = origText;
@@ -3238,12 +3174,24 @@
       // =========================================================
       // MODAL CONTROLS & EVENT LISTENERS
       // =========================================================
+      function anyModalOpen() {
+        return !!document.querySelector('.modal-backdrop.open');
+      }
+
+      function syncModalChrome() {
+        document.body.classList.toggle('modal-open', anyModalOpen());
+      }
+
       function openModal(modalEl) {
+        if (!modalEl) return;
         modalEl.classList.add('open');
+        syncModalChrome();
       }
 
       function closeModal(modalEl) {
+        if (!modalEl) return;
         modalEl.classList.remove('open');
+        syncModalChrome();
       }
 
       document.querySelectorAll('.modal-close-btn').forEach(btn => {
@@ -3260,19 +3208,19 @@
         });
       });
 
-      openWardrobeBtn.addEventListener('click', () => openModal(wardrobeModal));
-      openUpgradesBtn.addEventListener('click', () => {
-        renderUpgradesList();
-        openModal(upgradesModal);
-      });
-      openAchievementsBtn.addEventListener('click', () => {
-        achieveDot.classList.remove('visible');
-        updateAchievementUI();
-        openModal(achievementsModal);
+      openToolsBtn.addEventListener('click', () => {
+        showToolsHome();
+        openModal(toolsModal);
       });
       openWallBtn.addEventListener('click', () => {
         loadFullWallFeed();
         openModal(wallModal);
+      });
+
+      // Double-click sound button opens synthesizer presets
+      soundToggleBtn.addEventListener('dblclick', (e) => {
+        e.preventDefault();
+        openModal(soundModal);
       });
 
       // Sound Preset Selection
@@ -3294,9 +3242,6 @@
         currentLang = lang;
         try { localStorage.setItem('quack_lang', lang); } catch (_) {}
         visitedLangs.add(lang);
-        if (visitedLangs.size >= 3) {
-          unlockAchievement('polyglot');
-        }
 
         langButtons.forEach(btn => {
           const isActive = btn.dataset.lang === lang;
@@ -3341,37 +3286,16 @@
             aboutBadge.href = './about.html?lang=' + lang;
           }
 
-          // Nav buttons
-          document.getElementById('navWardrobeText').textContent = d.navWardrobe;
-          document.getElementById('navUpgradesText').textContent = d.navUpgrades;
-          document.getElementById('navAchievementsText').textContent = d.navAchievements;
+          document.getElementById('navToolsText').textContent = d.navTools;
           document.getElementById('navWallText').textContent = d.navWall;
-
-          // Modals titles
-          document.getElementById('wardrobeTitle').textContent = d.wardrobeTitle;
-          document.getElementById('wardrobeHatsTitle').textContent = d.wardrobeHats;
-          document.getElementById('wardrobeSkinsTitle').textContent = d.wardrobeSkins;
-          document.getElementById('upgradesTitle').textContent = d.upgradesTitle;
-          document.getElementById('achievementsTitle').textContent = d.achievementsTitle;
+          document.getElementById('toolsTitle').textContent = d.toolsTitle;
+          document.getElementById('toolsSearch').placeholder = d.toolsSearch;
+          document.getElementById('toolsBackText').textContent = d.toolsBack;
           document.getElementById('wallModalTitle').textContent = d.wallModalTitle;
           document.getElementById('soundModalTitle').textContent = d.soundModalTitle;
           document.getElementById('soundPresetTitle').textContent = d.soundPresetTitle;
-
-          // Hats names
-          document.getElementById('hatNone').textContent = d.hats.none;
-          document.getElementById('hatTopHat').textContent = d.hats.tophat;
-          document.getElementById('hatSunglasses').textContent = d.hats.sunglasses;
-          document.getElementById('hatGraduate').textContent = d.hats.graduate;
-          document.getElementById('hatPirate').textContent = d.hats.pirate;
-          document.getElementById('hatHalo').textContent = d.hats.halo;
-          document.getElementById('hatParty').textContent = d.hats.party;
-
-          // Skins names
-          document.getElementById('skinClassic').textContent = d.skins.classic;
-          document.getElementById('skinGold').textContent = d.skins.gold;
-          document.getElementById('skinCyber').textContent = d.skins.cyber;
-          document.getElementById('skinGhost').textContent = d.skins.ghost;
-          document.getElementById('skinStealth').textContent = d.skins.stealth;
+          applyToolsChromeI18n();
+          renderToolsCatalog(document.getElementById('toolsSearch').value || '');
 
           document.documentElement.lang = lang;
 
@@ -3398,7 +3322,6 @@
         isTerminalOpen = true;
         terminalOverlay.classList.add('active');
         playTerminalBeep();
-        unlockAchievement('matrix_hacker');
 
         const logEntry = document.createElement('div');
         logEntry.innerHTML = `> [${new Date().toLocaleTimeString()}] EASTER EGG UNLOCKED VIA ${triggerType}!`;
@@ -3489,6 +3412,495 @@
       document.addEventListener('mousemove', handleCardTilt);
       document.addEventListener('mouseleave', resetCardTilt);
 
+
+      // =========================================================
+      // TOOLS (it-tools inspired catalog + focused panels)
+      // =========================================================
+      const TOOL_IDS = ['markdown', 'qr', 'temp', 'percent', 'mac', 'bcrypt', 'password', 'crypto'];
+      const TOOL_ICONS = {
+        markdown: '📝',
+        qr: '▦',
+        temp: '🌡',
+        percent: '%',
+        mac: '🖧',
+        bcrypt: '🔐',
+        password: '🔑',
+        crypto: '🔒'
+      };
+
+      const toolsCatalogEl = document.getElementById('toolsCatalog');
+      const toolsHomeEl = document.getElementById('toolsHome');
+      const toolsDetailEl = document.getElementById('toolsDetail');
+      const toolsSearchEl = document.getElementById('toolsSearch');
+      const toolsBackBtn = document.getElementById('toolsBackBtn');
+      let activeToolId = null;
+
+      function tDict() { return i18n[currentLang]; }
+
+      function applyToolsChromeI18n() {
+        const d = tDict();
+        const map = {
+          mdRenderBtn: d.btnPreview,
+          mdCopyHtmlBtn: d.btnCopyHtml,
+          qrGenerateBtn: d.btnGenerate,
+          qrDownloadBtn: d.btnDownload,
+          pctCalcBtn: d.btnCalculate,
+          pctCopyBtn: d.btnCopy,
+          macFormatBtn: d.btnFormat,
+          macLookupBtn: d.btnLookup,
+          macCopyBtn: d.btnCopy,
+          bcryptHashBtn: d.btnHash,
+          bcryptCompareBtn: d.btnCompare,
+          bcryptCopyBtn: d.btnCopyHash,
+          cryptoEncBtn: d.btnEncrypt,
+          cryptoDecBtn: d.btnDecrypt,
+          cryptoCopyBtn: d.btnCopy
+        };
+        Object.keys(map).forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = map[id];
+        });
+        document.querySelectorAll('[data-i18n-tool-title]').forEach((el) => {
+          const id = el.getAttribute('data-i18n-tool-title');
+          if (d.tools[id]) el.textContent = d.tools[id].name;
+        });
+        document.querySelectorAll('[data-i18n-tool-desc]').forEach((el) => {
+          const id = el.getAttribute('data-i18n-tool-desc');
+          if (d.tools[id]) el.textContent = d.tools[id].desc;
+        });
+      }
+
+      function renderToolsCatalog(query) {
+        const d = tDict();
+        const q = (query || '').trim().toLowerCase();
+        toolsCatalogEl.innerHTML = '';
+        const matches = TOOL_IDS.filter((id) => {
+          const meta = d.tools[id];
+          if (!meta) return false;
+          if (!q) return true;
+          return (meta.name + ' ' + meta.desc + ' ' + id).toLowerCase().includes(q);
+        });
+        if (!matches.length) {
+          const empty = document.createElement('div');
+          empty.className = 'tools-empty';
+          empty.textContent = d.toolsEmpty;
+          toolsCatalogEl.appendChild(empty);
+          return;
+        }
+        matches.forEach((id) => {
+          const meta = d.tools[id];
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'tool-card';
+          btn.innerHTML = `
+            <div class="tool-card-icon">${TOOL_ICONS[id] || '•'}</div>
+            <div class="tool-card-name">${meta.name}</div>
+            <div class="tool-card-desc">${meta.desc}</div>
+          `;
+          btn.addEventListener('click', () => openTool(id));
+          toolsCatalogEl.appendChild(btn);
+        });
+      }
+
+      function showToolsHome() {
+        activeToolId = null;
+        toolsHomeEl.classList.remove('hidden');
+        toolsDetailEl.classList.remove('active');
+        document.querySelectorAll('.tool-panel').forEach((p) => p.classList.remove('active'));
+        document.getElementById('toolsTitle').textContent = tDict().toolsTitle;
+        renderToolsCatalog(toolsSearchEl.value || '');
+      }
+
+      function openTool(id) {
+        activeToolId = id;
+        toolsHomeEl.classList.add('hidden');
+        toolsDetailEl.classList.add('active');
+        document.querySelectorAll('.tool-panel').forEach((p) => {
+          p.classList.toggle('active', p.dataset.tool === id);
+        });
+        const meta = tDict().tools[id];
+        if (meta) document.getElementById('toolsTitle').textContent = meta.name;
+        applyToolsChromeI18n();
+      }
+
+      function copyText(value) {
+        const str = String(value == null ? '' : value);
+        if (!str) return;
+        const done = () => showToast('📋', tDict().copied, str.slice(0, 48) + (str.length > 48 ? '…' : ''));
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(str).then(done).catch(() => {
+            const ta = document.createElement('textarea');
+            ta.value = str;
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); } catch (_) {}
+            ta.remove();
+            done();
+          });
+        }
+      }
+
+      function simpleMarkdown(src) {
+        if (typeof marked !== 'undefined' && marked.parse) {
+          return marked.parse(src, { breaks: true });
+        }
+        // Minimal fallback
+        let html = src
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        html = html.replace(/^### (.*)$/gm, '<h3>$1</h3>')
+          .replace(/^## (.*)$/gm, '<h2>$1</h2>')
+          .replace(/^# (.*)$/gm, '<h1>$1</h1>')
+          .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*(.+?)\*/g, '<em>$1</em>')
+          .replace(/`([^`]+)`/g, '<code>$1</code>')
+          .replace(/\n/g, '<br>');
+        return html;
+      }
+
+      function initMarkdownTool() {
+        const input = document.getElementById('mdInput');
+        const preview = document.getElementById('mdPreview');
+        const htmlOut = document.getElementById('mdHtmlOut');
+        const render = () => {
+          const html = simpleMarkdown(input.value || '');
+          preview.innerHTML = html;
+          htmlOut.textContent = html;
+        };
+        document.getElementById('mdRenderBtn').addEventListener('click', render);
+        input.addEventListener('input', render);
+        document.getElementById('mdCopyHtmlBtn').addEventListener('click', () => copyText(htmlOut.textContent));
+      }
+
+      function initQrTool() {
+        const input = document.getElementById('qrInput');
+        const wrap = document.getElementById('qrCanvasWrap');
+        const canvas = document.getElementById('qrCanvas');
+        const generate = async () => {
+          const val = (input.value || '').trim();
+          if (!val) return;
+          if (typeof QRCode === 'undefined') {
+            wrap.hidden = false;
+            wrap.innerHTML = '<div class="tool-hint">QR library failed to load.</div>';
+            return;
+          }
+          wrap.hidden = false;
+          wrap.innerHTML = '';
+          wrap.appendChild(canvas);
+          await QRCode.toCanvas(canvas, val, {
+            width: 220,
+            margin: 2,
+            color: { dark: '#0a0a0b', light: '#ffffff' }
+          });
+        };
+        document.getElementById('qrGenerateBtn').addEventListener('click', () => { generate().catch(() => {}); });
+        document.getElementById('qrDownloadBtn').addEventListener('click', () => {
+          if (wrap.hidden) return;
+          const a = document.createElement('a');
+          a.download = 'qrcode.png';
+          a.href = canvas.toDataURL('image/png');
+          a.click();
+        });
+      }
+
+      function initTempTool() {
+        const c = document.getElementById('tempC');
+        const f = document.getElementById('tempF');
+        const k = document.getElementById('tempK');
+        let lock = false;
+        const setAll = (celsius) => {
+          lock = true;
+          c.value = Number.isFinite(celsius) ? String(+celsius.toFixed(4)) : '';
+          f.value = Number.isFinite(celsius) ? String(+((celsius * 9 / 5) + 32).toFixed(4)) : '';
+          k.value = Number.isFinite(celsius) ? String(+(celsius + 273.15).toFixed(4)) : '';
+          lock = false;
+        };
+        c.addEventListener('input', () => {
+          if (lock) return;
+          const v = parseFloat(c.value);
+          if (c.value === '' || !Number.isFinite(v)) return;
+          setAll(v);
+        });
+        f.addEventListener('input', () => {
+          if (lock) return;
+          const v = parseFloat(f.value);
+          if (f.value === '' || !Number.isFinite(v)) return;
+          setAll((v - 32) * 5 / 9);
+        });
+        k.addEventListener('input', () => {
+          if (lock) return;
+          const v = parseFloat(k.value);
+          if (k.value === '' || !Number.isFinite(v)) return;
+          setAll(v - 273.15);
+        });
+      }
+
+      function initPercentTool() {
+        const mode = document.getElementById('pctMode');
+        const xEl = document.getElementById('pctX');
+        const yEl = document.getElementById('pctY');
+        const out = document.getElementById('pctOut');
+        const calc = () => {
+          const x = parseFloat(xEl.value);
+          const y = parseFloat(yEl.value);
+          if (!Number.isFinite(x) || !Number.isFinite(y)) {
+            out.textContent = '—';
+            return;
+          }
+          let result;
+          switch (mode.value) {
+            case 'of': result = (x / 100) * y; out.textContent = `${x}% of ${y} = ${result}`; break;
+            case 'is': result = y === 0 ? NaN : (x / y) * 100; out.textContent = `${x} is ${result}% of ${y}`; break;
+            case 'inc': result = y * (1 + x / 100); out.textContent = `${y} + ${x}% = ${result}`; break;
+            case 'dec': result = y * (1 - x / 100); out.textContent = `${y} - ${x}% = ${result}`; break;
+            default: out.textContent = '—';
+          }
+        };
+        document.getElementById('pctCalcBtn').addEventListener('click', calc);
+        [mode, xEl, yEl].forEach((el) => el.addEventListener('input', calc));
+        document.getElementById('pctCopyBtn').addEventListener('click', () => copyText(out.textContent));
+        calc();
+      }
+
+      function normalizeMac(raw) {
+        const hex = String(raw || '').toUpperCase().replace(/[^0-9A-F]/g, '');
+        if (hex.length !== 12) return null;
+        const pairs = hex.match(/.{1,2}/g);
+        return {
+          colon: pairs.join(':'),
+          dash: pairs.join('-'),
+          cisco: pairs.slice(0, 3).join('.') + '.' + pairs.slice(3).join('.'),
+          bare: hex,
+          oui: pairs.slice(0, 3).join(':')
+        };
+      }
+
+      function initMacTool() {
+        const input = document.getElementById('macInput');
+        const out = document.getElementById('macOut');
+        let lastFormatted = '';
+        const format = () => {
+          const n = normalizeMac(input.value);
+          if (!n) {
+            out.textContent = 'Invalid MAC (need 12 hex digits)';
+            lastFormatted = '';
+            return null;
+          }
+          lastFormatted = n.colon;
+          input.value = n.colon;
+          out.textContent = `Colon: ${n.colon}\nDash:  ${n.dash}\nCisco: ${n.cisco}\nOUI:   ${n.oui}`;
+          return n;
+        };
+        document.getElementById('macFormatBtn').addEventListener('click', format);
+        document.getElementById('macCopyBtn').addEventListener('click', () => {
+          const n = normalizeMac(input.value) || format();
+          if (n) copyText(n.colon);
+        });
+        document.getElementById('macLookupBtn').addEventListener('click', async () => {
+          const n = format();
+          if (!n) return;
+          out.textContent += '\nLooking up vendor…';
+          try {
+            const res = await fetch('https://api.macvendors.com/' + encodeURIComponent(n.colon), { method: 'GET' });
+            if (res.ok) {
+              const vendor = (await res.text()).trim();
+              out.textContent = `Colon: ${n.colon}\nDash:  ${n.dash}\nCisco: ${n.cisco}\nOUI:   ${n.oui}\nVendor: ${vendor || 'Unknown'}`;
+            } else {
+              throw new Error('lookup failed');
+            }
+          } catch (err) {
+            out.textContent = `Colon: ${n.colon}\nDash:  ${n.dash}\nCisco: ${n.cisco}\nOUI:   ${n.oui}\nVendor: (API unavailable — use Wireshark OUI link below)`;
+          }
+        });
+      }
+
+      function initBcryptTool() {
+        const textEl = document.getElementById('bcryptText');
+        const roundsEl = document.getElementById('bcryptRounds');
+        const compareEl = document.getElementById('bcryptCompare');
+        const out = document.getElementById('bcryptOut');
+        let lastHash = '';
+        document.getElementById('bcryptHashBtn').addEventListener('click', () => {
+          if (typeof dcodeIO === 'undefined' && typeof bcrypt === 'undefined') {
+            out.textContent = 'bcryptjs failed to load';
+            return;
+          }
+          const bcryptLib = (typeof bcrypt !== 'undefined') ? bcrypt : dcodeIO.bcrypt;
+          const rounds = Math.min(12, Math.max(4, parseInt(roundsEl.value, 10) || 10));
+          roundsEl.value = String(rounds);
+          out.textContent = 'Hashing…';
+          setTimeout(() => {
+            try {
+              const salt = bcryptLib.genSaltSync(rounds);
+              lastHash = bcryptLib.hashSync(textEl.value || '', salt);
+              out.textContent = lastHash;
+            } catch (e) {
+              out.textContent = 'Hash error: ' + (e && e.message ? e.message : e);
+            }
+          }, 20);
+        });
+        document.getElementById('bcryptCompareBtn').addEventListener('click', () => {
+          const bcryptLib = (typeof bcrypt !== 'undefined') ? bcrypt : (typeof dcodeIO !== 'undefined' ? dcodeIO.bcrypt : null);
+          if (!bcryptLib) {
+            out.textContent = 'bcryptjs failed to load';
+            return;
+          }
+          const hash = (compareEl.value || lastHash || '').trim();
+          if (!hash) {
+            out.textContent = 'Provide a hash to compare';
+            return;
+          }
+          try {
+            const ok = bcryptLib.compareSync(textEl.value || '', hash);
+            out.textContent = ok ? 'Match ✓' : 'No match ✗';
+          } catch (e) {
+            out.textContent = 'Compare error: ' + (e && e.message ? e.message : e);
+          }
+        });
+        document.getElementById('bcryptCopyBtn').addEventListener('click', () => copyText(lastHash || out.textContent));
+      }
+
+      function estimateCharset(pw) {
+        let size = 0;
+        if (/[a-z]/.test(pw)) size += 26;
+        if (/[A-Z]/.test(pw)) size += 26;
+        if (/[0-9]/.test(pw)) size += 10;
+        if (/[^A-Za-z0-9]/.test(pw)) size += 33;
+        return size || 1;
+      }
+
+      function initPasswordTool() {
+        const input = document.getElementById('pwInput');
+        const out = document.getElementById('pwOut');
+        const bar = document.getElementById('pwMeterBar');
+        const analyse = () => {
+          const pw = input.value || '';
+          if (!pw) {
+            out.textContent = '—';
+            bar.style.width = '0%';
+            return;
+          }
+          const len = pw.length;
+          const charset = estimateCharset(pw);
+          const entropy = len * Math.log2(charset);
+          let score = 0;
+          if (len >= 8) score += 1;
+          if (len >= 12) score += 1;
+          if (len >= 16) score += 1;
+          if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) score += 1;
+          if (/[0-9]/.test(pw)) score += 1;
+          if (/[^A-Za-z0-9]/.test(pw)) score += 1;
+          if (entropy >= 60) score += 1;
+          const labels = ['Very weak', 'Weak', 'Fair', 'Good', 'Strong', 'Very strong', 'Excellent', 'Excellent'];
+          const label = labels[Math.min(score, labels.length - 1)];
+          const pct = Math.min(100, Math.round((score / 7) * 100));
+          const colors = ['#ef4444', '#f97316', '#eab308', '#84cc16', '#22c55e', '#10b981', '#e11d48'];
+          bar.style.width = pct + '%';
+          bar.style.background = colors[Math.min(score, colors.length - 1)];
+          const feedback = [];
+          if (len < 12) feedback.push('Use at least 12 characters');
+          if (!/[A-Z]/.test(pw) || !/[a-z]/.test(pw)) feedback.push('Mix upper and lower case');
+          if (!/[0-9]/.test(pw)) feedback.push('Add digits');
+          if (!/[^A-Za-z0-9]/.test(pw)) feedback.push('Add symbols');
+          if (!feedback.length) feedback.push('Looking solid');
+          out.textContent = `Score: ${score}/7 (${label})\nLength: ${len}\nCharset ≈ ${charset}\nEntropy ≈ ${entropy.toFixed(1)} bits\nTips: ${feedback.join('; ')}`;
+        };
+        input.addEventListener('input', analyse);
+      }
+
+      function bufToB64(buf) {
+        const bytes = new Uint8Array(buf);
+        let s = '';
+        bytes.forEach((b) => { s += String.fromCharCode(b); });
+        return btoa(s);
+      }
+
+      function b64ToBuf(b64) {
+        const s = atob(b64);
+        const bytes = new Uint8Array(s.length);
+        for (let i = 0; i < s.length; i++) bytes[i] = s.charCodeAt(i);
+        return bytes.buffer;
+      }
+
+      async function deriveKey(passphrase, salt) {
+        const enc = new TextEncoder();
+        const baseKey = await crypto.subtle.importKey('raw', enc.encode(passphrase), 'PBKDF2', false, ['deriveKey']);
+        return crypto.subtle.deriveKey(
+          { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
+          baseKey,
+          { name: 'AES-GCM', length: 256 },
+          false,
+          ['encrypt', 'decrypt']
+        );
+      }
+
+      function initCryptoTool() {
+        const pass = document.getElementById('cryptoPass');
+        const textEl = document.getElementById('cryptoText');
+        const out = document.getElementById('cryptoOut');
+        document.getElementById('cryptoEncBtn').addEventListener('click', async () => {
+          try {
+            if (!pass.value) { out.textContent = 'Enter a passphrase'; return; }
+            const salt = crypto.getRandomValues(new Uint8Array(16));
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            const key = await deriveKey(pass.value, salt);
+            const cipher = await crypto.subtle.encrypt(
+              { name: 'AES-GCM', iv },
+              key,
+              new TextEncoder().encode(textEl.value || '')
+            );
+            const packed = new Uint8Array(salt.byteLength + iv.byteLength + cipher.byteLength);
+            packed.set(salt, 0);
+            packed.set(iv, 16);
+            packed.set(new Uint8Array(cipher), 28);
+            out.textContent = bufToB64(packed.buffer);
+          } catch (e) {
+            out.textContent = 'Encrypt failed: ' + (e && e.message ? e.message : e);
+          }
+        });
+        document.getElementById('cryptoDecBtn').addEventListener('click', async () => {
+          try {
+            if (!pass.value) { out.textContent = 'Enter a passphrase'; return; }
+            const packed = new Uint8Array(b64ToBuf((textEl.value || out.textContent || '').trim()));
+            if (packed.byteLength < 30) { out.textContent = 'Invalid payload'; return; }
+            const salt = packed.slice(0, 16);
+            const iv = packed.slice(16, 28);
+            const data = packed.slice(28);
+            const key = await deriveKey(pass.value, salt);
+            const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, data);
+            out.textContent = new TextDecoder().decode(plain);
+          } catch (e) {
+            out.textContent = 'Decrypt failed (wrong passphrase or corrupt data)';
+          }
+        });
+        document.getElementById('cryptoCopyBtn').addEventListener('click', () => copyText(out.textContent));
+      }
+
+      function initTools() {
+        applyToolsChromeI18n();
+        renderToolsCatalog('');
+        toolsSearchEl.addEventListener('input', () => renderToolsCatalog(toolsSearchEl.value));
+        toolsBackBtn.addEventListener('click', showToolsHome);
+        initMarkdownTool();
+        initQrTool();
+        initTempTool();
+        initPercentTool();
+        initMacTool();
+        initBcryptTool();
+        initPasswordTool();
+        initCryptoTool();
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return;
+        if (toolsModal.classList.contains('open') && activeToolId) {
+          showToolsHome();
+          e.preventDefault();
+          return;
+        }
+        document.querySelectorAll('.modal-backdrop.open').forEach((m) => closeModal(m));
+      });
+
+
       // =========================================================
       // Service Worker Registration for PWA
       // =========================================================
@@ -3499,7 +3911,7 @@
       }
 
       // Initial stats fetch & UI setup
-      updateAchievementUI();
+      initTools();
       fetchStats();
 
       if (currentLang !== 'en') {
