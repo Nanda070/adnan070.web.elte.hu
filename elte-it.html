@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="ELTE Student IT reference — accounts, passwords and service portals. Unofficial guide by Nanda.">
+  <meta name="theme-color" content="#e11d48">
+  <title>ELTE Student IT — Where to get what</title>
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      --bg-dark: #0a0a0b;
+      --card-bg: rgba(20, 20, 22, 0.82);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --card-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.8), 0 0 45px -10px rgba(225, 29, 72, 0.16);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --accent-yellow: #e11d48;
+      --accent-orange: #dc2626;
+      --accent-cyan: #fb7185;
+      --btn-active-bg: rgba(225, 29, 72, 0.18);
+      --btn-active-border: rgba(225, 29, 72, 0.55);
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.2rem 1rem 3.5rem;
+      position: relative;
+    }
+
+    .background-container {
+      position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0;
+    }
+    .glow-orb {
+      position: absolute; border-radius: 50%; filter: blur(95px); opacity: 0.32;
+      animation: orbFloat 22s ease-in-out infinite alternate;
+    }
+    .orb-1 {
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, #e11d48, #9f1239 70%);
+      top: -12%; left: 10%; animation-duration: 24s;
+    }
+    .orb-2 {
+      width: 520px; height: 520px;
+      background: radial-gradient(circle, #dc2626, #450a0a 70%);
+      bottom: -15%; right: 5%; animation-duration: 28s; animation-delay: -6s; opacity: 0.22;
+    }
+    .orb-3 {
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, #00f3ff, #3b82f6 70%);
+      top: 38%; right: 22%; animation-duration: 20s; animation-delay: -11s; opacity: 0.16;
+    }
+    .noise-overlay {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 0);
+      background-size: 26px 26px; opacity: 0.6;
+    }
+    @keyframes orbFloat {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(45px, -55px) scale(1.08); }
+      100% { transform: translate(-40px, 40px) scale(0.92); }
+    }
+
+    .page-wrap {
+      position: relative; z-index: 2;
+      width: 100%; max-width: 1100px; margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 14px; flex-wrap: wrap;
+    }
+
+    .back-link, .dev-link {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(18, 22, 29, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      color: #e2e8f0; font-size: 0.82rem; font-weight: 600;
+      padding: 7px 15px; border-radius: 999px; text-decoration: none;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+    .back-link:hover, .dev-link:hover {
+      transform: translateY(-2px);
+      border-color: rgba(225, 29, 72, 0.45);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(225, 29, 72, 0.2);
+    }
+    .back-link strong, .dev-link strong { color: var(--accent-yellow); }
+
+    .lang-switcher {
+      display: inline-flex; background: rgba(0, 0, 0, 0.4);
+      padding: 3px; border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08); gap: 3px;
+    }
+    .lang-btn {
+      background: transparent; border: 1px solid transparent;
+      color: var(--text-muted); font-family: inherit; font-size: 0.78rem;
+      font-weight: 700; padding: 5px 10px; border-radius: 8px; cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .lang-btn:hover:not(.active) { color: var(--text-main); background: rgba(255, 255, 255, 0.05); }
+    .lang-btn.active {
+      background: var(--btn-active-bg); border-color: var(--btn-active-border);
+      color: var(--accent-yellow); box-shadow: 0 2px 10px rgba(225, 29, 72, 0.18);
+    }
+
+    .card {
+      position: relative; width: 100%;
+      background: var(--card-bg);
+      backdrop-filter: blur(28px) saturate(175%);
+      -webkit-backdrop-filter: blur(28px) saturate(175%);
+      border: 1px solid var(--card-border);
+      border-radius: 30px; padding: 28px 26px 32px;
+      box-shadow: var(--card-shadow);
+    }
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.05); padding: 6px 14px;
+      border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 14px;
+    }
+    .hero-badge .dot {
+      width: 7px; height: 7px; border-radius: 50%; background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+    }
+
+    h1 {
+      font-size: clamp(1.45rem, 3.5vw, 2rem); font-weight: 800;
+      letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 10px;
+    }
+    h1 span { color: var(--accent-yellow); }
+    .lede {
+      color: var(--text-muted); font-size: 0.98rem; line-height: 1.65;
+      margin-bottom: 18px; max-width: 68ch;
+    }
+
+    .notice {
+      background: rgba(225, 29, 72, 0.08);
+      border: 1px solid rgba(225, 29, 72, 0.28);
+      border-radius: 16px; padding: 14px 16px;
+      color: #fde68a; font-size: 0.9rem; line-height: 1.55;
+      margin-bottom: 20px;
+    }
+    .notice strong { color: var(--accent-yellow); }
+
+    .toolbar {
+      display: grid; grid-template-columns: 1fr auto; gap: 10px;
+      margin-bottom: 14px;
+    }
+    .search {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px; padding: 0 14px;
+    }
+    .search svg { width: 16px; height: 16px; color: var(--text-dim); flex: none; }
+    .search input {
+      width: 100%; border: 0; outline: 0; background: transparent;
+      color: var(--text-main); padding: 12px 0; font: inherit; font-size: 0.9rem;
+    }
+    .search input::placeholder { color: var(--text-dim); }
+
+    .filters {
+      display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+    }
+    .filter {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted); font-family: inherit; font-size: 0.78rem;
+      font-weight: 700; padding: 9px 12px; border-radius: 12px; cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .filter:hover:not(.active) { color: var(--text-main); background: rgba(255, 255, 255, 0.06); }
+    .filter.active {
+      background: var(--btn-active-bg); border-color: var(--btn-active-border);
+      color: var(--accent-yellow); box-shadow: 0 2px 10px rgba(225, 29, 72, 0.18);
+    }
+
+    .meta {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 10px; margin-bottom: 12px; flex-wrap: wrap;
+      font-size: 0.8rem; color: var(--text-dim);
+    }
+    .meta .count { color: #cbd5e1; font-weight: 700; }
+    .meta strong { color: var(--accent-yellow); font-weight: 700; }
+
+    .table-wrap {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 18px; overflow: auto;
+      background: rgba(0, 0, 0, 0.28);
+    }
+    table { width: 100%; min-width: 920px; border-collapse: collapse; }
+    th, td {
+      padding: 14px 15px; text-align: left; vertical-align: top;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    th {
+      font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--text-dim); background: rgba(0, 0, 0, 0.45);
+      position: sticky; top: 0; z-index: 1; font-weight: 800;
+    }
+    tr:last-child td { border-bottom: 0; }
+    tr:hover td { background: rgba(255, 255, 255, 0.025); }
+    td:first-child {
+      font-weight: 700; color: #f1f5f9; white-space: nowrap;
+    }
+    td { color: var(--text-muted); font-size: 0.88rem; line-height: 1.55; }
+    td:nth-child(2) { min-width: 170px; }
+    td:nth-child(3) { min-width: 320px; }
+    td:nth-child(4) { min-width: 220px; }
+
+    .tag {
+      display: inline-flex; align-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: #cbd5e1; border-radius: 999px; padding: 2px 8px;
+      font-size: 0.62rem; font-weight: 800; letter-spacing: 0.06em;
+      text-transform: uppercase; margin-left: 7px; vertical-align: 2px;
+    }
+    .tag.iig {
+      color: #7dd3fc; border-color: rgba(125, 211, 252, 0.35);
+      background: rgba(125, 211, 252, 0.08);
+    }
+    .tag.neptun {
+      color: #c4b5fd; border-color: rgba(196, 181, 253, 0.35);
+      background: rgba(196, 181, 253, 0.08);
+    }
+    .tag.inf {
+      color: #93c5fd; border-color: rgba(147, 197, 253, 0.35);
+      background: rgba(147, 197, 253, 0.08);
+    }
+    .tag.lib {
+      color: #fb7185; border-color: rgba(251, 113, 133, 0.35);
+      background: rgba(251, 113, 133, 0.08);
+    }
+
+    .mono, code {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.8rem; background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px; padding: 2px 7px; color: #fde68a;
+      word-break: break-all;
+    }
+
+    .portal {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .portal a {
+      color: var(--accent-yellow); text-decoration: underline;
+      text-underline-offset: 2px; font-weight: 600;
+    }
+    .portal a:hover { color: #ffe08a; }
+    .copy {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted); border-radius: 8px;
+      padding: 5px 8px; font-size: 0.68rem; font-weight: 700;
+      font-family: inherit; cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .copy:hover {
+      color: var(--text-main);
+      border-color: rgba(225, 29, 72, 0.4);
+    }
+    .copy.ok {
+      color: #fb7185;
+      border-color: rgba(251, 113, 133, 0.45);
+    }
+
+    .empty {
+      display: none; padding: 28px; text-align: center;
+      color: var(--text-muted); font-size: 0.92rem;
+    }
+
+    .footer-note {
+      margin-top: 22px; padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.8rem; color: var(--text-dim); line-height: 1.5;
+    }
+
+    .action-row {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px;
+    }
+    .btn-ghost {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      font-family: inherit; font-size: 0.88rem; font-weight: 700;
+      padding: 11px 18px; border-radius: 999px; text-decoration: none;
+      cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05); color: #e2e8f0;
+      transition: all 0.2s ease;
+    }
+    .btn-ghost:hover {
+      border-color: rgba(225, 29, 72, 0.4); color: var(--accent-yellow);
+    }
+
+    @media (max-width: 760px) {
+      body { padding: 0.8rem 0.65rem 2.5rem; }
+      .card { padding: 20px 16px 24px; border-radius: 24px; }
+      .toolbar { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="background-container" aria-hidden="true">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+    <div class="noise-overlay"></div>
+  </div>
+
+  <div class="page-wrap">
+    <div class="topbar">
+      <a class="back-link" href="./" id="backLink"><span>←</span> <span id="backText">Back to duck</span></a>
+      <nav class="lang-switcher" aria-label="Language selector">
+        <button type="button" class="lang-btn" data-lang="ru" aria-pressed="false">RU</button>
+        <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" class="lang-btn" data-lang="hu" aria-pressed="false">HU</button>
+      </nav>
+      <a class="dev-link" href="./about.html" id="aboutLink">
+        <span>⚡</span> <span id="aboutLinkText">About me</span>
+      </a>
+    </div>
+
+    <article class="card">
+      <div class="hero-badge"><span class="dot"></span> <span id="heroBadge">Unofficial · Student reference</span></div>
+      <h1 id="pageTitle">Where to get <span>what</span></h1>
+      <p class="lede" id="pageLede"></p>
+
+      <div class="action-row">
+        <a class="btn-ghost" href="./neptun-elte.html" id="neptunLink"></a>
+      </div>
+
+      <div class="notice" id="securityNote"></div>
+
+      <section class="toolbar" aria-label="Table controls">
+        <label class="search" for="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <input id="search" type="search" autocomplete="off">
+        </label>
+        <div class="filters" id="filters" role="group" aria-label="Category filters">
+          <button type="button" class="filter active" data-filter="all" id="fAll">All</button>
+          <button type="button" class="filter" data-filter="iig" id="fIig">ELTE / IIG</button>
+          <button type="button" class="filter" data-filter="neptun" id="fNeptun">Neptun</button>
+          <button type="button" class="filter" data-filter="inf" id="fInf">INF / IK</button>
+          <button type="button" class="filter" data-filter="library" id="fLib">Library</button>
+          <button type="button" class="filter" data-filter="other" id="fOther">Other</button>
+        </div>
+      </section>
+
+      <div class="meta">
+        <span id="count" class="count">12 services</span>
+        <span id="updatedLabel">Last updated: <strong>13 September 2026</strong></span>
+      </div>
+
+      <div class="table-wrap">
+        <table id="services">
+          <thead>
+            <tr>
+              <th id="thService">Service</th>
+              <th id="thUser">Username</th>
+              <th id="thPass">Password / How to get it</th>
+              <th id="thPortal">Portal</th>
+            </tr>
+          </thead>
+          <tbody id="servicesBody"></tbody>
+        </table>
+        <div class="empty" id="empty">No matching services.</div>
+      </div>
+
+      <p class="footer-note" id="footerNote"></p>
+    </article>
+  </div>
+
+  <script>
+    const services = [
+      {
+        cat: 'iig',
+        search: 'microsoft 365 office student email iig',
+        tag: 'iig',
+        tagLabel: 'ELTE',
+        userHtml: '<code>username@student.elte.hu</code>',
+        portalHtml: '<div class="portal"><a href="https://www.office.com/" target="_blank" rel="noopener noreferrer">office.com</a><button type="button" class="copy" data-copy="https://www.office.com/">Copy URL</button></div>',
+        i18n: {
+          en: { name: 'Microsoft 365', pass: 'Use the ELTE / IIG authentication flow; obtain the Microsoft password through the ELTE account workflow.' },
+          ru: { name: 'Microsoft 365', pass: 'Через аутентификацию ELTE / IIG; пароль Microsoft получают в процессе аккаунта ELTE.' },
+          hu: { name: 'Microsoft 365', pass: 'ELTE / IIG hitelesítéssel; a Microsoft jelszót az ELTE fiókfolyamatban kapod.' }
+        }
+      },
+      {
+        cat: 'neptun',
+        search: 'neptun academic administration',
+        tag: 'neptun',
+        tagLabel: 'Neptun',
+        userHtml: null,
+        portalHtml: '<div class="portal"><a href="https://neptun.elte.hu/" target="_blank" rel="noopener noreferrer">neptun.elte.hu</a><button type="button" class="copy" data-copy="https://neptun.elte.hu/">Copy URL</button></div>',
+        i18n: {
+          en: { name: 'Neptun', user: 'Neptun code', pass: 'University-issued Neptun credentials.' },
+          ru: { name: 'Neptun', user: 'Код Neptun', pass: 'Учётные данные Neptun, выданные университетом.' },
+          hu: { name: 'Neptun', user: 'Neptun kód', pass: 'Az egyetem által kiadott Neptun adatok.' }
+        }
+      },
+      {
+        cat: 'iig',
+        search: 'iig caesar central account ugykezelo',
+        tag: 'iig',
+        tagLabel: 'IIG',
+        userHtml: null,
+        portalHtml: '<div class="portal"><a href="https://ugykezelo.elte.hu/" target="_blank" rel="noopener noreferrer">ugykezelo.elte.hu</a><button type="button" class="copy" data-copy="https://ugykezelo.elte.hu/">Copy URL</button></div>',
+        i18n: {
+          en: { name: 'IIG / Caesar', user: 'IIG username', pass: 'Start from Neptun and create/request the IIG account.' },
+          ru: { name: 'IIG / Caesar', user: 'Логин IIG', pass: 'Начните с Neptun и создайте / запросите аккаунт IIG.' },
+          hu: { name: 'IIG / Caesar', user: 'IIG felhasználónév', pass: 'Neptunból indítsd, majd hozd létre / igényeld az IIG fiókot.' }
+        }
+      },
+      {
+        cat: 'iig',
+        search: 'caesar info iig',
+        tag: 'iig',
+        tagLabel: 'IIG',
+        userHtml: null,
+        portalHtml: '<div class="portal"><a href="https://info.caesar.elte.hu/" target="_blank" rel="noopener noreferrer">info.caesar.elte.hu</a><button type="button" class="copy" data-copy="https://info.caesar.elte.hu/">Copy URL</button></div>',
+        i18n: {
+          en: { name: 'Caesar', user: 'IIG username', pass: 'IIG password.' },
+          ru: { name: 'Caesar', user: 'Логин IIG', pass: 'Пароль IIG.' },
+          hu: { name: 'Caesar', user: 'IIG felhasználónév', pass: 'IIG jelszó.' }
+        }
+      },
+      {
+        cat: 'inf',
+        search: 'inf ik informatics pandora password',
+        tag: 'inf',
+        tagLabel: 'INF',
+        userHtml: null,
+        portalHtml: '<div class="portal"><a href="https://pandora.inf.elte.hu/passchg" target="_blank" rel="noopener noreferrer">pandora.inf.elte.hu/passchg</a><button type="button" class="copy" data-copy="https://pandora.inf.elte.hu/passchg">Copy URL</button></div>',
+        i18n: {
+          en: { name: 'INF / IK', user: 'Neptun code / INF ID', pass: 'Set or change the INF password via Pandora.' },
+          ru: { name: 'INF / IK', user: 'Код Neptun / INF ID', pass: 'Задать или сменить пароль INF через Pandora.' },
+          hu: { name: 'INF / IK', user: 'Neptun kód / INF ID', pass: 'INF jelszó beállítása / cseréje a Pandorán.' }
+        }
+      },
+      {
+        cat: 'iig',
+        search: 'vpn virtual private network iig',
+        tag: 'iig',
+        tagLabel: 'IIG',
+        userHtml: null,
+        portalHtml: '<div class="portal"><a href="https://ugykezelo.elte.hu/" target="_blank" rel="noopener noreferrer">ugykezelo.elte.hu</a><button type="button" class="copy" data-copy="https://ugykezelo.elte.hu/">Copy URL</button></div>',
+        i18n: {
+          en: { name: 'VPN', user: 'IIG username', pass: 'IIG password. Request or manage access through the ELTE account system.' },
+          ru: { name: 'VPN', user: 'Логин IIG', pass: 'Пароль IIG. Доступ запрашивается / управляется через систему аккаунтов ELTE.' },
+          hu: { name: 'VPN', user: 'IIG felhasználónév', pass: 'IIG jelszó. Hozzáférés az ELTE fiókrendszeren keresztül.' }
+        }
+      },
+      {
+        cat: 'iig',
+        search: 'wifi eduroam wireless iig',
+        tag: 'iig',
+        tagLabel: 'IIG',
+        userHtml: null,
+        portalHtml: '<code>eduroam</code>',
+        i18n: {
+          en: { name: 'Wi-Fi / Eduroam', user: 'IIG username', pass: 'IIG password.' },
+          ru: { name: 'Wi-Fi / Eduroam', user: 'Логин IIG', pass: 'Пароль IIG.' },
+          hu: { name: 'Wi-Fi / Eduroam', user: 'IIG felhasználónév', pass: 'IIG jelszó.' }
+        }
+      },
+      {
+        cat: 'library',
+        search: 'library books databases libraryapp',
+        tag: 'lib',
+        tagLabel: 'Library',
+        userHtml: null,
+        portalHtml: '<div class="portal"><a href="https://libraryapp.elte.hu/" target="_blank" rel="noopener noreferrer">libraryapp.elte.hu</a><button type="button" class="copy" data-copy="https://libraryapp.elte.hu/">Copy URL</button></div>',
+        i18n: {
+          en: { name: 'Library', user: 'Library username', pass: 'Library password.', tagLabel: 'Library' },
+          ru: { name: 'Библиотека', user: 'Логин библиотеки', pass: 'Пароль библиотеки.', tagLabel: 'Библ.' },
+          hu: { name: 'Könyvtár', user: 'Könyvtári felhasználónév', pass: 'Könyvtári jelszó.', tagLabel: 'Könyvtár' }
+        }
+      },
+      {
+        cat: 'library',
+        search: 'library databases institutional login elte vpn',
+        tag: 'lib',
+        tagLabel: 'Library',
+        userHtml: null,
+        portalHtml: null,
+        i18n: {
+          en: { name: 'Library databases', user: 'IIG / ELTE account', pass: 'Institutional Login → ELTE, or use ELTE VPN when required.', portal: 'Library database portal', tagLabel: 'Library' },
+          ru: { name: 'Базы библиотеки', user: 'Аккаунт IIG / ELTE', pass: 'Institutional Login → ELTE, или VPN ELTE при необходимости.', portal: 'Портал баз библиотеки', tagLabel: 'Библ.' },
+          hu: { name: 'Könyvtári adatbázisok', user: 'IIG / ELTE fiók', pass: 'Institutional Login → ELTE, vagy szükség esetén ELTE VPN.', portal: 'Könyvtári adatbázis portál', tagLabel: 'Könyvtár' }
+        }
+      },
+      {
+        cat: 'iig',
+        search: 'moodle lms courses assignments elte',
+        tag: 'iig',
+        tagLabel: 'ELTE',
+        userHtml: null,
+        portalHtml: null,
+        i18n: {
+          en: { name: 'Moodle / LMS', user: 'ELTE account', pass: 'Use the ELTE authentication flow.', portal: 'ELTE Moodle' },
+          ru: { name: 'Moodle / LMS', user: 'Аккаунт ELTE', pass: 'Через аутентификацию ELTE.', portal: 'ELTE Moodle' },
+          hu: { name: 'Moodle / LMS', user: 'ELTE fiók', pass: 'ELTE hitelesítéssel.', portal: 'ELTE Moodle' }
+        }
+      },
+      {
+        cat: 'iig',
+        search: 'panopto lecture recordings video elte',
+        tag: 'iig',
+        tagLabel: 'ELTE',
+        userHtml: null,
+        portalHtml: '<div class="portal"><a href="https://elte.cloud.panopto.eu/" target="_blank" rel="noopener noreferrer">elte.cloud.panopto.eu</a><button type="button" class="copy" data-copy="https://elte.cloud.panopto.eu/">Copy URL</button></div>',
+        i18n: {
+          en: { name: 'Panopto', user: 'ELTE account', pass: 'Use the ELTE / IIG authentication flow.' },
+          ru: { name: 'Panopto', user: 'Аккаунт ELTE', pass: 'Через аутентификацию ELTE / IIG.' },
+          hu: { name: 'Panopto', user: 'ELTE fiók', pass: 'ELTE / IIG hitelesítéssel.' }
+        }
+      },
+      {
+        cat: 'other',
+        search: 'mooc online course email',
+        tag: null,
+        tagLabel: null,
+        userHtml: null,
+        portalHtml: null,
+        i18n: {
+          en: { name: 'MOOC', user: 'Personal email', pass: 'MOOC account password.', portal: 'MOOC portal' },
+          ru: { name: 'MOOC', user: 'Личный email', pass: 'Пароль аккаунта MOOC.', portal: 'Портал MOOC' },
+          hu: { name: 'MOOC', user: 'Személyes e-mail', pass: 'MOOC fiók jelszava.', portal: 'MOOC portál' }
+        }
+      }
+    ];
+
+    const i18n = {
+      en: {
+        back: 'Back to duck',
+        about: 'About me',
+        heroBadge: 'Unofficial · Student reference',
+        titleHtml: 'Where to get <span>what</span>',
+        lede: 'A compact reference for ELTE student accounts, passwords and service access. Credentials themselves are never stored here.',
+        neptunLink: 'NEPTUN Mobile for ELTE →',
+        securityNote: '<strong>Security:</strong> Keep credentials out of GitHub. Never publish passwords, recovery codes, session URLs, cookies or personal account data.',
+        searchPlaceholder: 'Search services, accounts or portals…',
+        fAll: 'All', fIig: 'ELTE / IIG', fNeptun: 'Neptun', fInf: 'INF / IK', fLib: 'Library', fOther: 'Other',
+        thService: 'Service', thUser: 'Username', thPass: 'Password / How to get it', thPortal: 'Portal',
+        count: (n) => n + ' service' + (n === 1 ? '' : 's'),
+        updated: 'Last updated: <strong>13 September 2026</strong>',
+        empty: 'No matching services.',
+        copy: 'Copy URL',
+        copied: 'Copied',
+        copyFail: 'Copy failed',
+        footer: 'Unofficial student reference · Verify current ELTE URLs and authentication methods before use · Nanda',
+        title: 'ELTE Student IT — Where to get what'
+      },
+      ru: {
+        back: 'Назад к утке',
+        about: 'Обо мне',
+        heroBadge: 'Неофициально · Справочник студента',
+        titleHtml: 'Где взять <span>что</span>',
+        lede: 'Краткий справочник по аккаунтам ELTE, паролям и доступу к сервисам. Сами пароли здесь не хранятся.',
+        neptunLink: 'NEPTUN Mobile for ELTE →',
+        securityNote: '<strong>Безопасность:</strong> не кладите учётные данные в GitHub. Не публикуйте пароли, recovery-коды, session URL, cookies и личные данные аккаунта.',
+        searchPlaceholder: 'Поиск сервисов, аккаунтов или порталов…',
+        fAll: 'Все', fIig: 'ELTE / IIG', fNeptun: 'Neptun', fInf: 'INF / IK', fLib: 'Библиотека', fOther: 'Другое',
+        thService: 'Сервис', thUser: 'Логин', thPass: 'Пароль / Как получить', thPortal: 'Портал',
+        count: (n) => n + ' сервис' + (n === 1 ? '' : n >= 2 && n <= 4 ? 'а' : 'ов'),
+        updated: 'Обновлено: <strong>13 сентября 2026</strong>',
+        empty: 'Ничего не найдено.',
+        copy: 'Копировать',
+        copied: 'Скопировано',
+        copyFail: 'Ошибка',
+        footer: 'Неофициальный студенческий справочник · Проверяйте актуальные URL и способы входа ELTE · Nanda',
+        title: 'ELTE Student IT — Где взять что'
+      },
+      hu: {
+        back: 'Vissza a kacsához',
+        about: 'Rólam',
+        heroBadge: 'Nem hivatalos · Hallgatói útmutató',
+        titleHtml: 'Hol kapod <span>mit</span>',
+        lede: 'Kompakt ELTE hallgatói útmutató fiókokhoz, jelszavakhoz és szolgáltatásokhoz. Magukat a jelszavakat itt soha nem tároljuk.',
+        neptunLink: 'NEPTUN Mobile for ELTE →',
+        securityNote: '<strong>Biztonság:</strong> ne tedd a hitelesítő adatokat GitHubra. Soha ne publikálj jelszavakat, recovery kódokat, session URL-eket, cookie-kat vagy személyes fiókadatokat.',
+        searchPlaceholder: 'Keresés szolgáltatás, fiók vagy portál…',
+        fAll: 'Mind', fIig: 'ELTE / IIG', fNeptun: 'Neptun', fInf: 'INF / IK', fLib: 'Könyvtár', fOther: 'Egyéb',
+        thService: 'Szolgáltatás', thUser: 'Felhasználónév', thPass: 'Jelszó / Hogyan kapod', thPortal: 'Portál',
+        count: (n) => n + ' szolgáltatás',
+        updated: 'Utolsó frissítés: <strong>2026. szeptember 13.</strong>',
+        empty: 'Nincs találat.',
+        copy: 'URL másolása',
+        copied: 'Másolva',
+        copyFail: 'Sikertelen',
+        footer: 'Nem hivatalos hallgatói útmutató · Ellenőrizd az aktuális ELTE URL-eket és hitelesítést · Nanda',
+        title: 'ELTE Student IT — Hol kapod mit'
+      }
+    };
+
+    let currentLang = 'en';
+    let activeFilter = 'all';
+
+    function bindCopyButtons(root, d) {
+      root.querySelectorAll('.copy').forEach(btn => {
+        btn.textContent = d.copy;
+        btn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(btn.dataset.copy);
+            const old = d.copy;
+            btn.textContent = d.copied;
+            btn.classList.add('ok');
+            setTimeout(() => { btn.textContent = old; btn.classList.remove('ok'); }, 1200);
+          } catch {
+            btn.textContent = d.copyFail;
+            setTimeout(() => { btn.textContent = d.copy; }, 1200);
+          }
+        });
+      });
+    }
+
+    function renderTable() {
+      const d = i18n[currentLang];
+      const q = document.getElementById('search').value.trim().toLowerCase();
+      const body = document.getElementById('servicesBody');
+      body.innerHTML = '';
+      let visible = 0;
+
+      services.forEach(s => {
+        const t = s.i18n[currentLang];
+        const tagLabel = t.tagLabel || s.tagLabel;
+        const matchCat = activeFilter === 'all' || s.cat === activeFilter;
+        const hay = (s.search + ' ' + t.name + ' ' + (t.user || '') + ' ' + t.pass + ' ' + (t.portal || '')).toLowerCase();
+        const matchText = !q || hay.includes(q);
+        if (!matchCat || !matchText) return;
+        visible++;
+
+        const tagHtml = s.tag
+          ? ` <span class="tag ${s.tag}">${tagLabel}</span>`
+          : '';
+        const userCell = s.userHtml || t.user || '';
+        const portalCell = s.portalHtml || (t.portal || '');
+
+        const tr = document.createElement('tr');
+        tr.dataset.cat = s.cat;
+        tr.innerHTML =
+          `<td>${t.name}${tagHtml}</td>` +
+          `<td>${userCell}</td>` +
+          `<td>${t.pass}</td>` +
+          `<td>${portalCell}</td>`;
+        body.appendChild(tr);
+      });
+
+      document.getElementById('count').textContent = d.count(visible);
+      document.getElementById('empty').style.display = visible ? 'none' : 'block';
+      document.getElementById('empty').textContent = d.empty;
+      bindCopyButtons(body, d);
+    }
+
+    function applyLang(lang) {
+      if (!i18n[lang]) return;
+      currentLang = lang;
+      try { localStorage.setItem('quack_lang', lang); } catch (_) {}
+      document.documentElement.lang = lang;
+      const d = i18n[lang];
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        const on = btn.dataset.lang === lang;
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+
+      document.getElementById('backText').textContent = d.back;
+      document.getElementById('aboutLinkText').textContent = d.about;
+      document.getElementById('aboutLink').href = './about.html?lang=' + lang;
+      document.getElementById('heroBadge').textContent = d.heroBadge;
+      document.getElementById('pageTitle').innerHTML = d.titleHtml;
+      document.getElementById('pageLede').textContent = d.lede;
+      document.getElementById('neptunLink').textContent = d.neptunLink;
+      document.getElementById('neptunLink').href = './neptun-elte.html?lang=' + lang;
+      document.getElementById('securityNote').innerHTML = d.securityNote;
+      document.getElementById('search').placeholder = d.searchPlaceholder;
+      document.getElementById('fAll').textContent = d.fAll;
+      document.getElementById('fIig').textContent = d.fIig;
+      document.getElementById('fNeptun').textContent = d.fNeptun;
+      document.getElementById('fInf').textContent = d.fInf;
+      document.getElementById('fLib').textContent = d.fLib;
+      document.getElementById('fOther').textContent = d.fOther;
+      document.getElementById('thService').textContent = d.thService;
+      document.getElementById('thUser').textContent = d.thUser;
+      document.getElementById('thPass').textContent = d.thPass;
+      document.getElementById('thPortal').textContent = d.thPortal;
+      document.getElementById('updatedLabel').innerHTML = d.updated;
+      document.getElementById('footerNote').textContent = d.footer;
+      document.title = d.title;
+      document.getElementById('backLink').href = './?lang=' + lang;
+
+      renderTable();
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+    });
+
+    document.querySelectorAll('.filter').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.filter;
+        renderTable();
+      });
+    });
+
+    document.getElementById('search').addEventListener('input', renderTable);
+
+    const params = new URLSearchParams(location.search);
+    const fromQuery = params.get('lang');
+    let fromStore = null;
+    try { fromStore = localStorage.getItem('quack_lang'); } catch (_) {}
+    applyLang(['ru', 'en', 'hu'].includes(fromQuery) ? fromQuery : (['ru', 'en', 'hu'].includes(fromStore) ? fromStore : 'en'));
+  </script>
+</body>
+</html>

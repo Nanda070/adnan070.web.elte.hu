@@ -1,32 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
-  <rect width="512" height="512" rx="128" fill="#131722"/>
+  <rect width="512" height="512" rx="128" fill="#0a0a0b"/>
   <defs>
     <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ffc72c" stop-opacity="0.35"/>
-      <stop offset="100%" stop-color="#ffc72c" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#e11d48" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#e11d48" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="bodyGrad" x1="120" y1="120" x2="400" y2="440" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#FFF36D"/>
-      <stop offset="45%" stop-color="#FFCA28"/>
-      <stop offset="100%" stop-color="#F57F17"/>
+      <stop offset="0%" stop-color="#fb7185"/>
+      <stop offset="45%" stop-color="#e11d48"/>
+      <stop offset="100%" stop-color="#9f1239"/>
     </linearGradient>
     <linearGradient id="beakGrad" x1="40" y1="160" x2="200" y2="240" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#FF9E40"/>
-      <stop offset="60%" stop-color="#FF6D00"/>
-      <stop offset="100%" stop-color="#DD2C00"/>
+      <stop offset="0%" stop-color="#fecdd3"/>
+      <stop offset="60%" stop-color="#fb7185"/>
+      <stop offset="100%" stop-color="#be123c"/>
     </linearGradient>
   </defs>
   <circle cx="256" cy="256" r="220" fill="url(#glow)"/>
-  <!-- Body -->
   <path d="M190 240 C190 190 230 170 280 170 C360 170 420 220 420 300 C420 370 360 410 280 410 C190 410 140 350 140 300 C140 280 160 256 190 240 Z" fill="url(#bodyGrad)"/>
-  <!-- Head -->
   <circle cx="250" cy="180" r="95" fill="url(#bodyGrad)"/>
-  <!-- Beak -->
   <path d="M170 170 C130 170 80 185 70 205 C65 210 70 220 80 222 C110 228 150 228 175 220 C182 212 182 180 170 170 Z" fill="url(#beakGrad)"/>
-  <!-- Eye -->
-  <ellipse cx="220" cy="155" rx="14" ry="18" fill="#1e1810"/>
+  <ellipse cx="220" cy="155" rx="14" ry="18" fill="#1a0a0e"/>
   <ellipse cx="216" cy="148" rx="6" ry="8" fill="#FFFFFF"/>
   <circle cx="225" cy="162" r="3" fill="#FFFFFF"/>
-  <!-- Wing -->
-  <path d="M250 280 C220 280 200 305 205 340 C215 385 260 400 315 390 C360 382 375 350 365 320 C350 288 300 280 250 280 Z" fill="#FFE082" opacity="0.9"/>
+  <path d="M250 280 C220 280 200 305 205 340 C215 385 260 400 315 390 C360 382 375 350 365 320 C350 288 300 280 250 280 Z" fill="#fda4af" opacity="0.9"/>
 </svg>

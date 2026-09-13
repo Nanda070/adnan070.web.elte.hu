@@ -4,8 +4,8 @@
   "description": "Interactive procedural audio quack sanctuary and clicker game.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0d0f12",
-  "theme_color": "#ffc72c",
+  "background_color": "#0a0a0b",
+  "theme_color": "#e11d48",
   "orientation": "portrait-primary",
   "icons": [
     {

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="description" content="Random Duck Sanctuary - Interactive procedural audio quack clicker, tycoon upgrades, duck wardrobe, and global quack wall.">
-  <meta name="theme-color" content="#ffc72c">
+  <meta name="theme-color" content="#e11d48">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Random Duck | Quack Sanctuary & Tycoon</title>
@@ -25,24 +25,24 @@
     }
 
     :root {
-      --bg-dark: #0d0f12;
-      --card-bg: rgba(23, 27, 34, 0.78);
+      --bg-dark: #0a0a0b;
+      --card-bg: rgba(20, 20, 22, 0.82);
       --card-border: rgba(255, 255, 255, 0.1);
       --card-border-hover: rgba(255, 255, 255, 0.22);
-      --card-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.75), 0 0 45px -10px rgba(255, 199, 44, 0.12);
+      --card-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.8), 0 0 45px -10px rgba(225, 29, 72, 0.16);
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
-      --accent-yellow: #ffc72c;
-      --accent-orange: #ff7a00;
-      --accent-gold: #ffd700;
-      --accent-cyan: #00f3ff;
+      --accent-yellow: #e11d48;
+      --accent-orange: #dc2626;
+      --accent-gold: #fb7185;
+      --accent-cyan: #fb7185;
       --accent-pink: #ff007b;
       --matrix-green: #00ff66;
       --btn-bg: rgba(255, 255, 255, 0.06);
       --btn-border: rgba(255, 255, 255, 0.12);
-      --btn-active-bg: rgba(255, 199, 44, 0.18);
-      --btn-active-border: rgba(255, 199, 44, 0.55);
+      --btn-active-bg: rgba(225, 29, 72, 0.18);
+      --btn-active-border: rgba(225, 29, 72, 0.55);
       --modal-bg: rgba(18, 22, 29, 0.88);
     }
 
@@ -95,7 +95,7 @@
     .orb-1 {
       width: 480px;
       height: 480px;
-      background: radial-gradient(circle, #ff9f00, #ff5e00 70%);
+      background: radial-gradient(circle, #e11d48, #9f1239 70%);
       top: -12%;
       left: 10%;
       animation-duration: 24s;
@@ -104,7 +104,7 @@
     .orb-2 {
       width: 520px;
       height: 520px;
-      background: radial-gradient(circle, #3b82f6, #6366f1 70%);
+      background: radial-gradient(circle, #dc2626, #450a0a 70%);
       bottom: -15%;
       right: 5%;
       animation-duration: 28s;
@@ -115,7 +115,7 @@
     .orb-3 {
       width: 380px;
       height: 380px;
-      background: radial-gradient(circle, #ec4899, #8b5cf6 70%);
+      background: radial-gradient(circle, #fb7185, #7f1d1d 70%);
       top: 38%;
       right: 22%;
       animation-duration: 20s;
@@ -185,15 +185,15 @@
     @keyframes neonPulse {
       0% {
         border-color: #00f3ff;
-        box-shadow: 0 0 20px rgba(0, 243, 255, 0.4), 0 0 45px rgba(255, 0, 123, 0.25), inset 0 0 15px rgba(0, 243, 255, 0.15);
+        box-shadow: 0 0 20px rgba(251, 113, 133, 0.4), 0 0 45px rgba(255, 0, 123, 0.25), inset 0 0 15px rgba(251, 113, 133, 0.15);
       }
       50% {
         border-color: #ff007b;
-        box-shadow: 0 0 30px rgba(255, 0, 123, 0.5), 0 0 65px rgba(0, 243, 255, 0.35), inset 0 0 20px rgba(255, 0, 123, 0.2);
+        box-shadow: 0 0 30px rgba(255, 0, 123, 0.5), 0 0 65px rgba(251, 113, 133, 0.35), inset 0 0 20px rgba(255, 0, 123, 0.2);
       }
       100% {
         border-color: #00f3ff;
-        box-shadow: 0 0 20px rgba(0, 243, 255, 0.4), 0 0 45px rgba(255, 0, 123, 0.25), inset 0 0 15px rgba(0, 243, 255, 0.15);
+        box-shadow: 0 0 20px rgba(251, 113, 133, 0.4), 0 0 45px rgba(255, 0, 123, 0.25), inset 0 0 15px rgba(251, 113, 133, 0.15);
       }
     }
 
@@ -277,7 +277,7 @@
     .sound-toggle-btn:hover {
       color: var(--accent-yellow);
       background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 199, 44, 0.4);
+      border-color: rgba(225, 29, 72, 0.4);
     }
 
     .sound-toggle-btn.muted {
@@ -317,7 +317,7 @@
       background: var(--btn-active-bg);
       border-color: var(--btn-active-border);
       color: var(--accent-yellow);
-      box-shadow: 0 2px 10px rgba(255, 199, 44, 0.18);
+      box-shadow: 0 2px 10px rgba(225, 29, 72, 0.18);
     }
 
     /* Floating Feature Toolbar (Wardrobe, Tycoon, Achievements, Wall) */
@@ -352,7 +352,7 @@
 
     .nav-pill-btn:hover {
       background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 199, 44, 0.4);
+      border-color: rgba(225, 29, 72, 0.4);
       color: var(--accent-yellow);
       transform: translateY(-1px);
     }
@@ -366,8 +366,8 @@
       font-family: 'JetBrains Mono', monospace;
       padding: 1px 6px;
       border-radius: 999px;
-      background: rgba(255, 199, 44, 0.2);
-      border: 1px solid rgba(255, 199, 44, 0.4);
+      background: rgba(225, 29, 72, 0.2);
+      border: 1px solid rgba(225, 29, 72, 0.4);
       color: var(--accent-yellow);
     }
 
@@ -411,12 +411,12 @@
       font-weight: 800;
       font-feature-settings: "tnum";
       font-variant-numeric: tabular-nums;
-      background: linear-gradient(135deg, #ffffff 40%, #ffc72c 100%);
+      background: linear-gradient(135deg, #ffffff 40%, #e11d48 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       line-height: 1.15;
       letter-spacing: -0.02em;
-      text-shadow: 0 2px 20px rgba(255, 199, 44, 0.2);
+      text-shadow: 0 2px 20px rgba(225, 29, 72, 0.2);
     }
 
     .qps-rate-indicator {
@@ -440,8 +440,8 @@
       font-weight: 800;
       padding: 3px 10px;
       border-radius: 999px;
-      background: rgba(255, 199, 44, 0.15);
-      border: 1px solid rgba(255, 199, 44, 0.4);
+      background: rgba(225, 29, 72, 0.15);
+      border: 1px solid rgba(225, 29, 72, 0.4);
       color: var(--accent-yellow);
       display: inline-flex;
       align-items: center;
@@ -493,7 +493,7 @@
       width: 150px;
       height: 150px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 199, 44, 0.28) 0%, rgba(255, 122, 0, 0.12) 50%, transparent 75%);
+      background: radial-gradient(circle, rgba(225, 29, 72, 0.28) 0%, rgba(220, 38, 38, 0.12) 50%, transparent 75%);
       filter: blur(28px);
       transition: transform 0.4s ease, opacity 0.4s ease;
       pointer-events: none;
@@ -519,7 +519,7 @@
     }
 
     .duck-wrapper:hover {
-      filter: drop-shadow(0 14px 25px rgba(255, 199, 44, 0.4));
+      filter: drop-shadow(0 14px 25px rgba(225, 29, 72, 0.4));
     }
 
     /* SKINS */
@@ -531,7 +531,7 @@
 
     @keyframes goldenSparkle {
       0% { filter: drop-shadow(0 0 22px #ffd700) brightness(1.2); }
-      100% { filter: drop-shadow(0 0 40px #ff9100) brightness(1.35); }
+      100% { filter: drop-shadow(0 0 40px #dc2626) brightness(1.35); }
     }
 
     /* Cyber Duck */
@@ -628,7 +628,7 @@
       border: 1px solid rgba(255, 213, 79, 0.6);
       padding: 6px 14px;
       border-radius: 999px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 18px rgba(255, 199, 44, 0.4);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 18px rgba(225, 29, 72, 0.4);
       backdrop-filter: blur(8px);
       white-space: nowrap;
       user-select: none;
@@ -722,7 +722,7 @@
       cursor: pointer;
       z-index: 100;
       animation: floatTreat 10s linear forwards;
-      filter: drop-shadow(0 0 14px rgba(255, 199, 44, 0.8));
+      filter: drop-shadow(0 0 14px rgba(225, 29, 72, 0.8));
       user-select: none;
       touch-action: manipulation;
     }
@@ -815,13 +815,13 @@
     .wall-input::placeholder { color: #475569; }
 
     .wall-input:focus {
-      border-color: rgba(255, 199, 44, 0.5);
-      box-shadow: 0 0 12px rgba(255, 199, 44, 0.2);
+      border-color: rgba(225, 29, 72, 0.5);
+      box-shadow: 0 0 12px rgba(225, 29, 72, 0.2);
       background: rgba(255, 255, 255, 0.08);
     }
 
     .wall-submit-btn {
-      background: linear-gradient(135deg, #ffc72c 0%, #ff8800 100%);
+      background: linear-gradient(135deg, #e11d48 0%, #dc2626 100%);
       color: #0b0f14;
       border: none;
       border-radius: 12px;
@@ -957,22 +957,32 @@
 
     .dev-badge:hover {
       transform: translateY(-2px);
-      border-color: rgba(255, 199, 44, 0.45);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 199, 44, 0.2);
+      border-color: rgba(225, 29, 72, 0.45);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(225, 29, 72, 0.2);
     }
 
     .dev-badge.neptun-badge {
-      border-color: rgba(0, 243, 255, 0.28);
+      border-color: rgba(251, 113, 133, 0.28);
     }
 
     .dev-badge.neptun-badge:hover {
-      border-color: rgba(0, 243, 255, 0.55);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 243, 255, 0.22);
+      border-color: rgba(251, 113, 133, 0.55);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(251, 113, 133, 0.22);
+    }
+
+    .dev-badge.it-badge {
+      border-color: rgba(251, 113, 133, 0.28);
+    }
+
+    .dev-badge.it-badge:hover {
+      border-color: rgba(251, 113, 133, 0.55);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 20px rgba(251, 113, 133, 0.22);
     }
 
     .dev-badge strong { color: var(--accent-yellow); font-weight: 700; }
     .dev-badge-icon { font-size: 0.85rem; color: var(--accent-yellow); flex-shrink: 0; }
     .neptun-badge .dev-badge-icon { color: var(--accent-cyan); }
+    .it-badge .dev-badge-icon { color: #fb7185; }
 
     /* ========================================================= */
     /* Modals & Backdrop UI (Glassmorphic Popups)               */
@@ -1007,7 +1017,7 @@
       max-height: 85vh;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 199, 44, 0.1);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(225, 29, 72, 0.1);
       transform: scale(0.92) translateY(12px);
       transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
       overflow: hidden;
@@ -1094,14 +1104,14 @@
 
     .wardrobe-card:hover {
       background: rgba(255, 255, 255, 0.09);
-      border-color: rgba(255, 199, 44, 0.4);
+      border-color: rgba(225, 29, 72, 0.4);
       transform: translateY(-2px);
     }
 
     .wardrobe-card.active {
-      background: rgba(255, 199, 44, 0.14);
+      background: rgba(225, 29, 72, 0.14);
       border-color: var(--accent-yellow);
-      box-shadow: 0 0 14px rgba(255, 199, 44, 0.25);
+      box-shadow: 0 0 14px rgba(225, 29, 72, 0.25);
     }
 
     .wardrobe-icon { font-size: 1.6rem; }
@@ -1121,7 +1131,7 @@
     }
 
     .upgrade-card:hover {
-      border-color: rgba(255, 199, 44, 0.35);
+      border-color: rgba(225, 29, 72, 0.35);
       background: rgba(255, 255, 255, 0.06);
     }
 
@@ -1167,7 +1177,7 @@
     }
 
     .upgrade-buy-btn {
-      background: linear-gradient(135deg, #ffc72c, #ff9100);
+      background: linear-gradient(135deg, #e11d48, #dc2626);
       border: none;
       color: #0d0f12;
       font-family: 'JetBrains Mono', monospace;
@@ -1212,8 +1222,8 @@
 
     .achievement-item.unlocked {
       opacity: 1;
-      border-color: rgba(255, 199, 44, 0.45);
-      background: rgba(255, 199, 44, 0.06);
+      border-color: rgba(225, 29, 72, 0.45);
+      background: rgba(225, 29, 72, 0.06);
     }
 
     .achievement-trophy {
@@ -1332,12 +1342,12 @@
 
     .sound-preset-btn:hover {
       background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 199, 44, 0.4);
+      border-color: rgba(225, 29, 72, 0.4);
     }
 
     .sound-preset-btn.active {
       border-color: var(--accent-yellow);
-      background: rgba(255, 199, 44, 0.14);
+      background: rgba(225, 29, 72, 0.14);
     }
 
     .sound-preset-name { font-size: 0.86rem; font-weight: 700; color: #fff; }
@@ -1360,8 +1370,8 @@
 
     .toast-banner {
       background: rgba(18, 22, 29, 0.95);
-      border: 1px solid rgba(255, 199, 44, 0.6);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 199, 44, 0.3);
+      border: 1px solid rgba(225, 29, 72, 0.6);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(225, 29, 72, 0.3);
       backdrop-filter: blur(16px);
       border-radius: 16px;
       padding: 12px 18px;
@@ -1787,15 +1797,19 @@
     </article>
   </main>
 
-  <!-- Floating badge stack: Neptun download, Dev Nanda -->
+  <!-- Floating badge stack: ELTE IT, Neptun download, About Nanda -->
   <div class="badge-stack" id="badgeStack">
+    <a href="./elte-it.html" class="dev-badge it-badge" id="itBadge" title="ELTE Student IT">
+      <span class="dev-badge-icon">🔑</span>
+      <span id="itBadgeText">ELTE <strong>Student IT</strong></span>
+    </a>
     <a href="./neptun-elte.html" class="dev-badge neptun-badge" id="neptunBadge" title="NEPTUN Mobile for ELTE">
       <span class="dev-badge-icon">📱</span>
       <span id="neptunBadgeText">Download <strong>NEPTUN Mobile for ELTE</strong></span>
     </a>
-    <a href="https://nanda.is-a.dev" target="_blank" rel="noopener noreferrer" class="dev-badge" id="devBadge" title="Visit Developer Portfolio">
+    <a href="./about.html" class="dev-badge" id="devBadge" title="About me">
       <span class="dev-badge-icon">⚡</span>
-      <span>Dev: <strong>Nanda</strong></span>
+      <span id="aboutBadgeText">About <strong>me</strong></span>
     </a>
   </div>
 
@@ -2027,7 +2041,9 @@
           placeholder: "Напиши что-нибудь (до 60 симв.)...",
           postBtn: "Пост",
           badgeText: "Утка Онлайн",
+          itBadge: "ELTE Student IT",
           neptunBadge: "Скачать NEPTUN Mobile for ELTE",
+          aboutBadge: "Обо мне",
           latest: "Новое",
           emptyFeed: "Напиши что-нибудь классное!",
           navWardrobe: "Гардероб",
@@ -2095,7 +2111,9 @@
           placeholder: "Drop a thought (max 60 chars)...",
           postBtn: "Post",
           badgeText: "Live Duck",
+          itBadge: "ELTE Student IT",
           neptunBadge: "Download NEPTUN Mobile for ELTE",
+          aboutBadge: "About me",
           latest: "Latest",
           emptyFeed: "Quack something cool!",
           navWardrobe: "Wardrobe",
@@ -2163,7 +2181,9 @@
           placeholder: "Írj egy üzenetet (max 60 kar.)...",
           postBtn: "Küldés",
           badgeText: "Élő Kacsa",
+          itBadge: "ELTE Student IT",
           neptunBadge: "NEPTUN Mobile for ELTE letöltése",
+          aboutBadge: "Rólam",
           latest: "Legújabb",
           emptyFeed: "Írj valami vicceset!",
           navWardrobe: "Ruhatár",
@@ -2625,7 +2645,7 @@
 
             canvasCtx.beginPath();
             canvasCtx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
-            canvasCtx.strokeStyle = `rgba(255, 199, 44, ${r.alpha * 0.4})`;
+            canvasCtx.strokeStyle = `rgba(225, 29, 72, ${r.alpha * 0.4})`;
             canvasCtx.lineWidth = 2.5;
             canvasCtx.stroke();
           }
@@ -2896,7 +2916,7 @@
             comboBadgeEl.style.color = '#ff007b';
           } else {
             comboTextEl.textContent = `${comboStreak} COMBO!`;
-            comboBadgeEl.style.borderColor = 'rgba(255, 199, 44, 0.5)';
+            comboBadgeEl.style.borderColor = 'rgba(225, 29, 72, 0.5)';
             comboBadgeEl.style.color = 'var(--accent-yellow)';
           }
         } else {
@@ -3297,12 +3317,28 @@
           postBtnText.textContent = d.postBtn;
           duckWrapper.setAttribute('aria-label', d.ariaLabel);
 
+          const itBadgeText = document.getElementById('itBadgeText');
+          const itBadge = document.getElementById('itBadge');
+          if (itBadgeText) itBadgeText.textContent = d.itBadge;
+          if (itBadge) {
+            itBadge.setAttribute('title', d.itBadge);
+            itBadge.href = './elte-it.html?lang=' + lang;
+          }
+
           const neptunBadgeText = document.getElementById('neptunBadgeText');
           const neptunBadge = document.getElementById('neptunBadge');
           if (neptunBadgeText) neptunBadgeText.textContent = d.neptunBadge;
           if (neptunBadge) {
             neptunBadge.setAttribute('title', d.neptunBadge);
             neptunBadge.href = './neptun-elte.html?lang=' + lang;
+          }
+
+          const aboutBadgeText = document.getElementById('aboutBadgeText');
+          const aboutBadge = document.getElementById('devBadge');
+          if (aboutBadgeText) aboutBadgeText.textContent = d.aboutBadge;
+          if (aboutBadge) {
+            aboutBadge.setAttribute('title', d.aboutBadge);
+            aboutBadge.href = './about.html?lang=' + lang;
           }
 
           // Nav buttons
@@ -3471,8 +3507,12 @@
         currentLang = 'en'; // allow switchLanguage to run
         switchLanguage(bootLang);
       } else {
+        const itBadge = document.getElementById('itBadge');
+        if (itBadge) itBadge.href = './elte-it.html?lang=en';
         const neptunBadge = document.getElementById('neptunBadge');
         if (neptunBadge) neptunBadge.href = './neptun-elte.html?lang=en';
+        const aboutBadge = document.getElementById('devBadge');
+        if (aboutBadge) aboutBadge.href = './about.html?lang=en';
       }
 
     })();
