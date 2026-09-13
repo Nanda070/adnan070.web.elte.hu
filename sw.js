@@ -1,8 +1,9 @@
 // Random Duck Service Worker
-const CACHE_NAME = 'quack-v2.1';
+const CACHE_NAME = 'quack-v2.2';
 const ASSETS = [
   './',
   './index.html',
+  './neptun-elte.html',
   './icon.svg',
   './manifest.webmanifest'
 ];
