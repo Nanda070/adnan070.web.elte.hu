@@ -1,0 +1,14 @@
+# Local / runtime
+quack_data.sqlite
+quack_data.sqlite-*
+
+# Discord webhook (never commit)
+webhook.secret.php
+*.secret.php
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

@@ -1,0 +1,3 @@
+# Branded 404 — works when this directory is the site document root
+# (e.g. adnan070.web.elte.hu). Adjust path if hosted under a subdirectory.
+ErrorDocument 404 /404.html

@@ -1,9 +1,13 @@
 // Random Duck Service Worker
-const CACHE_NAME = 'quack-v2.3';
+const CACHE_NAME = 'quack-v2.8';
 const ASSETS = [
   './',
   './index.html',
+  './about.html',
+  './404.html',
   './neptun-elte.html',
+  './elte-it.html',
+  './cookie-consent.js',
   './icon.svg',
   './manifest.webmanifest'
 ];
@@ -31,14 +35,13 @@ self.addEventListener('fetch', (event) => {
   }
 
   event.respondWith(
-    fetch(event.request)
-      .then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-          const responseClone = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
-        }
-        return networkResponse;
-      })
-      .catch(() => caches.match(event.request))
+    caches.match(event.request).then((cached) => {
+      if (cached) return cached;
+      return fetch(event.request).then((response) => {
+        const responseClone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
+        return response;
+      }).catch(() => cached);
+    })
   );
 });

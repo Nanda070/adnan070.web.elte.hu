@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="404 — page not found. Back to the duck sanctuary.">
+  <meta name="theme-color" content="#e11d48">
+  <meta name="robots" content="noindex">
+  <title>404 — Not Found</title>
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      --bg: #0a0a0b;
+      --text: #f8fafc;
+      --muted: #a1a1aa;
+      --dim: #71717a;
+      --accent: #e11d48;
+      --accent-soft: #fda4af;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem 1.25rem 2.5rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .bg {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .orb {
+      position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.32;
+      animation: float 22s ease-in-out infinite alternate;
+    }
+    .orb-a {
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, #e11d48, #7f1d1d 70%);
+      top: -18%; left: 5%;
+    }
+    .orb-b {
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, #dc2626, #450a0a 70%);
+      bottom: -20%; right: -5%;
+      animation-duration: 26s; animation-delay: -8s; opacity: 0.24;
+    }
+    .noise {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 0);
+      background-size: 24px 24px; opacity: 0.5;
+    }
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-30px, 40px) scale(1.06); }
+    }
+
+    .wrap {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 440px;
+      text-align: center;
+    }
+
+    .lang-switcher {
+      display: inline-flex;
+      background: rgba(0, 0, 0, 0.45);
+      padding: 3px; border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      gap: 3px; margin-bottom: 28px;
+    }
+    .lang-btn {
+      background: transparent; border: 1px solid transparent;
+      color: var(--muted); font-family: inherit; font-size: 0.78rem;
+      font-weight: 700; padding: 5px 10px; border-radius: 8px; cursor: pointer;
+    }
+    .lang-btn.active {
+      background: rgba(225, 29, 72, 0.18);
+      border-color: rgba(225, 29, 72, 0.55);
+      color: var(--accent-soft);
+    }
+
+    .code {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: clamp(4.5rem, 18vw, 6.5rem);
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: -0.06em;
+      color: var(--accent);
+      text-shadow: 0 0 60px rgba(225, 29, 72, 0.35);
+      margin-bottom: 12px;
+      animation: glitch 4.5s ease-in-out infinite;
+    }
+    @keyframes glitch {
+      0%, 92%, 100% { transform: translate(0); opacity: 1; }
+      93% { transform: translate(-3px, 1px); opacity: 0.85; }
+      94% { transform: translate(3px, -1px); }
+      95% { transform: translate(0); opacity: 1; }
+    }
+
+    h1 {
+      font-size: clamp(1.35rem, 4vw, 1.65rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+
+    .lede {
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .wink {
+      font-size: 0.78rem;
+      color: var(--dim);
+      font-style: italic;
+      margin-bottom: 28px;
+    }
+    .wink em { color: rgba(251, 113, 133, 0.75); font-style: normal; font-weight: 600; }
+
+    .home-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #e11d48, #9f1239);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 12px 32px rgba(225, 29, 72, 0.28);
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    .home-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+    }
+
+    .foot {
+      margin-top: 36px;
+      font-size: 0.68rem;
+      color: var(--dim);
+      opacity: 0.7;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true">
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+    <div class="noise"></div>
+  </div>
+
+  <div class="wrap">
+    <nav class="lang-switcher" aria-label="Language">
+      <button type="button" class="lang-btn" data-lang="ru">RU</button>
+      <button type="button" class="lang-btn active" data-lang="en">EN</button>
+      <button type="button" class="lang-btn" data-lang="hu">HU</button>
+    </nav>
+
+    <div class="code" aria-hidden="true">404</div>
+    <h1 id="title">Page not found</h1>
+    <p class="lede" id="lede">This URL wandered off the map. The duck is still home.</p>
+    <p class="wink" id="wink">Not the Discord server — just a missing page. <em>Server Not Found</em> energy.</p>
+    <a class="home-btn" id="homeBtn" href="./">Home</a>
+    <p class="foot" id="foot" title="charcoal & scarlet">determination optional</p>
+  </div>
+
+  <script>
+    (function () {
+      var i18n = {
+        en: {
+          title: 'Page not found',
+          lede: 'This URL wandered off the map. The duck is still home.',
+          wink: 'Not the Discord server — just a missing page. <em>Server Not Found</em> energy.',
+          home: 'Home',
+          foot: 'determination optional',
+          footTitle: 'charcoal & scarlet',
+          docTitle: '404 — Not Found'
+        },
+        ru: {
+          title: 'Страница не найдена',
+          lede: 'Этот адрес сбился с пути. Утка всё ещё дома.',
+          wink: 'Это не Discord-сервер — просто пропавшая страница. Энергия <em>Server Not Found</em>.',
+          home: 'Домой',
+          foot: 'решимость по желанию',
+          footTitle: 'угольный и алый',
+          docTitle: '404 — Не найдено'
+        },
+        hu: {
+          title: 'Az oldal nem található',
+          lede: 'Ez az URL eltévedt a térképen. A kacsa még otthon van.',
+          wink: 'Nem a Discord szerver — csak egy hiányzó oldal. <em>Server Not Found</em> vibe.',
+          home: 'Kezdőlap',
+          foot: 'elszántság opcionális',
+          footTitle: 'szénszürke és skarlát',
+          docTitle: '404 — Nem található'
+        }
+      };
+
+      function apply(lang) {
+        if (!i18n[lang]) return;
+        try { localStorage.setItem('quack_lang', lang); } catch (_) {}
+        document.documentElement.lang = lang;
+        var d = i18n[lang];
+        document.getElementById('title').textContent = d.title;
+        document.getElementById('lede').textContent = d.lede;
+        document.getElementById('wink').innerHTML = d.wink;
+        document.getElementById('homeBtn').textContent = d.home;
+        document.getElementById('homeBtn').href = './?lang=' + lang;
+        document.getElementById('foot').textContent = d.foot;
+        if (d.footTitle) document.getElementById('foot').setAttribute('title', d.footTitle);
+        document.title = d.docTitle;
+        document.querySelectorAll('.lang-btn').forEach(function (btn) {
+          btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+      }
+
+      document.querySelectorAll('.lang-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () { apply(btn.dataset.lang); });
+      });
+
+      var fromStore = '';
+      try { fromStore = localStorage.getItem('quack_lang') || ''; } catch (_) {}
+      var q = new URLSearchParams(location.search).get('lang');
+      var start = (q && i18n[q]) ? q : (i18n[fromStore] ? fromStore : 'en');
+      apply(start);
+    })();
+  </script>
+</body>
+</html>

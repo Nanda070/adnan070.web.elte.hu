@@ -111,6 +111,96 @@ try {
     // Fail silently if table already exists
 }
 
+/**
+ * Load Discord webhook URL from webhook.secret.php (gitignored).
+ * Returns null if missing/invalid — never expose the URL to clients.
+ */
+function loadDiscordWebhookUrl(): ?string
+{
+    $path = __DIR__ . '/webhook.secret.php';
+    if (!is_readable($path)) {
+        return null;
+    }
+    try {
+        $url = require $path;
+    } catch (Throwable $e) {
+        return null;
+    }
+    if (!is_string($url)) {
+        return null;
+    }
+    $url = trim($url);
+    if ($url === '' || str_contains($url, 'REPLACE_WITH_YOUR')) {
+        return null;
+    }
+    if (!preg_match('#^https://(?:canary\.|ptb\.)?discord(?:app)?\.com/api/webhooks/\d+/[A-Za-z0-9_-]+$#', $url)) {
+        return null;
+    }
+    return $url;
+}
+
+/**
+ * Soft-fail Discord notification for a new Quack Wall post.
+ * Rate-limited by the same IP cooldown as wall posts (caller already passed that gate).
+ */
+function notifyDiscordWallPost(string $message, int $messageId): void
+{
+    $webhook = loadDiscordWebhookUrl();
+    if ($webhook === null) {
+        return;
+    }
+
+    $preview = mb_substr($message, 0, 180, 'UTF-8');
+    if (mb_strlen($message, 'UTF-8') > 180) {
+        $preview .= '…';
+    }
+
+    $payload = json_encode([
+        'username' => 'Quack Wall',
+        'embeds' => [[
+            'title' => 'New quack on the wall',
+            'description' => $preview,
+            'color' => 0xe11d48,
+            'footer' => ['text' => 'id #' . $messageId . ' · adnan070.web.elte.hu'],
+            'timestamp' => gmdate('c')
+        ]]
+    ], JSON_UNESCAPED_UNICODE);
+
+    if ($payload === false) {
+        return;
+    }
+
+    try {
+        if (function_exists('curl_init')) {
+            $ch = curl_init($webhook);
+            curl_setopt_array($ch, [
+                CURLOPT_POST => true,
+                CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+                CURLOPT_POSTFIELDS => $payload,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT => 4,
+                CURLOPT_CONNECTTIMEOUT => 3
+            ]);
+            curl_exec($ch);
+            curl_close($ch);
+            return;
+        }
+
+        $ctx = stream_context_create([
+            'http' => [
+                'method' => 'POST',
+                'header' => "Content-Type: application/json\r\n",
+                'content' => $payload,
+                'timeout' => 4,
+                'ignore_errors' => true
+            ]
+        ]);
+        @file_get_contents($webhook, false, $ctx);
+    } catch (Throwable $e) {
+        // Fail soft — wall post already succeeded
+    }
+}
+
 // Parse request payload
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
 
@@ -295,6 +385,9 @@ switch ($action) {
                 $insRate = $pdo->prepare("INSERT OR REPLACE INTO quack_rate_limits (ip, last_post_at) VALUES (:ip, :now)");
                 $insRate->execute([':ip' => $userIp, ':now' => $nowTime]);
             }
+
+            // Discord notify (server-side secret only; fail soft)
+            notifyDiscordWallPost($messageClean, $newId);
 
             echo json_encode([
                 'status' => 'success',

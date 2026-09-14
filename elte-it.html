@@ -302,7 +302,8 @@
     .footer-note {
       margin-top: 22px; padding-top: 16px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
-      font-size: 0.8rem; color: var(--text-dim); line-height: 1.5;
+      font-size: 0.75rem; color: var(--text-dim); line-height: 1.5;
+      opacity: 0.72;
     }
 
     .action-row {
@@ -405,7 +406,7 @@
         search: 'microsoft 365 office student email iig',
         tag: 'iig',
         tagLabel: 'ELTE',
-        userHtml: '<code>username@student.elte.hu</code>',
+        userHtml: '<code>user@student.elte.hu</code>',
         portalHtml: '<div class="portal"><a href="https://www.office.com/" target="_blank" rel="noopener noreferrer">office.com</a><button type="button" class="copy" data-copy="https://www.office.com/">Copy URL</button></div>',
         i18n: {
           en: { name: 'Microsoft 365', pass: 'Use the ELTE / IIG authentication flow; obtain the Microsoft password through the ELTE account workflow.' },
@@ -577,6 +578,7 @@
         copied: 'Copied',
         copyFail: 'Copy failed',
         footer: 'Unofficial student reference · Verify current ELTE URLs and authentication methods before use · Nanda',
+        footerTitle: 'privacy is a right not a privilege',
         title: 'ELTE Student IT — Where to get what'
       },
       ru: {
@@ -597,6 +599,7 @@
         copied: 'Скопировано',
         copyFail: 'Ошибка',
         footer: 'Неофициальный студенческий справочник · Проверяйте актуальные URL и способы входа ELTE · Nanda',
+        footerTitle: 'приватность — право, а не привилегия',
         title: 'ELTE Student IT — Где взять что'
       },
       hu: {
@@ -617,6 +620,7 @@
         copied: 'Másolva',
         copyFail: 'Sikertelen',
         footer: 'Nem hivatalos hallgatói útmutató · Ellenőrizd az aktuális ELTE URL-eket és hitelesítést · Nanda',
+        footerTitle: 'a magánélet jog, nem kiváltság',
         title: 'ELTE Student IT — Hol kapod mit'
       }
     };
@@ -715,6 +719,7 @@
       document.getElementById('thPortal').textContent = d.thPortal;
       document.getElementById('updatedLabel').innerHTML = d.updated;
       document.getElementById('footerNote').textContent = d.footer;
+      if (d.footerTitle) document.getElementById('footerNote').setAttribute('title', d.footerTitle);
       document.title = d.title;
       document.getElementById('backLink').href = './?lang=' + lang;
 
@@ -742,5 +747,6 @@
     try { fromStore = localStorage.getItem('quack_lang'); } catch (_) {}
     applyLang(['ru', 'en', 'hu'].includes(fromQuery) ? fromQuery : (['ru', 'en', 'hu'].includes(fromStore) ? fromStore : 'en'));
   </script>
+  <script src="./cookie-consent.js" defer></script>
 </body>
 </html>

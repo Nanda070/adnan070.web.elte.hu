@@ -58,20 +58,12 @@
     }
 
     body {
-      zoom: 0.9;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
-      padding: 1.2rem 1rem calc(5.5rem + env(safe-area-inset-bottom, 0px));
-    }
-
-    @supports not (zoom: 0.9) {
-      .viewport-wrapper {
-        transform: scale(0.9);
-        transform-origin: center top;
-      }
+      padding: 1rem 0.9rem calc(5.5rem + env(safe-area-inset-bottom, 0px));
     }
 
     /* Ambient Glowing Orbs Background */
@@ -517,7 +509,12 @@
       position: relative;
       z-index: 4;
       width: 180px;
-      height: 180px;
+      height: auto;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
       cursor: pointer;
       animation: float 3.8s ease-in-out infinite;
       transform-origin: center bottom;
@@ -557,10 +554,16 @@
       filter: drop-shadow(0 0 22px rgba(255, 0, 60, 0.6)) brightness(0.4) contrast(1.7) grayscale(0.85);
     }
 
+    /* viewBox is 220×200 — never force both axes to 100% or the duck stretches */
     .duck-svg {
       width: 100%;
-      height: 100%;
+      height: auto;
+      aspect-ratio: 220 / 200;
+      max-width: 100%;
+      max-height: 100%;
       display: block;
+      object-fit: contain;
+      flex-shrink: 0;
       transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
       transform-origin: center bottom;
       overflow: visible;
@@ -765,6 +768,56 @@
     .message-text.fade-out { opacity: 0; transform: translateY(8px); }
     .message-text.fade-in { opacity: 1; transform: translateY(0); }
 
+    /* Duck of the day — quiet tip, not a promo card */
+    .duck-of-day {
+      width: 100%;
+      margin: -2px 0 10px;
+      padding: 4px 2px 0;
+      text-align: center;
+      background: none;
+      border: none;
+    }
+    .dod-label {
+      display: block;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #64748b;
+      opacity: 0.65;
+      margin-bottom: 3px;
+    }
+    .dod-phrase {
+      font-size: 0.78rem;
+      line-height: 1.4;
+      font-weight: 450;
+      color: #94a3b8;
+      opacity: 0.72;
+      margin: 0;
+    }
+
+    .privacy-motto {
+      margin: 0 0 10px;
+      text-align: center;
+      font-size: 0.68rem;
+      font-weight: 500;
+      font-style: italic;
+      letter-spacing: 0.02em;
+      color: #64748b;
+      opacity: 0.62;
+    }
+
+    .error-sans-glitch {
+      animation: errorSansGlitch 0.55s steps(2, end);
+    }
+    @keyframes errorSansGlitch {
+      0% { transform: translate(0, 0); filter: none; text-shadow: none; }
+      20% { transform: translate(-2px, 1px); filter: hue-rotate(90deg); text-shadow: 2px 0 #e11d48, -2px 0 #67e8f9; }
+      40% { transform: translate(2px, -1px); text-shadow: -2px 0 #e11d48, 2px 0 #67e8f9; }
+      60% { transform: translate(-1px, 0); filter: contrast(1.4); }
+      100% { transform: translate(0, 0); filter: none; text-shadow: none; }
+    }
+
     /* Quack Wall Form Section */
     .quack-wall-section {
       width: 100%;
@@ -915,17 +968,17 @@
     }
 
     .secret-hint-text {
-      font-size: 0.7rem;
+      font-size: 0.62rem;
       color: #475569;
       font-family: 'JetBrains Mono', monospace;
-      letter-spacing: 0.03em;
-      opacity: 0.6;
+      letter-spacing: 0.04em;
+      opacity: 0.38;
       transition: opacity 0.3s ease, color 0.3s ease;
       cursor: default;
       user-select: none;
     }
 
-    .secret-hint-text:hover { opacity: 0.95; color: #94a3b8; }
+    .secret-hint-text:hover { opacity: 0.72; color: #64748b; }
 
     /* Floating badge stack (bottom right) */
     .badge-stack {
@@ -1388,6 +1441,13 @@
       font-size: 0.75rem;
       color: var(--text-dim);
       line-height: 1.4;
+      opacity: 0.85;
+    }
+    .tool-hint .quiet-aside {
+      display: inline;
+      opacity: 0.68;
+      font-style: italic;
+      color: #64748b;
     }
 
     .tool-hint a {
@@ -1722,19 +1782,65 @@
 
     .terminal-link:hover { transform: scale(1.04); }
 
-    /* Mobile Responsive Adjustments */
+    /* Desktop: gentle ~90% card density (replaces former body zoom) */
+    @media (min-width: 521px) {
+      .card { padding: 20px 18px 24px; }
+      .card-header { margin-bottom: 10px; }
+      .duck-stage { width: 205px; height: 205px; margin: 2px 0 12px; }
+      .duck-wrapper { width: 160px; }
+      .duck-glow-bg { width: 130px; height: 130px; }
+      .counter-value { font-size: 2rem; }
+      .content-area { min-height: 64px; margin-bottom: 12px; }
+      .duck-of-day { margin: -2px 0 10px; padding: 4px 2px 0; }
+    }
+
+    /* Phones ≈390–430 CSS px (iPhone 16 Pro 393×852, ~390 Android, Pro Max 430×932).
+       ~80% density vs old 155px duck; square hit-target; SVG keeps 220/200 aspect. */
     @media (max-width: 520px) {
-      body { padding: 0.8rem 0.6rem calc(6.2rem + env(safe-area-inset-bottom, 0px)); }
-      .card { padding: 20px 16px 22px; border-radius: 24px; }
-      .duck-stage { width: 195px; height: 195px; margin: 4px 0 14px; }
-      .duck-wrapper { width: 155px; height: 155px; }
-      .counter-value { font-size: 1.85rem; }
-      .message-text { font-size: 0.92rem; line-height: 1.5; }
-      .content-area { min-height: 70px; }
+      body {
+        justify-content: flex-start;
+        padding:
+          max(0.45rem, env(safe-area-inset-top, 0px))
+          0.55rem
+          calc(5.6rem + env(safe-area-inset-bottom, 0px));
+      }
+      .card { padding: 12px 13px 14px; border-radius: 22px; }
+      .card-header { margin-bottom: 6px; gap: 6px; }
+      .badge-status { font-size: 0.65rem; padding: 4px 10px; gap: 5px; }
+      .sound-toggle-btn { width: 30px; height: 30px; font-size: 0.9rem; }
+      .lang-btn { font-size: 0.7rem; padding: 4px 8px; }
+      .hud-container { margin-bottom: 4px; }
+      .counter-label { font-size: 0.62rem; }
+      .counter-value { font-size: 1.55rem; }
+      .combo-bar-wrapper { margin-top: 2px; min-height: 18px; gap: 6px; }
+      .combo-badge { font-size: 0.65rem; padding: 2px 8px; }
+      .cps-indicator { font-size: 0.65rem; padding: 1px 6px; }
+      .duck-stage {
+        width: 152px;
+        height: 152px;
+        margin: 0 0 6px;
+        flex-shrink: 0;
+      }
+      .duck-wrapper { width: 124px; }
+      .duck-glow-bg { width: 98px; height: 98px; }
+      .duck-shadow { width: 82px; height: 12px; bottom: 10px; }
+      .content-area { min-height: 44px; margin-bottom: 6px; padding: 0 4px; }
+      .message-text { font-size: 0.8rem; line-height: 1.38; }
+      .duck-of-day { margin: 0 0 5px; padding: 2px 0 0; }
+      .dod-label { font-size: 0.58rem; margin-bottom: 2px; }
+      .dod-phrase { font-size: 0.74rem; line-height: 1.32; }
+      .privacy-motto { margin: 0 0 6px; font-size: 0.62rem; }
+      .quack-wall-section { padding: 8px 10px; margin-bottom: 6px; gap: 5px; border-radius: 14px; }
+      .wall-title-row { font-size: 0.66rem; }
+      .wall-input { padding: 7px 10px; font-size: 0.8rem; border-radius: 10px; }
+      .wall-submit-btn { padding: 7px 12px; font-size: 0.78rem; }
+      .card-footer { margin-top: 2px; gap: 3px; }
+      .click-hint-text { font-size: 0.68rem; }
+      .secret-hint-text { font-size: 0.56rem; }
       .sound-presets-grid { grid-template-columns: 1fr; }
       .badge-stack {
-        bottom: calc(74px + env(safe-area-inset-bottom, 0px));
-        right: 10px;
+        bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+        right: max(10px, env(safe-area-inset-right, 0px));
         gap: 6px;
       }
       .dev-badge { padding: 6px 12px; font-size: 0.76rem; }
@@ -1755,6 +1861,29 @@
         max-width: 100%;
       }
       .bottom-nav { width: 100%; padding-left: 10px; padding-right: 10px; }
+    }
+
+    /* Short / landscape-ish phones: compress further so duck + wall stay usable */
+    @media (max-width: 520px) and (max-height: 720px) {
+      body {
+        padding-top: max(0.3rem, env(safe-area-inset-top, 0px));
+        padding-bottom: calc(5.2rem + env(safe-area-inset-bottom, 0px));
+      }
+      .card { padding: 10px 12px 12px; }
+      .card-header { margin-bottom: 4px; }
+      .duck-stage { width: 136px; height: 136px; margin: 0 0 4px; }
+      .duck-wrapper { width: 110px; }
+      .duck-glow-bg { width: 88px; height: 88px; }
+      .duck-shadow { width: 72px; height: 11px; }
+      .counter-value { font-size: 1.4rem; }
+      .content-area { min-height: 34px; margin-bottom: 4px; }
+      .message-text { font-size: 0.74rem; line-height: 1.3; }
+      .duck-of-day { display: none; }
+      .privacy-motto { margin-bottom: 5px; font-size: 0.58rem; }
+      .quack-wall-section { padding: 7px 9px; margin-bottom: 5px; }
+      .badge-stack {
+        bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+      }
     }
   </style>
 </head>
@@ -1818,9 +1947,9 @@
         <div class="bubble-container" id="bubbleContainer" aria-hidden="true"></div>
         <div class="quack-container" id="quackContainer" aria-live="polite" aria-atomic="true"></div>
 
-        <div class="duck-wrapper" id="duckInteractive" role="button" tabindex="0" title="Click or Tap to Quack!" aria-label="Rubber duck (tap to quack)">
+        <div class="duck-wrapper" id="duckInteractive" role="button" tabindex="0" title="Privacy is a right not a privilege" aria-label="Rubber duck (tap to quack)">
           <!-- Handcrafted Vector Duck SVG -->
-          <svg class="duck-svg" viewBox="0 0 220 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg class="duck-svg" viewBox="0 0 220 200" preserveAspectRatio="xMidYMid meet" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <defs>
               <linearGradient id="duckBody" x1="40" y1="20" x2="190" y2="190" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stop-color="#FFF36D" />
@@ -1903,6 +2032,12 @@
         </p>
       </section>
 
+      <aside class="duck-of-day" id="duckOfDay" aria-live="polite">
+        <span class="dod-label" id="duckOfDayLabel">Duck of the day</span>
+        <p class="dod-phrase" id="duckOfDayPhrase"></p>
+      </aside>
+      <p class="privacy-motto" id="privacyMotto">privacy is a right not a privilege</p>
+
       <!-- Quack Wall Input Form -->
       <section class="quack-wall-section">
         <div class="wall-title-row">
@@ -1929,8 +2064,8 @@
           </svg>
           <span id="clickHint">Click the duck to quack</span>
         </div>
-        <div class="secret-hint-text" id="secretHint">
-          Try typing...
+        <div class="secret-hint-text" id="secretHint" title="sans">
+          …sans
         </div>
       </footer>
 
@@ -2109,9 +2244,8 @@
             </div>
             <div class="tool-output" id="macOut">—</div>
             <p class="tool-hint" id="macHint">
-              OUI lookup uses a public API when available.
-              Fallback:
-              <a href="https://www.wireshark.org/tools/oui-lookup.html" target="_blank" rel="noopener noreferrer">Wireshark OUI Lookup</a>
+              <span id="macHintLead">OUI lookup uses a public API when available. Fallback:</span>
+              <a href="https://www.wireshark.org/tools/oui-lookup.html" target="_blank" rel="noopener noreferrer" id="macHintLink">Wireshark OUI Lookup</a>
             </p>
           </div>
 
@@ -2177,7 +2311,7 @@
               <button type="button" class="tool-btn tool-btn-ghost" id="cryptoCopyBtn">Copy</button>
             </div>
             <div class="tool-output" id="cryptoOut">—</div>
-            <p class="tool-hint" id="cryptoHint">AES-GCM via Web Crypto. Output is base64(iv + ciphertext).</p>
+            <p class="tool-hint" id="cryptoHint">AES-GCM via Web Crypto. Output is base64(salt + iv + ciphertext). <span class="quiet-aside">privacy is a right not a privilege</span></p>
           </div>
         </div>
       </div>
@@ -2288,7 +2422,12 @@
 
 
   <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+  <!-- qrcode@1.5.2+ omitted npm build/; 1.5.1 ships browser UMD with global QRCode.toCanvas -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"
+    onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.1/qrcode.min.js'"
+  ></script>
   <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
   <script>
     (function() {
@@ -2303,7 +2442,7 @@
           quack: "Кря!",
           hint: "Нажмите на утку",
           ariaLabel: "Резиновая утка (нажмите, чтобы крякнуть)",
-          secretHint: "Попробуй ввести...",
+          secretHint: "…sans",
           counterLabel: "Всего кряков",
           placeholder: "Напиши что-нибудь (до 60 симв.)...",
           postBtn: "Пост",
@@ -2338,6 +2477,57 @@
           btnEncrypt: "Шифровать",
           btnDecrypt: "Расшифровать",
           copied: "Скопировано",
+          copyFailed: "Не удалось скопировать",
+          labelMarkdown: "Markdown",
+          labelPreview: "Превью",
+          labelHtml: "HTML",
+          labelQrInput: "Текст / URL",
+          labelOperation: "Операция",
+          pctOf: "X% от Y",
+          pctIs: "Какой % составляет X от Y",
+          pctInc: "Увеличить Y на X%",
+          pctDec: "Уменьшить Y на X%",
+          labelMac: "MAC-адрес",
+          macHintLead: "OUI-поиск через публичный API, если доступен. Запасной вариант:",
+          macHintLink: "Wireshark OUI Lookup",
+          labelText: "Текст",
+          labelRounds: "Раунды",
+          labelHashCompare: "Хеш для сравнения",
+          labelPassword: "Пароль",
+          labelPassphrase: "Парольная фраза",
+          labelCryptoText: "Текст",
+          cryptoHintHtml: "AES-GCM через Web Crypto. Вывод: base64(соль + IV + шифротекст). <span class=\"quiet-aside\">приватность — право, а не привилегия</span>",
+          errEnterPassphrase: "Введите парольную фразу",
+          errInvalidPayload: "Неверная полезная нагрузка",
+          errEncryptFailed: "Ошибка шифрования",
+          errDecryptFailed: "Ошибка расшифровки (неверная фраза или повреждённые данные)",
+          errInvalidMac: "Неверный MAC (нужно 12 hex-цифр)",
+          errBcryptLoad: "Не удалось загрузить bcryptjs",
+          errHashing: "Хеширование…",
+          errHashError: "Ошибка хеша",
+          errProvideHash: "Укажите хеш для сравнения",
+          errCompareError: "Ошибка сравнения",
+          errQrLoad: "Не удалось загрузить библиотеку QR",
+          errMacLookup: "Поиск вендора…",
+          errMacVendorFallback: "(API недоступен — используйте ссылку Wireshark OUI ниже)",
+          matchYes: "Совпадение ✓",
+          matchNo: "Не совпадает ✗",
+          duckOfDayLabel: "Утка дня",
+          privacyMotto: "приватность — право, а не привилегия",
+          errorSansToast: "всё ещё полон решимости",
+          duckOfDay: [
+            "Нептун тормозит? Сохрани черновик — и не закрывай вкладку с яростью.",
+            "Кампусный совет: сначала eduroam, потом кофе.",
+            "Крякай осознанно: на стене максимум 60 символов.",
+            "Шифруй парольной фразой, которую не запостишь на стене.",
+            "Кампус большой: карта и бутылка воды — твоя броня.",
+            "Логаут из Нептуна безопасен. Без сохранения — нет.",
+            "Сдай лабу раньше дедлайна. Будущее тебе скажет спасибо.",
+            "Держись своей стаи. И своего бэкапа.",
+            "Шифруй то, что важно.",
+            "хехехе. не сдавайся.",
+            "всё ещё полон решимости."
+          ],
           tools: {
             markdown: { name: "Markdown → HTML", desc: "Превью и копирование HTML" },
             qr: { name: "QR-код", desc: "Текст или URL в QR" },
@@ -2354,7 +2544,7 @@
           quack: "Quack!",
           hint: "Click the duck to quack",
           ariaLabel: "Rubber duck (click or tap to quack)",
-          secretHint: "Try typing...",
+          secretHint: "…sans",
           counterLabel: "Global Quacks",
           placeholder: "Drop a thought (max 60 chars)...",
           postBtn: "Post",
@@ -2389,6 +2579,57 @@
           btnEncrypt: "Encrypt",
           btnDecrypt: "Decrypt",
           copied: "Copied",
+          copyFailed: "Copy failed",
+          labelMarkdown: "Markdown",
+          labelPreview: "Preview",
+          labelHtml: "HTML",
+          labelQrInput: "Text / URL",
+          labelOperation: "Operation",
+          pctOf: "X% of Y",
+          pctIs: "What % is X of Y",
+          pctInc: "Increase Y by X%",
+          pctDec: "Decrease Y by X%",
+          labelMac: "MAC address",
+          macHintLead: "OUI lookup uses a public API when available. Fallback:",
+          macHintLink: "Wireshark OUI Lookup",
+          labelText: "Text",
+          labelRounds: "Rounds",
+          labelHashCompare: "Hash to compare",
+          labelPassword: "Password",
+          labelPassphrase: "Passphrase",
+          labelCryptoText: "Text",
+          cryptoHintHtml: "AES-GCM via Web Crypto. Output: base64(salt + iv + ciphertext). <span class=\"quiet-aside\">privacy is a right not a privilege</span>",
+          errEnterPassphrase: "Enter a passphrase",
+          errInvalidPayload: "Invalid payload",
+          errEncryptFailed: "Encrypt failed",
+          errDecryptFailed: "Decrypt failed (wrong passphrase or corrupt data)",
+          errInvalidMac: "Invalid MAC (need 12 hex digits)",
+          errBcryptLoad: "bcryptjs failed to load",
+          errHashing: "Hashing…",
+          errHashError: "Hash error",
+          errProvideHash: "Provide a hash to compare",
+          errCompareError: "Compare error",
+          errQrLoad: "QR library failed to load",
+          errMacLookup: "Looking up vendor…",
+          errMacVendorFallback: "(API unavailable — use Wireshark OUI link below)",
+          matchYes: "Match ✓",
+          matchNo: "No match ✗",
+          duckOfDayLabel: "Duck of the day",
+          privacyMotto: "privacy is a right not a privilege",
+          errorSansToast: "still filled with determination",
+          duckOfDay: [
+            "Neptun lagging? Save the draft before you rage-close the tab.",
+            "Campus tip: eduroam first, coffee second.",
+            "Quack wisely — wall messages cap at 60 characters.",
+            "Use a passphrase you'd never post on the wall.",
+            "Big campus: map + water bottle help more than bravado.",
+            "Logging out of Neptun is safe. Skipping save isn't.",
+            "Submit the lab early. Future-you will nod.",
+            "Stick with your pack — and your backup.",
+            "Encrypt what matters.",
+            "heheheh. don't give up.",
+            "still filled with determination."
+          ],
           tools: {
             markdown: { name: "Markdown to HTML", desc: "Preview and copy rendered HTML" },
             qr: { name: "QR Code", desc: "Turn text or a URL into a QR" },
@@ -2405,7 +2646,7 @@
           quack: "Háp!",
           hint: "Kattints a kacsára a hápogáshoz",
           ariaLabel: "Gumikacsa (kattints a hápogáshoz)",
-          secretHint: "Próbálj meg begépelni...",
+          secretHint: "…sans",
           counterLabel: "Összes hápogás",
           placeholder: "Írj egy üzenetet (max 60 kar.)...",
           postBtn: "Küldés",
@@ -2440,6 +2681,57 @@
           btnEncrypt: "Titkosítás",
           btnDecrypt: "Visszafejtés",
           copied: "Másolva",
+          copyFailed: "Másolás sikertelen",
+          labelMarkdown: "Markdown",
+          labelPreview: "Előnézet",
+          labelHtml: "HTML",
+          labelQrInput: "Szöveg / URL",
+          labelOperation: "Művelet",
+          pctOf: "X% az Y-ból",
+          pctIs: "X hány %-a Y-nak",
+          pctInc: "Y növelése X%-kal",
+          pctDec: "Y csökkentése X%-kal",
+          labelMac: "MAC cím",
+          macHintLead: "Az OUI keresés nyilvános API-t használ, ha elérhető. Tartalék:",
+          macHintLink: "Wireshark OUI Lookup",
+          labelText: "Szöveg",
+          labelRounds: "Körök",
+          labelHashCompare: "Összehasonlítandó hash",
+          labelPassword: "Jelszó",
+          labelPassphrase: "Jelmondat",
+          labelCryptoText: "Szöveg",
+          cryptoHintHtml: "AES-GCM Web Crypto-val. Kimenet: base64(só + iv + titkosított szöveg). <span class=\"quiet-aside\">a magánélet jog, nem kiváltság</span>",
+          errEnterPassphrase: "Add meg a jelmondatot",
+          errInvalidPayload: "Érvénytelen adat",
+          errEncryptFailed: "Titkosítás sikertelen",
+          errDecryptFailed: "Visszafejtés sikertelen (rossz jelmondat vagy sérült adat)",
+          errInvalidMac: "Érvénytelen MAC (12 hex számjegy kell)",
+          errBcryptLoad: "A bcryptjs nem töltődött be",
+          errHashing: "Hashelés…",
+          errHashError: "Hash hiba",
+          errProvideHash: "Adj meg egy hasht az összehasonlításhoz",
+          errCompareError: "Összehasonlítási hiba",
+          errQrLoad: "A QR könyvtár nem töltődött be",
+          errMacLookup: "Gyártó keresése…",
+          errMacVendorFallback: "(API nem elérhető — használd a Wireshark OUI linket)",
+          matchYes: "Egyezés ✓",
+          matchNo: "Nincs egyezés ✗",
+          duckOfDayLabel: "A nap kacsája",
+          privacyMotto: "a magánélet jog, nem kiváltság",
+          errorSansToast: "még mindig tele elszántsággal",
+          duckOfDay: [
+            "Akadozik a Neptun? Mentés előbb, panik később.",
+            "Campus tipp: először eduroam, aztán kávé.",
+            "Okosan hápogj — a fal legfeljebb 60 karakter.",
+            "Olyan jelmondatot használj, amit soha nem posztolnál a falra.",
+            "Nagy campus: térkép + kulacs többet ér, mint a bravúr.",
+            "A Neptunból kijelentkezni biztonságos. Mentés nélkül nem.",
+            "Add be a labot korán. A jövőbeli én bólogatni fog.",
+            "Maradj a falkáddal — és a biztonsági mentéssel.",
+            "Titkosítsd, ami számít.",
+            "heheheh. ne add fel.",
+            "még mindig tele elszántsággal."
+          ],
           tools: {
             markdown: { name: "Markdown → HTML", desc: "Előnézet és HTML másolás" },
             qr: { name: "QR-kód", desc: "Szöveg vagy URL → QR" },
@@ -3296,6 +3588,8 @@
           document.getElementById('soundPresetTitle').textContent = d.soundPresetTitle;
           applyToolsChromeI18n();
           renderToolsCatalog(document.getElementById('toolsSearch').value || '');
+          refreshDuckOfDay();
+          if (typeof window.quackApplyCookieLang === 'function') window.quackApplyCookieLang(lang);
 
           document.documentElement.lang = lang;
 
@@ -3344,6 +3638,7 @@
         'b', 'a'
       ];
       let konamiIndex = 0;
+      let eggTypeBuffer = '';
 
       document.addEventListener('keydown', (e) => {
         if (isTerminalOpen && e.key === 'Escape') {
@@ -3352,6 +3647,16 @@
         }
 
         if (document.activeElement === messageInput) return;
+        const tag = (document.activeElement && document.activeElement.tagName) || '';
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+        if (e.key && e.key.length === 1 && /[a-z]/i.test(e.key)) {
+          eggTypeBuffer = (eggTypeBuffer + e.key.toLowerCase()).slice(-16);
+          if (eggTypeBuffer.endsWith('errorsans') || eggTypeBuffer.endsWith('sans')) {
+            eggTypeBuffer = '';
+            triggerErrorSansWink();
+          }
+        }
 
         const requiredKey = konamiSequence[konamiIndex];
         if (e.key === requiredKey || e.key.toLowerCase() === requiredKey) {
@@ -3454,12 +3759,35 @@
           bcryptCopyBtn: d.btnCopyHash,
           cryptoEncBtn: d.btnEncrypt,
           cryptoDecBtn: d.btnDecrypt,
-          cryptoCopyBtn: d.btnCopy
+          cryptoCopyBtn: d.btnCopy,
+          mdInputLabel: d.labelMarkdown,
+          mdPreviewLabel: d.labelPreview,
+          mdHtmlLabel: d.labelHtml,
+          qrInputLabel: d.labelQrInput,
+          pctModeLabel: d.labelOperation,
+          macInputLabel: d.labelMac,
+          macHintLead: d.macHintLead,
+          macHintLink: d.macHintLink,
+          bcryptTextLabel: d.labelText,
+          bcryptRoundsLabel: d.labelRounds,
+          bcryptCompareLabel: d.labelHashCompare,
+          pwInputLabel: d.labelPassword,
+          cryptoPassLabel: d.labelPassphrase,
+          cryptoTextLabel: d.labelCryptoText
         };
         Object.keys(map).forEach((id) => {
           const el = document.getElementById(id);
-          if (el) el.textContent = map[id];
+          if (el && map[id]) el.textContent = map[id];
         });
+        const cryptoHintEl = document.getElementById('cryptoHint');
+        if (cryptoHintEl && d.cryptoHintHtml) cryptoHintEl.innerHTML = d.cryptoHintHtml;
+        const pctMode = document.getElementById('pctMode');
+        if (pctMode) {
+          const opts = { of: d.pctOf, is: d.pctIs, inc: d.pctInc, dec: d.pctDec };
+          Array.from(pctMode.options).forEach((o) => {
+            if (opts[o.value]) o.textContent = opts[o.value];
+          });
+        }
         document.querySelectorAll('[data-i18n-tool-title]').forEach((el) => {
           const id = el.getAttribute('data-i18n-tool-title');
           if (d.tools[id]) el.textContent = d.tools[id].name;
@@ -3468,6 +3796,40 @@
           const id = el.getAttribute('data-i18n-tool-desc');
           if (d.tools[id]) el.textContent = d.tools[id].desc;
         });
+        const motto = document.getElementById('privacyMotto');
+        if (motto && d.privacyMotto) motto.textContent = d.privacyMotto;
+        if (duckWrapper && d.privacyMotto) duckWrapper.setAttribute('title', d.privacyMotto);
+        const dodLabel = document.getElementById('duckOfDayLabel');
+        if (dodLabel && d.duckOfDayLabel) dodLabel.textContent = d.duckOfDayLabel;
+      }
+
+      function refreshDuckOfDay() {
+        const d = tDict();
+        const list = d.duckOfDay || [];
+        const phraseEl = document.getElementById('duckOfDayPhrase');
+        const labelEl = document.getElementById('duckOfDayLabel');
+        const motto = document.getElementById('privacyMotto');
+        if (labelEl && d.duckOfDayLabel) labelEl.textContent = d.duckOfDayLabel;
+        if (motto && d.privacyMotto) motto.textContent = d.privacyMotto;
+        if (!phraseEl || !list.length) return;
+        phraseEl.textContent = list[Math.floor(Math.random() * list.length)];
+      }
+
+      function triggerErrorSansWink() {
+        const targets = [
+          document.getElementById('duckOfDay'),
+          document.getElementById('duckMessage'),
+          document.getElementById('privacyMotto')
+        ].filter(Boolean);
+        targets.forEach((el) => {
+          el.classList.remove('error-sans-glitch');
+          void el.offsetWidth;
+          el.classList.add('error-sans-glitch');
+        });
+        showToast('☠', 'E R R O R', tDict().errorSansToast || 'still filled with determination');
+        setTimeout(() => {
+          targets.forEach((el) => el.classList.remove('error-sans-glitch'));
+        }, 700);
       }
 
       function renderToolsCatalog(query) {
@@ -3527,25 +3889,34 @@
         const str = String(value == null ? '' : value);
         if (!str) return;
         const done = () => showToast('📋', tDict().copied, str.slice(0, 48) + (str.length > 48 ? '…' : ''));
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(str).then(done).catch(() => {
+        const fail = () => showToast('⚠️', tDict().copyFailed || 'Copy failed', '');
+        const fallback = () => {
+          try {
             const ta = document.createElement('textarea');
             ta.value = str;
+            ta.setAttribute('readonly', '');
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
             document.body.appendChild(ta);
             ta.select();
-            try { document.execCommand('copy'); } catch (_) {}
+            ta.setSelectionRange(0, str.length);
+            const ok = document.execCommand('copy');
             ta.remove();
-            done();
-          });
+            if (ok) done();
+            else fail();
+          } catch (_) {
+            fail();
+          }
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(str).then(done).catch(fallback);
+        } else {
+          fallback();
         }
       }
 
-      function simpleMarkdown(src) {
-        if (typeof marked !== 'undefined' && marked.parse) {
-          return marked.parse(src, { breaks: true });
-        }
-        // Minimal fallback
-        let html = src
+      function safeMarkdownFallback(src) {
+        let html = String(src || '')
           .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         html = html.replace(/^### (.*)$/gm, '<h3>$1</h3>')
           .replace(/^## (.*)$/gm, '<h2>$1</h2>')
@@ -3555,6 +3926,15 @@
           .replace(/`([^`]+)`/g, '<code>$1</code>')
           .replace(/\n/g, '<br>');
         return html;
+      }
+
+      function simpleMarkdown(src) {
+        const canPurify = typeof DOMPurify !== 'undefined' && DOMPurify.sanitize;
+        if (typeof marked !== 'undefined' && marked.parse && canPurify) {
+          return DOMPurify.sanitize(marked.parse(src, { breaks: true }));
+        }
+        // Graceful: if DOMPurify CDN failed, never inject raw marked HTML
+        return safeMarkdownFallback(src);
       }
 
       function initMarkdownTool() {
@@ -3575,24 +3955,40 @@
         const input = document.getElementById('qrInput');
         const wrap = document.getElementById('qrCanvasWrap');
         const canvas = document.getElementById('qrCanvas');
+        const getQrLib = () => {
+          const lib = (typeof QRCode !== 'undefined') ? QRCode : (typeof window !== 'undefined' ? window.QRCode : null);
+          return (lib && typeof lib.toCanvas === 'function') ? lib : null;
+        };
+        const showQrError = (msg) => {
+          wrap.hidden = false;
+          wrap.innerHTML = '';
+          const hint = document.createElement('div');
+          hint.className = 'tool-hint';
+          hint.textContent = msg;
+          wrap.appendChild(hint);
+        };
         const generate = async () => {
           const val = (input.value || '').trim();
           if (!val) return;
-          if (typeof QRCode === 'undefined') {
-            wrap.hidden = false;
-            wrap.innerHTML = '<div class="tool-hint">QR library failed to load.</div>';
+          const lib = getQrLib();
+          if (!lib) {
+            showQrError(tDict().errQrLoad || 'QR library failed to load');
             return;
           }
           wrap.hidden = false;
           wrap.innerHTML = '';
           wrap.appendChild(canvas);
-          await QRCode.toCanvas(canvas, val, {
+          await lib.toCanvas(canvas, val, {
             width: 220,
             margin: 2,
             color: { dark: '#0a0a0b', light: '#ffffff' }
           });
         };
-        document.getElementById('qrGenerateBtn').addEventListener('click', () => { generate().catch(() => {}); });
+        document.getElementById('qrGenerateBtn').addEventListener('click', () => {
+          generate().catch(() => {
+            showQrError(tDict().errQrLoad || 'QR library failed to load');
+          });
+        });
         document.getElementById('qrDownloadBtn').addEventListener('click', () => {
           if (wrap.hidden) return;
           const a = document.createElement('a');
@@ -3681,7 +4077,7 @@
         const format = () => {
           const n = normalizeMac(input.value);
           if (!n) {
-            out.textContent = 'Invalid MAC (need 12 hex digits)';
+            out.textContent = tDict().errInvalidMac;
             lastFormatted = '';
             return null;
           }
@@ -3698,7 +4094,7 @@
         document.getElementById('macLookupBtn').addEventListener('click', async () => {
           const n = format();
           if (!n) return;
-          out.textContent += '\nLooking up vendor…';
+          out.textContent += '\n' + tDict().errMacLookup;
           try {
             const res = await fetch('https://api.macvendors.com/' + encodeURIComponent(n.colon), { method: 'GET' });
             if (res.ok) {
@@ -3708,7 +4104,7 @@
               throw new Error('lookup failed');
             }
           } catch (err) {
-            out.textContent = `Colon: ${n.colon}\nDash:  ${n.dash}\nCisco: ${n.cisco}\nOUI:   ${n.oui}\nVendor: (API unavailable — use Wireshark OUI link below)`;
+            out.textContent = `Colon: ${n.colon}\nDash:  ${n.dash}\nCisco: ${n.cisco}\nOUI:   ${n.oui}\nVendor: ${tDict().errMacVendorFallback}`;
           }
         });
       }
@@ -3721,39 +4117,39 @@
         let lastHash = '';
         document.getElementById('bcryptHashBtn').addEventListener('click', () => {
           if (typeof dcodeIO === 'undefined' && typeof bcrypt === 'undefined') {
-            out.textContent = 'bcryptjs failed to load';
+            out.textContent = tDict().errBcryptLoad;
             return;
           }
           const bcryptLib = (typeof bcrypt !== 'undefined') ? bcrypt : dcodeIO.bcrypt;
           const rounds = Math.min(12, Math.max(4, parseInt(roundsEl.value, 10) || 10));
           roundsEl.value = String(rounds);
-          out.textContent = 'Hashing…';
+          out.textContent = tDict().errHashing;
           setTimeout(() => {
             try {
               const salt = bcryptLib.genSaltSync(rounds);
               lastHash = bcryptLib.hashSync(textEl.value || '', salt);
               out.textContent = lastHash;
             } catch (e) {
-              out.textContent = 'Hash error: ' + (e && e.message ? e.message : e);
+              out.textContent = tDict().errHashError + ': ' + (e && e.message ? e.message : e);
             }
           }, 20);
         });
         document.getElementById('bcryptCompareBtn').addEventListener('click', () => {
           const bcryptLib = (typeof bcrypt !== 'undefined') ? bcrypt : (typeof dcodeIO !== 'undefined' ? dcodeIO.bcrypt : null);
           if (!bcryptLib) {
-            out.textContent = 'bcryptjs failed to load';
+            out.textContent = tDict().errBcryptLoad;
             return;
           }
           const hash = (compareEl.value || lastHash || '').trim();
           if (!hash) {
-            out.textContent = 'Provide a hash to compare';
+            out.textContent = tDict().errProvideHash;
             return;
           }
           try {
             const ok = bcryptLib.compareSync(textEl.value || '', hash);
-            out.textContent = ok ? 'Match ✓' : 'No match ✗';
+            out.textContent = ok ? tDict().matchYes : tDict().matchNo;
           } catch (e) {
-            out.textContent = 'Compare error: ' + (e && e.message ? e.message : e);
+            out.textContent = tDict().errCompareError + ': ' + (e && e.message ? e.message : e);
           }
         });
         document.getElementById('bcryptCopyBtn').addEventListener('click', () => copyText(lastHash || out.textContent));
@@ -3839,7 +4235,7 @@
         const out = document.getElementById('cryptoOut');
         document.getElementById('cryptoEncBtn').addEventListener('click', async () => {
           try {
-            if (!pass.value) { out.textContent = 'Enter a passphrase'; return; }
+            if (!pass.value) { out.textContent = tDict().errEnterPassphrase; return; }
             const salt = crypto.getRandomValues(new Uint8Array(16));
             const iv = crypto.getRandomValues(new Uint8Array(12));
             const key = await deriveKey(pass.value, salt);
@@ -3852,24 +4248,31 @@
             packed.set(salt, 0);
             packed.set(iv, 16);
             packed.set(new Uint8Array(cipher), 28);
-            out.textContent = bufToB64(packed.buffer);
+            const b64 = bufToB64(packed.buffer);
+            out.textContent = b64;
+            textEl.value = b64; // encrypt→decrypt works without manual clear
           } catch (e) {
-            out.textContent = 'Encrypt failed: ' + (e && e.message ? e.message : e);
+            out.textContent = tDict().errEncryptFailed + ': ' + (e && e.message ? e.message : e);
           }
         });
         document.getElementById('cryptoDecBtn').addEventListener('click', async () => {
           try {
-            if (!pass.value) { out.textContent = 'Enter a passphrase'; return; }
-            const packed = new Uint8Array(b64ToBuf((textEl.value || out.textContent || '').trim()));
-            if (packed.byteLength < 30) { out.textContent = 'Invalid payload'; return; }
+            if (!pass.value) { out.textContent = tDict().errEnterPassphrase; return; }
+            const outVal = (out.textContent || '').trim();
+            const looksCipher = outVal && outVal !== '—' && !/\s/.test(outVal) && outVal.length >= 40;
+            const src = (looksCipher ? outVal : (textEl.value || '')).trim();
+            const packed = new Uint8Array(b64ToBuf(src));
+            if (packed.byteLength < 30) { out.textContent = tDict().errInvalidPayload; return; }
             const salt = packed.slice(0, 16);
             const iv = packed.slice(16, 28);
             const data = packed.slice(28);
             const key = await deriveKey(pass.value, salt);
             const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, data);
-            out.textContent = new TextDecoder().decode(plain);
+            const decoded = new TextDecoder().decode(plain);
+            out.textContent = decoded;
+            textEl.value = decoded;
           } catch (e) {
-            out.textContent = 'Decrypt failed (wrong passphrase or corrupt data)';
+            out.textContent = tDict().errDecryptFailed;
           }
         });
         document.getElementById('cryptoCopyBtn').addEventListener('click', () => copyText(out.textContent));
@@ -3913,12 +4316,15 @@
       // Initial stats fetch & UI setup
       initTools();
       fetchStats();
+      refreshDuckOfDay();
 
       if (currentLang !== 'en') {
         const bootLang = currentLang;
         currentLang = 'en'; // allow switchLanguage to run
         switchLanguage(bootLang);
       } else {
+        applyToolsChromeI18n();
+        refreshDuckOfDay();
         const itBadge = document.getElementById('itBadge');
         if (itBadge) itBadge.href = './elte-it.html?lang=en';
         const neptunBadge = document.getElementById('neptunBadge');
@@ -3929,5 +4335,6 @@
 
     })();
   </script>
+  <script src="./cookie-consent.js" defer></script>
 </body>
 </html>

@@ -176,38 +176,99 @@
       text-transform: uppercase; color: var(--text-dim); margin-bottom: 14px;
     }
 
-    .contact-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px;
+    /* Contact block — scarlet accent bar + icon rows (reference layout) */
+    .contact-card {
+      position: relative;
+      width: 100%;
+      margin-bottom: 14px;
+      padding: 22px 22px 20px 26px;
+      background: #0c0c0e;
+      border: 1px solid #222328;
+      border-radius: 14px;
+      overflow: hidden;
+      animation: cardIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-delay: 0.06s;
     }
-    .contact-item {
-      display: flex; flex-direction: column; gap: 5px;
-      background: rgba(255, 255, 255, 0.035);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px; padding: 12px 14px;
-      text-decoration: none; color: inherit;
-      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: #e11d48;
+      border-radius: 14px 0 0 14px;
     }
-    a.contact-item:hover, .contact-item:has(button:hover) {
-      transform: translateY(-2px);
-      border-color: var(--accent-border);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35), 0 0 16px rgba(225, 29, 72, 0.14);
+    .contact-name {
+      font-size: clamp(1.55rem, 4vw, 1.9rem);
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+      margin: 0 0 18px;
+      line-height: 1.15;
     }
-    .contact-item .label {
-      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
-      text-transform: uppercase; color: var(--text-dim);
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
-    .contact-item .value { font-size: 0.92rem; font-weight: 700; word-break: break-word; }
-    .contact-item .mono {
+    .contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      border: none;
+      background: transparent;
+      padding: 0;
+      width: 100%;
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+    }
+    a.contact-row:hover .contact-row-value,
+    button.contact-row:hover .contact-row-value {
+      color: #fda4af;
+    }
+    .contact-ico {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: #e11d48;
+    }
+    .contact-ico svg { width: 100%; height: 100%; display: block; fill: currentColor; }
+    .contact-row-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+    .contact-row-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #8b8b96;
+      letter-spacing: 0.02em;
+    }
+    .contact-row-value {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #fff;
+      word-break: break-word;
+      transition: color 0.15s ease;
+    }
+    .contact-row-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .contact-row-meta .mono {
       font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.74rem; font-weight: 600; color: var(--text-muted);
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #71717a;
     }
-    .copy-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
     .copy-btn {
-      font-family: inherit; font-size: 0.7rem; font-weight: 800;
+      font-family: inherit; font-size: 0.68rem; font-weight: 800;
       letter-spacing: 0.04em; text-transform: uppercase;
-      padding: 5px 10px; border-radius: 999px; cursor: pointer;
-      border: 1px solid var(--accent-border);
-      background: var(--accent-soft); color: #fda4af;
+      padding: 4px 9px; border-radius: 8px; cursor: pointer;
+      border: 1px solid rgba(225, 29, 72, 0.45);
+      background: rgba(225, 29, 72, 0.14); color: #fda4af;
       transition: background 0.2s ease, transform 0.15s ease;
     }
     .copy-btn:hover { background: rgba(225, 29, 72, 0.28); transform: translateY(-1px); }
@@ -346,14 +407,124 @@
     }
     .project-card .dual-links a:hover { filter: brightness(1.08); transform: translateY(-1px); }
 
-    .footer-note {
-      margin-top: 8px; font-size: 0.8rem; color: var(--text-dim);
-      line-height: 1.5; text-align: center;
+    .brand-motto {
+      margin-top: 14px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: #64748b;
+      opacity: 0.65;
+      text-align: center;
+      font-style: italic;
+    }
+    .brand-motto span {
+      color: var(--text-dim);
+      font-style: normal;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .page-foot {
+      margin: 8px auto 0;
+      max-width: 720px;
+      text-align: center;
+      font-size: 0.65rem;
+      color: #475569;
+      opacity: 0.55;
+      letter-spacing: 0.03em;
+      font-style: italic;
+    }
+
+    /* Featured Discord home-server card (404 : Server Not Found) */
+    .home-server-card {
+      margin-top: 4px;
+      padding: 26px 28px 24px;
+      border-radius: 14px;
+      background: #0c0c0e;
+      border: 1px solid #222328;
+      box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.75);
+    }
+    .home-server-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 12px;
+      margin-bottom: 16px;
+    }
+    .home-server-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+    .home-server-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #c4c4cc;
+      background: #1a1a1f;
+      border: 1px solid #2a2a30;
+    }
+    .home-server-lang {
+      margin: -6px 0 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #fb7185;
+      letter-spacing: 0.02em;
+    }
+    .home-server-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .home-server-body p {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      color: #c8c8d0;
+      font-weight: 450;
+    }
+    .home-server-join {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 18px;
+      border-radius: 10px;
+      background: #8b1a28;
+      color: #fff !important;
+      text-decoration: none !important;
+      font-weight: 700;
+      font-size: 0.92rem;
+      border: 1px solid rgba(225, 29, 72, 0.35);
+      transition: filter 0.2s ease, transform 0.2s ease, background 0.2s ease;
+    }
+    .home-server-join:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+      background: #a01f30;
+    }
+    .home-server-join svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+    @media (max-width: 560px) {
+      .home-server-card { padding: 20px 16px 18px; }
+      .home-server-title { font-size: 1.02rem; }
     }
 
     @media (max-width: 560px) {
-      body { padding: 0.8rem 0.65rem 2.5rem; }
-      .card { padding: 20px 16px 24px; border-radius: 22px; }
+      body { padding: 0.65rem 0.6rem 2.2rem; }
+      .card { padding: 16px 14px 18px; border-radius: 20px; }
+      .hero-badge { margin-bottom: 10px; padding: 5px 11px; font-size: 0.66rem; }
+      h1 { font-size: clamp(1.4rem, 6vw, 1.85rem); margin-bottom: 6px; }
+      .aka { font-size: 0.88rem; margin-bottom: 10px; }
+      .lede { font-size: 0.9rem; line-height: 1.6; }
       .counters { grid-template-columns: 1fr; }
       .project-grid { grid-template-columns: 1fr; }
     }
@@ -383,40 +554,92 @@
       <h1 id="pageTitle">Adnan <span>(Nanda)</span></h1>
       <p class="aka" id="akaLine"></p>
       <p class="lede" id="bioText"></p>
+      <p class="brand-motto" id="brandMotto">privacy is a right not a privilege</p>
     </article>
 
-    <section class="card d1" aria-labelledby="contactHeading">
-      <h2 class="section-title" id="contactHeading">Contact</h2>
-      <div class="contact-grid">
-        <div class="contact-item">
-          <span class="label" id="labelName">Name</span>
-          <span class="value">Adnan · Nanda</span>
-        </div>
-        <a class="contact-item" href="mailto:adnan.huseynli1@gmail.com">
-          <span class="label" id="labelEmail">Email</span>
-          <span class="value">adnan.huseynli1@gmail.com</span>
+    <section class="d1 contact-card" aria-labelledby="contactHeading">
+      <h2 class="contact-name" id="contactHeading">Nanda</h2>
+      <div class="contact-list">
+        <a class="contact-row" href="mailto:adnan.huseynli1@gmail.com">
+          <span class="contact-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5L4 8V6l8 5 8-5v2z"/></svg>
+          </span>
+          <span class="contact-row-text">
+            <span class="contact-row-label" id="labelEmail">Email</span>
+            <span class="contact-row-value">adnan.huseynli1@gmail.com</span>
+          </span>
         </a>
-        <div class="contact-item">
-          <span class="label" id="labelDiscord">Discord</span>
-          <span class="value">nandak070</span>
-          <span class="mono" id="discordId">1219803151180370021</span>
-          <div class="copy-row">
-            <a href="https://discord.com/users/1219803151180370021" target="_blank" rel="noopener noreferrer" class="mono" style="color:#fda4af;text-decoration:none;font-size:0.72rem;font-weight:700;" id="discordProfile">Profile →</a>
-            <button type="button" class="copy-btn" data-copy="1219803151180370021" id="copyDiscord">Copy ID</button>
-          </div>
+        <a class="contact-row" href="tel:+41772599608">
+          <span class="contact-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.15 15.15 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1C10.4 21 3 13.6 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1.02l-2.2 2.2z"/></svg>
+          </span>
+          <span class="contact-row-text">
+            <span class="contact-row-label" id="labelPhone">Phone</span>
+            <span class="contact-row-value">+41-77-259-9608</span>
+          </span>
+        </a>
+        <div class="contact-row" role="group" aria-labelledby="labelDiscord">
+          <span class="contact-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.548-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+          </span>
+          <span class="contact-row-text">
+            <span class="contact-row-label" id="labelDiscord">Discord</span>
+            <span class="contact-row-value">nandak070</span>
+            <span class="contact-row-meta">
+              <span class="mono" id="discordId">1219803151180370021</span>
+              <button type="button" class="copy-btn" data-copy="1219803151180370021" id="copyDiscord">Copy ID</button>
+              <a href="https://discord.com/users/1219803151180370021" target="_blank" rel="noopener noreferrer" class="mono" style="color:#fda4af;text-decoration:none;font-weight:700;" id="discordProfile">Profile →</a>
+            </span>
+          </span>
         </div>
-        <div class="contact-item">
-          <span class="label" id="labelTelegram">Telegram</span>
-          <span class="value">nanda070</span>
-          <div class="copy-row">
-            <a href="https://t.me/nanda070" target="_blank" rel="noopener noreferrer" class="mono" style="color:#fda4af;text-decoration:none;font-size:0.72rem;font-weight:700;" id="telegramOpen">Open →</a>
-            <button type="button" class="copy-btn" data-copy="nanda070" id="copyTelegram">Copy</button>
-          </div>
+        <div class="contact-row" role="group" aria-labelledby="labelTelegram">
+          <span class="contact-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M9.78 14.25l-.35 4.88c.5 0 .72-.21.98-.46l2.35-2.23 4.87 3.56c.89.49 1.52.23 1.76-.83l3.19-14.98h.01c.28-1.31-.47-1.82-1.34-1.5L2.3 9.17c-1.27.49-1.25 1.2-.22 1.52l4.93 1.54 11.45-7.2c.54-.33 1.03-.15.63.21L9.78 14.25z"/></svg>
+          </span>
+          <span class="contact-row-text">
+            <span class="contact-row-label" id="labelTelegram">Telegram</span>
+            <span class="contact-row-value">nanda070</span>
+            <span class="contact-row-meta">
+              <a href="https://t.me/nanda070" target="_blank" rel="noopener noreferrer" class="mono" style="color:#fda4af;text-decoration:none;font-weight:700;" id="telegramOpen">Open →</a>
+              <button type="button" class="copy-btn" data-copy="nanda070" id="copyTelegram">Copy</button>
+            </span>
+          </span>
         </div>
+        <button type="button" class="contact-row" id="copyRiotRow" aria-labelledby="labelRiot">
+          <span class="contact-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.64-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/></svg>
+          </span>
+          <span class="contact-row-text">
+            <span class="contact-row-label" id="labelRiot">Riot ID</span>
+            <span class="contact-row-value" id="riotIdValue">Xaosletao#404</span>
+            <span class="contact-row-meta">
+              <span class="copy-btn" data-copy="Xaosletao#404" id="copyRiot" role="button" tabindex="0">Copy</span>
+            </span>
+          </span>
+        </button>
       </div>
     </section>
 
-    <section class="card d2" aria-labelledby="statsHeading">
+    <section class="card d2" aria-labelledby="homeServerTitle">
+      <article class="home-server-card">
+        <div class="home-server-head">
+          <h2 class="home-server-title" id="homeServerTitle">404 : Server Not Found</h2>
+          <span class="home-server-tag" id="homeServerTag">Home server</span>
+        </div>
+        <p class="home-server-lang" id="homeServerLang">Server language: Russian</p>
+        <div class="home-server-body">
+          <p id="homeServerP1"></p>
+          <p id="homeServerP2"></p>
+          <p id="homeServerP3"></p>
+        </div>
+        <a class="home-server-join" id="homeServerJoin" href="https://discord.gg/cheterin" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.548-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+          <span id="homeServerCta">Join</span>
+        </a>
+      </article>
+    </section>
+
+    <section class="card d3" aria-labelledby="statsHeading">
       <h2 class="section-title" id="statsHeading">At a glance</h2>
       <div class="counters" id="counters">
         <div class="counter">
@@ -456,8 +679,9 @@
     <section class="card d6" aria-labelledby="projectsHeading">
       <h2 class="section-title" id="projectsHeading">Projects</h2>
       <div class="project-grid" id="projectGrid"></div>
-      <p class="footer-note" id="footerNote"></p>
     </section>
+
+    <p class="page-foot" id="pageFoot" title="heheheh.">still filled with determination</p>
   </div>
 
   <script>
@@ -645,8 +869,17 @@
         titleHtml: 'Adnan <span>(Nanda)</span>',
         aka: 'Better known as <strong>Nanda</strong> · Full-stack developer',
         bio: 'Born in Azerbaijan, I found my footing as a developer in Switzerland and have been shipping code since age 11. I contributed to well-known Discord projects — Juniper, Carl, and Cheterin — and was one of the Discord Dev participants who helped initiate the Riot Games × Discord Connection. Day-to-day languages: Python, Java, and HTML; also Figma and a long list of tools. I speak Russian, English, German, and more. Questions and messages are welcome.',
-        contact: 'Contact', name: 'Name', email: 'Email', discord: 'Discord', telegram: 'Telegram',
+        motto: 'privacy is a right not a privilege',
+        foot: 'still filled with determination',
+        footTitle: 'heheheh.',
+        contact: 'Nanda', name: 'Name', email: 'Email:', phone: 'Phone:', discord: 'Discord:', telegram: 'Telegram:', riot: 'Riot ID:',
         copyId: 'Copy ID', copy: 'Copy', copied: 'Copied', profile: 'Profile →', openTg: 'Open →',
+        homeServerTag: 'Home server',
+        homeServerLang: 'Server language: Russian',
+        homeServerP1: '«404 : Server Not Found» — a place for late-night talks, vibe, and people you want to stay with a little longer. An entry point for a reset: no corporate nonsense. Just strong vibe, insights, ideas, and a community that actually means something. This is the home server of Cheterin — and of this bot.',
+        homeServerP2: 'Memes live their own life here, jokes sometimes miss on purpose, and “come back later” is half the culture. Not a growth funnel — a room someone simply never closed.',
+        homeServerP3: 'If Cheterin Group has a front door, this is it: loud neon, soft edges, and the same people who build the tools you’re reading about.',
+        homeServerCta: 'Join',
         stats: 'At a glance', lblRepos: 'GitHub repos', subRepos: 'public',
         lblYears: 'Years coding', subYears: 'since age 11',
         lblCommunity: 'Cheterin', joinCta: 'Join →',
@@ -668,7 +901,6 @@
         quick: 'ELTE quick links',
         neptunCheck: 'No public Student-web status API found — <a href="https://neptun.elte.hu" target="_blank" rel="noopener noreferrer">check Neptun manually</a>.',
         projects: 'Projects', open: 'Open',
-        footer: 'Charcoal & scarlet · same glass language as the rest of this site · Nanda',
         title: 'About Nanda — Adnan'
       },
       ru: {
@@ -677,8 +909,17 @@
         titleHtml: 'Adnan <span>(Nanda)</span>',
         aka: 'Лучше известен как <strong>Nanda</strong> · Full-stack разработчик',
         bio: 'Родился в Азербайджане, путь разработчика начал в Швейцарии и пишу код с 11 лет. Участвовал в известных Discord-проектах — Juniper, Carl и Cheterin — и был одним из Discord Dev-участников, кто помог инициировать Riot Games × Discord Connection. Основные языки: Python, Java и HTML; также Figma и другие инструменты. Говорю на русском, английском, немецком и дальше. Вопросы и сообщения — всегда welcome.',
-        contact: 'Контакты', name: 'Имя', email: 'Email', discord: 'Discord', telegram: 'Telegram',
+        motto: 'приватность — право, а не привилегия',
+        foot: 'всё ещё полон решимости',
+        footTitle: 'хехехе.',
+        contact: 'Nanda', name: 'Имя', email: 'Email:', phone: 'Телефон:', discord: 'Discord:', telegram: 'Telegram:', riot: 'Riot ID:',
         copyId: 'Копировать ID', copy: 'Копировать', copied: 'Скопировано', profile: 'Профиль →', openTg: 'Открыть →',
+        homeServerTag: 'Домашний сервер',
+        homeServerLang: 'Язык сервера: русский',
+        homeServerP1: '«404 : Server Not Found» — место ночных разговоров, вайба и людей, с которыми хочется остаться подольше. Точка входа для перезагрузки: без корпоративного буллшита. Только сильный вайб, инсайты, идеи и комьюнити, в котором есть смысл. Это домашний сервер Cheterin и этого бота.',
+        homeServerP2: 'Здесь мемы живут своей жизнью, шутки иногда промахиваются специально, а «зайди позже» — половина культуры. Не воронка роста — комната, которую просто не закрыли.',
+        homeServerP3: 'Если у Cheterin Group есть парадная дверь, то вот она: громкий неон, мягкие края и те же люди, что собирают инструменты, о которых ты читаешь.',
+        homeServerCta: 'Зайти',
         stats: 'Коротко', lblRepos: 'Репозитории GitHub', subRepos: 'публичные',
         lblYears: 'Лет в коде', subYears: 'с 11 лет',
         lblCommunity: 'Cheterin', joinCta: 'Войти →',
@@ -700,7 +941,6 @@
         quick: 'Быстрые ссылки ELTE',
         neptunCheck: 'Публичного status API для Student web нет — <a href="https://neptun.elte.hu" target="_blank" rel="noopener noreferrer">проверьте Neptun вручную</a>.',
         projects: 'Проекты', open: 'Открыть',
-        footer: 'Угольный и алый · тот же glass-язык сайта · Nanda',
         title: 'О Nanda — Adnan'
       },
       hu: {
@@ -709,8 +949,17 @@
         titleHtml: 'Adnan <span>(Nanda)</span>',
         aka: 'Inkább <strong>Nanda</strong> néven · Full-stack fejlesztő',
         bio: 'Azerbajdzsánban születtem, a fejlesztői utat Svájcban kezdtem, és 11 éves korom óta kódolok. Közismert Discord-projektekhez járultam hozzá — Juniper, Carl, Cheterin —, és egyike voltam azoknak a Discord Dev résztvevőknek, akik elindították a Riot Games × Discord Connectionöt. Fő nyelveim: Python, Java és HTML; mellette Figma és más eszközök. Oroszul, angolul, németül és tovább beszélek. Kérdések és üzenetek mindig jöhetnek.',
-        contact: 'Kapcsolat', name: 'Név', email: 'Email', discord: 'Discord', telegram: 'Telegram',
+        motto: 'a magánélet jog, nem kiváltság',
+        foot: 'még mindig tele elszántsággal',
+        footTitle: 'heheheh.',
+        contact: 'Nanda', name: 'Név', email: 'Email:', phone: 'Telefon:', discord: 'Discord:', telegram: 'Telegram:', riot: 'Riot ID:',
         copyId: 'ID másolása', copy: 'Másolás', copied: 'Másolva', profile: 'Profil →', openTg: 'Megnyitás →',
+        homeServerTag: 'Otthoni szerver',
+        homeServerLang: 'Szerver nyelve: orosz',
+        homeServerP1: '«404 : Server Not Found» — éjszakai beszélgetések, vibe, és emberek, akikkel szívesen maradnál tovább. Belépő egy újraindításhoz: vállalati bullshit nélkül. Csak erős vibe, insightok, ötletek és egy közösség, aminek van értelme. Ez a Cheterin — és ennek a botnak — az otthoni szervere.',
+        homeServerP2: 'Itt a mémek saját életet élnek, a poénok néha szándékosan mellémennek, és a „gyere vissza később” a kultúra fele. Nem növekedési tölcsér — egy szoba, amit egyszerűen nem zártak be.',
+        homeServerP3: 'Ha a Cheterin Groupnak van díszbejárata, akkor ez az: hangos neon, lágy élek, és ugyanazok az emberek, akik azokat az eszközöket építik, amikről olvasol.',
+        homeServerCta: 'Belépés',
         stats: 'Egy pillantás', lblRepos: 'GitHub repo', subRepos: 'nyilvános',
         lblYears: 'Év kódolás', subYears: '11 éves kortól',
         lblCommunity: 'Cheterin', joinCta: 'Csatlakozás →',
@@ -732,7 +981,6 @@
         quick: 'ELTE gyorslinkek',
         neptunCheck: 'Nincs megbízható nyilvános Student-web status API — <a href="https://neptun.elte.hu" target="_blank" rel="noopener noreferrer">ellenőrizd a Neptunt kézzel</a>.',
         projects: 'Projektek', open: 'Megnyitás',
-        footer: 'Szénszürke és skarlát · ugyanaz a glass nyelv · Nanda',
         title: 'Nandáról — Adnan'
       }
     };
@@ -866,15 +1114,40 @@
       document.getElementById('pageTitle').innerHTML = d.titleHtml;
       document.getElementById('akaLine').innerHTML = d.aka;
       document.getElementById('bioText').textContent = d.bio;
-      document.getElementById('contactHeading').textContent = d.contact;
-      document.getElementById('labelName').textContent = d.name;
+      const mottoEl = document.getElementById('brandMotto');
+      if (mottoEl && d.motto) mottoEl.textContent = d.motto;
+      const footEl = document.getElementById('pageFoot');
+      if (footEl && d.foot) {
+        footEl.textContent = d.foot;
+        if (d.footTitle) footEl.setAttribute('title', d.footTitle);
+      }
+      document.getElementById('contactHeading').textContent = d.contact || 'Nanda';
       document.getElementById('labelEmail').textContent = d.email;
+      const labelPhone = document.getElementById('labelPhone');
+      if (labelPhone) labelPhone.textContent = d.phone || 'Phone';
       document.getElementById('labelDiscord').textContent = d.discord;
       document.getElementById('labelTelegram').textContent = d.telegram;
+      const labelRiot = document.getElementById('labelRiot');
+      if (labelRiot) labelRiot.textContent = d.riot || 'Riot ID';
       document.getElementById('copyDiscord').textContent = d.copyId;
       document.getElementById('copyTelegram').textContent = d.copy;
+      const copyRiot = document.getElementById('copyRiot');
+      if (copyRiot) copyRiot.textContent = d.copy;
       document.getElementById('discordProfile').textContent = d.profile;
       document.getElementById('telegramOpen').textContent = d.openTg;
+      const hsTag = document.getElementById('homeServerTag');
+      if (hsTag && d.homeServerTag) hsTag.textContent = d.homeServerTag;
+      const hsLang = document.getElementById('homeServerLang');
+      if (hsLang && d.homeServerLang) hsLang.textContent = d.homeServerLang;
+      const hsP1 = document.getElementById('homeServerP1');
+      const hsP2 = document.getElementById('homeServerP2');
+      const hsP3 = document.getElementById('homeServerP3');
+      if (hsP1 && d.homeServerP1) hsP1.textContent = d.homeServerP1;
+      if (hsP2 && d.homeServerP2) hsP2.textContent = d.homeServerP2;
+      if (hsP3 && d.homeServerP3) hsP3.textContent = d.homeServerP3;
+      const hsCta = document.getElementById('homeServerCta');
+      if (hsCta && d.homeServerCta) hsCta.textContent = d.homeServerCta;
+      if (typeof window.quackApplyCookieLang === 'function') window.quackApplyCookieLang(lang);
       document.getElementById('statsHeading').textContent = d.stats;
       document.getElementById('lblRepos').textContent = d.lblRepos;
       document.getElementById('subRepos').textContent = d.subRepos;
@@ -887,7 +1160,6 @@
       document.getElementById('quickHeading').textContent = d.quick;
       document.getElementById('neptunCheck').innerHTML = d.neptunCheck;
       document.getElementById('projectsHeading').textContent = d.projects;
-      document.getElementById('footerNote').textContent = d.footer;
       document.title = d.title;
 
       renderTimeline(lang);
@@ -896,8 +1168,10 @@
     }
 
     document.querySelectorAll('.copy-btn').forEach((btn) => {
-      btn.addEventListener('click', async () => {
+      const doCopy = async (e) => {
+        if (e) e.stopPropagation();
         const text = btn.dataset.copy || '';
+        if (!text) return;
         const label = i18n[currentLang].copied;
         try {
           await navigator.clipboard.writeText(text);
@@ -914,8 +1188,21 @@
           btn.textContent = prev;
           btn.classList.remove('copied');
         }, 1400);
+      };
+      btn.addEventListener('click', doCopy);
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); doCopy(e); }
       });
     });
+
+    const riotRow = document.getElementById('copyRiotRow');
+    if (riotRow) {
+      riotRow.addEventListener('click', (e) => {
+        if (e.target.closest('.copy-btn')) return;
+        const btn = document.getElementById('copyRiot');
+        if (btn) btn.click();
+      });
+    }
 
     document.querySelectorAll('.lang-btn').forEach((btn) => {
       btn.addEventListener('click', () => applyLang(btn.dataset.lang));
@@ -969,5 +1256,6 @@
     try { fromStore = localStorage.getItem('quack_lang'); } catch (_) {}
     applyLang(['ru', 'en', 'hu'].includes(fromQuery) ? fromQuery : (['ru', 'en', 'hu'].includes(fromStore) ? fromStore : 'en'));
   </script>
+  <script src="./cookie-consent.js" defer></script>
 </body>
 </html>

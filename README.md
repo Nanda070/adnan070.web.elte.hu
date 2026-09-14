@@ -111,14 +111,54 @@ Do not commit or document database passwords — Caesar injects credentials at r
 
 ## Owner & contact
 
+**Adnan (Nanda)** is one of two co-founders and the owner of **Cheterin Group**. This site and related work are part of the Cheterin Group portfolio:
+
+- **Cheterin**
+- **Cheterin Lookup**
+- **ChetMedia**
+- **Astra** (Minecraft plugin series)
+
+*RU: Аднан (Nanda) — один из двух основателей и владелец Cheterin Group; проекты выше — часть экосистемы Cheterin.*
+
 | | |
 |---|---|
 | **Name** | Adnan / Nanda |
 | **Email** | [adnan.huseynli1@gmail.com](mailto:adnan.huseynli1@gmail.com) |
 | **Discord** | `nandak070` |
 | **Telegram** | `@nanda070` |
+| **Riot ID** | `Xaosletao#404` |
 | **GitHub** | [github.com/Nanda070](https://github.com/Nanda070) |
 | **Card** | [nanda.is-a.dev](https://nanda.is-a.dev/) |
+
+---
+
+## Discord webhook (Quack Wall)
+
+New wall posts can notify a Discord channel via a **server-side only** webhook:
+
+1. On Caesar: `cp webhook.secret.php.example webhook.secret.php`
+2. Edit `webhook.secret.php` and paste your Discord Incoming Webhook URL (PHP `return 'https://discord.com/api/webhooks/...';`).
+3. Do **not** commit `webhook.secret.php` (listed in `.gitignore`). Never put the URL in HTML/JS/CSS.
+4. If the secret file is missing or invalid, wall posts still work — Discord notify fails soft.
+5. Rate-limited with the same IP cooldown as wall posts; message text is truncated; the webhook URL is never echoed in API responses.
+
+**Security:** If a webhook URL was ever pasted in chat or committed, regenerate it in Discord (Server Settings → Integrations → Webhooks).
+
+---
+
+## Cookies / local prefs
+
+Pages load `cookie-consent.js` (RU/EN/HU). **Accept** sets `quack_cookie_ok=1` (cookie) + choice in localStorage. **Essential only** hides the banner and keeps language (`quack_lang`) in localStorage — no ad trackers, no data selling.
+
+## Custom 404
+
+`404.html` is a branded not-found page (RU/EN/HU). Root `.htaccess` sets:
+
+```apache
+ErrorDocument 404 /404.html
+```
+
+On Caesar this usually works if the site lives at the web root of your `public_html`. If your space is under a subdirectory, adjust the path accordingly.
 
 ---
 

@@ -267,7 +267,13 @@
     .footer-note {
       margin-top: 22px; padding-top: 16px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
-      font-size: 0.8rem; color: var(--text-dim); line-height: 1.5;
+      font-size: 0.75rem; color: var(--text-dim); line-height: 1.5;
+      opacity: 0.72;
+    }
+    .footer-note .quiet-wink {
+      opacity: 0.65;
+      font-style: italic;
+      color: #64748b;
     }
 
     .help-fab {
@@ -574,6 +580,7 @@
           </ul>
         `,
         footer: "Unofficial client · Owner Nanda",
+        footerTitle: "save often — determination optional",
         helpTitle: "Help",
         helpText: "Having trouble installing? Message Nanda",
         helpGo: "Go",
@@ -716,6 +723,7 @@
           </ul>
         `,
         footer: "Неофициальный клиент · Владелец Nanda",
+        footerTitle: "сохраняй чаще — решимость пригодится",
         helpTitle: "Помощь",
         helpText: "Возникла проблема при установке? Напиши Nanda",
         helpGo: "перейти",
@@ -858,6 +866,7 @@
           </ul>
         `,
         footer: "Nem hivatalos kliens · Tulajdonos: Nanda",
+        footerTitle: "ments gyakran — az elszántság jól jön",
         helpTitle: "Segítség",
         helpText: "Gond van a telepítéssel? Írj Nandának",
         helpGo: "Tovább",
@@ -903,6 +912,7 @@
       document.getElementById('panel-phone').innerHTML = d.phone;
       document.getElementById('sharedBlock').innerHTML = d.shared;
       document.getElementById('footerNote').textContent = d.footer;
+      if (d.footerTitle) document.getElementById('footerNote').setAttribute('title', d.footerTitle);
       document.getElementById('helpModalTitle').textContent = d.helpTitle;
       document.getElementById('helpModalText').textContent = d.helpText;
       document.getElementById('helpModalGo').textContent = d.helpGo;
@@ -960,5 +970,6 @@
     try { fromStore = localStorage.getItem('quack_lang'); } catch (_) {}
     applyLang(['ru', 'en', 'hu'].includes(fromQuery) ? fromQuery : (['ru', 'en', 'hu'].includes(fromStore) ? fromStore : 'en'));
   </script>
+  <script src="./cookie-consent.js" defer></script>
 </body>
 </html>
