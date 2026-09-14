@@ -210,7 +210,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 14px;
+      margin-bottom: 44px;
       gap: 8px;
     }
 
@@ -399,7 +399,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 36px;
       text-align: center;
     }
 
@@ -465,12 +465,24 @@
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
+    /* Counter + duck stack; height follows content (no viewport stretch) */
+    .duck-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .card-below {
+      width: 100%;
+    }
+
     /* Central Duck Stage & Interactive Canvas */
     .duck-stage {
       position: relative;
       width: 230px;
       height: 230px;
-      margin: 4px 0 16px;
+      margin: 0 0 44px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -747,13 +759,13 @@
     /* Multilingual Text Section */
     .content-area {
       width: 100%;
-      min-height: 75px;
+      min-height: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
       padding: 0 10px;
-      margin-bottom: 16px;
+      margin-bottom: 26px;
     }
 
     .message-text {
@@ -771,8 +783,8 @@
     /* Duck of the day — quiet tip, not a promo card */
     .duck-of-day {
       width: 100%;
-      margin: -2px 0 10px;
-      padding: 4px 2px 0;
+      margin: 0 0 12px;
+      padding: 0 2px;
       text-align: center;
       background: none;
       border: none;
@@ -785,7 +797,7 @@
       text-transform: uppercase;
       color: #64748b;
       opacity: 0.65;
-      margin-bottom: 3px;
+      margin-bottom: 6px;
     }
     .dod-phrase {
       font-size: 0.78rem;
@@ -797,7 +809,7 @@
     }
 
     .privacy-motto {
-      margin: 0 0 10px;
+      margin: 0 0 36px;
       text-align: center;
       font-size: 0.68rem;
       font-weight: 500;
@@ -825,7 +837,7 @@
       border: 1px solid rgba(255, 255, 255, 0.07);
       border-radius: 18px;
       padding: 12px 14px;
-      margin-bottom: 14px;
+      margin-bottom: 28px;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -948,7 +960,7 @@
       flex-direction: column;
       align-items: center;
       gap: 6px;
-      margin-top: 6px;
+      margin-top: 0;
     }
 
     .click-hint-text {
@@ -980,10 +992,10 @@
 
     .secret-hint-text:hover { opacity: 0.72; color: #64748b; }
 
-    /* Floating badge stack (bottom right) */
+    /* Floating badge stack (bottom right) — leave ~12px above Tools/Wall nav */
     .badge-stack {
       position: fixed;
-      bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+      bottom: calc(90px + env(safe-area-inset-bottom, 0px));
       right: max(12px, env(safe-area-inset-right, 0px));
       z-index: 100;
       display: flex;
@@ -1782,68 +1794,122 @@
 
     .terminal-link:hover { transform: scale(1.04); }
 
-    /* Desktop: gentle ~90% card density (replaces former body zoom) */
+    /* Desktop/tablet: keep screenshot card rhythm (duck size only denser) */
     @media (min-width: 521px) {
-      .card { padding: 20px 18px 24px; }
-      .card-header { margin-bottom: 10px; }
-      .duck-stage { width: 205px; height: 205px; margin: 2px 0 12px; }
+      .card { padding: 24px 22px 28px; }
+      .card-header { margin-bottom: 44px; }
+      .hud-container { margin-bottom: 36px; }
+      .duck-stage { width: 205px; height: 205px; margin: 0 0 40px; }
       .duck-wrapper { width: 160px; }
       .duck-glow-bg { width: 130px; height: 130px; }
       .counter-value { font-size: 2rem; }
-      .content-area { min-height: 64px; margin-bottom: 12px; }
-      .duck-of-day { margin: -2px 0 10px; padding: 4px 2px 0; }
+      .content-area { min-height: 0; margin-bottom: 26px; }
+      .duck-of-day { margin: 0 0 12px; padding: 0 2px; }
+      .privacy-motto { margin: 0 0 36px; }
+      .quack-wall-section { margin-bottom: 28px; }
+      .card-footer { margin-top: 0; }
     }
 
-    /* Phones ≈390–430 CSS px (iPhone 16 Pro 393×852, ~390 Android, Pro Max 430×932).
-       ~80% density vs old 155px duck; square hit-target; SVG keeps 220/200 aspect. */
+    /* Phones — compact shrink-wrapped card; guestbook lives in Wall modal */
     @media (max-width: 520px) {
       body {
         justify-content: flex-start;
         padding:
-          max(0.45rem, env(safe-area-inset-top, 0px))
-          0.55rem
-          calc(5.6rem + env(safe-area-inset-bottom, 0px));
+          max(0.75rem, env(safe-area-inset-top, 0px))
+          0.65rem
+          calc(5.4rem + env(safe-area-inset-bottom, 0px));
       }
-      .card { padding: 12px 13px 14px; border-radius: 22px; }
-      .card-header { margin-bottom: 6px; gap: 6px; }
+      .viewport-wrapper {
+        width: 100%;
+        flex: none;
+        min-height: 0;
+        margin-top: 0;
+      }
+      .card {
+        flex: none;
+        height: auto;
+        padding: 16px 14px 18px;
+        border-radius: 22px;
+      }
+      .card-header {
+        margin-bottom: 22px;
+        gap: 6px;
+      }
       .badge-status { font-size: 0.65rem; padding: 4px 10px; gap: 5px; }
       .sound-toggle-btn { width: 30px; height: 30px; font-size: 0.9rem; }
       .lang-btn { font-size: 0.7rem; padding: 4px 8px; }
-      .hud-container { margin-bottom: 4px; }
-      .counter-label { font-size: 0.62rem; }
-      .counter-value { font-size: 1.55rem; }
+      .duck-hero {
+        flex: none;
+        margin: 0;
+      }
+      .hud-container { margin-bottom: 16px; }
+      .counter-label { font-size: 0.6rem; margin-bottom: 0; }
+      .counter-value { font-size: 1.65rem; line-height: 1.1; }
       .combo-bar-wrapper { margin-top: 2px; min-height: 18px; gap: 6px; }
       .combo-badge { font-size: 0.65rem; padding: 2px 8px; }
-      .cps-indicator { font-size: 0.65rem; padding: 1px 6px; }
+      .cps-indicator { font-size: 0.62rem; padding: 1px 6px; }
       .duck-stage {
         width: 152px;
         height: 152px;
-        margin: 0 0 6px;
+        margin: 0 0 20px;
         flex-shrink: 0;
       }
       .duck-wrapper { width: 124px; }
-      .duck-glow-bg { width: 98px; height: 98px; }
-      .duck-shadow { width: 82px; height: 12px; bottom: 10px; }
-      .content-area { min-height: 44px; margin-bottom: 6px; padding: 0 4px; }
-      .message-text { font-size: 0.8rem; line-height: 1.38; }
-      .duck-of-day { margin: 0 0 5px; padding: 2px 0 0; }
-      .dod-label { font-size: 0.58rem; margin-bottom: 2px; }
-      .dod-phrase { font-size: 0.74rem; line-height: 1.32; }
-      .privacy-motto { margin: 0 0 6px; font-size: 0.62rem; }
-      .quack-wall-section { padding: 8px 10px; margin-bottom: 6px; gap: 5px; border-radius: 14px; }
+      .duck-glow-bg { width: 100px; height: 100px; }
+      .duck-shadow { width: 82px; height: 12px; bottom: 8px; }
+      .card-below {
+        width: 100%;
+        margin-top: 0;
+      }
+      .content-area { min-height: 0; margin-bottom: 14px; padding: 0 2px; }
+      .message-text { font-size: 0.8rem; line-height: 1.35; }
+      .duck-of-day { margin: 0 0 8px; padding: 0; }
+      .dod-label { font-size: 0.55rem; margin-bottom: 4px; }
+      .dod-phrase { font-size: 0.72rem; line-height: 1.3; }
+      .privacy-motto { margin: 0 0 16px; font-size: 0.6rem; }
+      /* Belt-and-suspenders: never show guestbook inside the main card on phones.
+         placeWallCompose() moves it into #wallComposeMount for the Wall modal. */
+      #cardComposeMount {
+        display: none !important;
+      }
+      #wallModal .quack-wall-section {
+        display: flex;
+        flex-direction: column;
+        padding: 10px 12px;
+        margin: 0 0 10px;
+        gap: 5px;
+        border-radius: 14px;
+        background: rgba(0, 0, 0, 0.28);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
       .wall-title-row { font-size: 0.66rem; }
       .wall-input { padding: 7px 10px; font-size: 0.8rem; border-radius: 10px; }
       .wall-submit-btn { padding: 7px 12px; font-size: 0.78rem; }
-      .card-footer { margin-top: 2px; gap: 3px; }
-      .click-hint-text { font-size: 0.68rem; }
-      .secret-hint-text { font-size: 0.56rem; }
+      .card-footer { margin-top: 0; gap: 4px; }
+      .click-hint-text { font-size: 0.66rem; opacity: 0.75; }
+      .secret-hint-text { font-size: 0.54rem; }
       .sound-presets-grid { grid-template-columns: 1fr; }
+      /* Badges sit under the card (in-flow) — kills the SE mid-screen dead zone */
       .badge-stack {
-        bottom: calc(76px + env(safe-area-inset-bottom, 0px));
-        right: max(10px, env(safe-area-inset-right, 0px));
+        position: static;
+        width: 100%;
+        margin: 10px 0 0;
+        padding: 0;
+        bottom: auto;
+        right: auto;
+        left: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
         gap: 6px;
+        z-index: 2;
       }
-      .dev-badge { padding: 6px 12px; font-size: 0.76rem; }
+      .dev-badge {
+        padding: 5px 10px;
+        font-size: 0.7rem;
+        max-width: none;
+      }
       .modal-backdrop {
         padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);
       }
@@ -1861,29 +1927,58 @@
         max-width: 100%;
       }
       .bottom-nav { width: 100%; padding-left: 10px; padding-right: 10px; }
+      /* In-flow badges shouldn't leave a hole when nav/modals hide them */
+      body.modal-open .badge-stack,
+      body.keyboard-open .badge-stack {
+        height: 0;
+        margin: 0;
+        overflow: hidden;
+      }
     }
 
-    /* Short / landscape-ish phones: compress further so duck + wall stay usable */
+    /* Tall phones (≈844+) — gently center the compact composition */
+    @media (max-width: 520px) and (min-height: 780px) {
+      body {
+        justify-content: safe center;
+        padding-top: max(0.5rem, env(safe-area-inset-top, 0px));
+      }
+      .viewport-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .badge-stack {
+        margin-top: 12px;
+      }
+    }
+
+    /* Short phones (SE etc.): tighter duck + hide secondary chrome */
     @media (max-width: 520px) and (max-height: 720px) {
       body {
-        padding-top: max(0.3rem, env(safe-area-inset-top, 0px));
-        padding-bottom: calc(5.2rem + env(safe-area-inset-bottom, 0px));
+        justify-content: flex-start;
+        padding-top: max(0.35rem, env(safe-area-inset-top, 0px));
+        padding-bottom: calc(5.1rem + env(safe-area-inset-bottom, 0px));
       }
-      .card { padding: 10px 12px 12px; }
-      .card-header { margin-bottom: 4px; }
-      .duck-stage { width: 136px; height: 136px; margin: 0 0 4px; }
-      .duck-wrapper { width: 110px; }
-      .duck-glow-bg { width: 88px; height: 88px; }
-      .duck-shadow { width: 72px; height: 11px; }
+      .card { padding: 12px 12px 14px; }
+      .card-header { margin-bottom: 14px; }
+      .hud-container { margin-bottom: 10px; }
+      .duck-stage { width: 128px; height: 128px; margin: 0 0 14px; }
+      .duck-wrapper { width: 104px; }
+      .duck-glow-bg { width: 84px; height: 84px; }
+      .duck-shadow { width: 68px; height: 10px; }
       .counter-value { font-size: 1.4rem; }
-      .content-area { min-height: 34px; margin-bottom: 4px; }
+      .content-area { margin-bottom: 10px; }
       .message-text { font-size: 0.74rem; line-height: 1.3; }
       .duck-of-day { display: none; }
-      .privacy-motto { margin-bottom: 5px; font-size: 0.58rem; }
-      .quack-wall-section { padding: 7px 9px; margin-bottom: 5px; }
+      .privacy-motto { margin-bottom: 12px; font-size: 0.56rem; }
+      .card-footer { margin-top: 0; }
+      /* Drop the longest promo badge so the row stays tight above nav */
       .badge-stack {
-        bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+        margin-top: 8px;
+        gap: 5px;
       }
+      .dev-badge.neptun-badge { display: none; }
+      .dev-badge { padding: 4px 9px; font-size: 0.66rem; }
     }
   </style>
 </head>
@@ -1924,107 +2019,111 @@
         </div>
       </header>
 
-      <!-- Global Quack Counter & Combo HUD -->
-      <section class="hud-container" aria-live="polite">
-        <div class="counter-label" id="counterLabel">Global Quacks</div>
-        <div class="counter-value" id="globalCounter">0</div>
-        <div class="combo-bar-wrapper">
-          <div class="combo-badge" id="comboBadge">
-            <span id="comboIcon">🔥</span>
-            <span id="comboText">10 COMBO</span>
+      <!-- Global Quack Counter + Interactive Duck -->
+      <div class="duck-hero">
+        <section class="hud-container" aria-live="polite">
+          <div class="counter-label" id="counterLabel">Global Quacks</div>
+          <div class="counter-value" id="globalCounter">0</div>
+          <div class="combo-bar-wrapper">
+            <div class="combo-badge" id="comboBadge">
+              <span id="comboIcon">🔥</span>
+              <span id="comboText">10 COMBO</span>
+            </div>
+            <div class="cps-indicator" id="cpsIndicator">0.0 CPS</div>
           </div>
-          <div class="cps-indicator" id="cpsIndicator">0.0 CPS</div>
-        </div>
-      </section>
+        </section>
 
-      <!-- Central Stage: Interactive Duck & Canvas Ripples -->
-      <section class="duck-stage" id="duckStage" aria-label="Interactive Duck">
-        <canvas class="water-canvas" id="waterCanvas"></canvas>
-        <div class="duck-glow-bg" aria-hidden="true"></div>
-        <div class="duck-shadow" aria-hidden="true"></div>
+        <!-- Central Stage: Interactive Duck & Canvas Ripples -->
+        <section class="duck-stage" id="duckStage" aria-label="Interactive Duck">
+          <canvas class="water-canvas" id="waterCanvas"></canvas>
+          <div class="duck-glow-bg" aria-hidden="true"></div>
+          <div class="duck-shadow" aria-hidden="true"></div>
 
-        <!-- Floating Comic Speech Bubbles & Quack Badges -->
-        <div class="bubble-container" id="bubbleContainer" aria-hidden="true"></div>
-        <div class="quack-container" id="quackContainer" aria-live="polite" aria-atomic="true"></div>
+          <!-- Floating Comic Speech Bubbles & Quack Badges -->
+          <div class="bubble-container" id="bubbleContainer" aria-hidden="true"></div>
+          <div class="quack-container" id="quackContainer" aria-live="polite" aria-atomic="true"></div>
 
-        <div class="duck-wrapper" id="duckInteractive" role="button" tabindex="0" title="Privacy is a right not a privilege" aria-label="Rubber duck (tap to quack)">
-          <!-- Handcrafted Vector Duck SVG -->
-          <svg class="duck-svg" viewBox="0 0 220 200" preserveAspectRatio="xMidYMid meet" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-              <linearGradient id="duckBody" x1="40" y1="20" x2="190" y2="190" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#FFF36D" />
-                <stop offset="42%" stop-color="#FFCA28" />
-                <stop offset="100%" stop-color="#F57F17" />
-              </linearGradient>
+          <div class="duck-wrapper" id="duckInteractive" role="button" tabindex="0" title="Privacy is a right not a privilege" aria-label="Rubber duck (tap to quack)">
+            <!-- Handcrafted Vector Duck SVG -->
+            <svg class="duck-svg" viewBox="0 0 220 200" preserveAspectRatio="xMidYMid meet" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="duckBody" x1="40" y1="20" x2="190" y2="190" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#FFF36D" />
+                  <stop offset="42%" stop-color="#FFCA28" />
+                  <stop offset="100%" stop-color="#F57F17" />
+                </linearGradient>
 
-              <linearGradient id="duckWing" x1="70" y1="80" x2="160" y2="170" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#FFE082" />
-                <stop offset="60%" stop-color="#FFB300" />
-                <stop offset="100%" stop-color="#E65100" />
-              </linearGradient>
+                <linearGradient id="duckWing" x1="70" y1="80" x2="160" y2="170" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#FFE082" />
+                  <stop offset="60%" stop-color="#FFB300" />
+                  <stop offset="100%" stop-color="#E65100" />
+                </linearGradient>
 
-              <linearGradient id="duckBeak" x1="10" y1="55" x2="70" y2="85" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#FF9E40" />
-                <stop offset="50%" stop-color="#FF6D00" />
-                <stop offset="100%" stop-color="#DD2C00" />
-              </linearGradient>
+                <linearGradient id="duckBeak" x1="10" y1="55" x2="70" y2="85" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#FF9E40" />
+                  <stop offset="50%" stop-color="#FF6D00" />
+                  <stop offset="100%" stop-color="#DD2C00" />
+                </linearGradient>
 
-              <linearGradient id="headHighlight" x1="95" y1="25" x2="120" y2="60" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6" />
-                <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
-              </linearGradient>
+                <linearGradient id="headHighlight" x1="95" y1="25" x2="120" y2="60" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6" />
+                  <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+                </linearGradient>
 
-              <radialGradient id="wingShadow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#BF360C" stop-opacity="0.3" />
-                <stop offset="100%" stop-color="#BF360C" stop-opacity="0" />
-              </radialGradient>
-            </defs>
+                <radialGradient id="wingShadow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#BF360C" stop-opacity="0.3" />
+                  <stop offset="100%" stop-color="#BF360C" stop-opacity="0" />
+                </radialGradient>
+              </defs>
 
-            <!-- Tail Feathers -->
-            <path d="M165 110 C185 92 205 95 212 104 C215 108 214 114 207 119 C198 126 186 132 173 135 Z" fill="url(#duckBody)" />
-            <path d="M172 102 C188 88 202 89 208 97 C204 105 192 114 178 120 Z" fill="#FFB300" opacity="0.75" />
+              <!-- Tail Feathers -->
+              <path d="M165 110 C185 92 205 95 212 104 C215 108 214 114 207 119 C198 126 186 132 173 135 Z" fill="url(#duckBody)" />
+              <path d="M172 102 C188 88 202 89 208 97 C204 105 192 114 178 120 Z" fill="#FFB300" opacity="0.75" />
 
-            <!-- Main Duck Body -->
-            <path d="M72 100 C72 75 92 65 116 65 C155 65 186 92 186 128 C186 160 156 182 118 182 C76 182 52 153 52 128 C52 118 58 108 72 100 Z" fill="url(#duckBody)" />
+              <!-- Main Duck Body -->
+              <path d="M72 100 C72 75 92 65 116 65 C155 65 186 92 186 128 C186 160 156 182 118 182 C76 182 52 153 52 128 C52 118 58 108 72 100 Z" fill="url(#duckBody)" />
 
-            <!-- Duck Head & Neck -->
-            <path d="M62 62 C62 36 82 18 108 18 C134 18 152 36 152 62 C152 76 142 90 128 98 C105 102 85 94 72 82 C65 76 62 69 62 62 Z" fill="url(#duckBody)" />
+              <!-- Duck Head & Neck -->
+              <path d="M62 62 C62 36 82 18 108 18 C134 18 152 36 152 62 C152 76 142 90 128 98 C105 102 85 94 72 82 C65 76 62 69 62 62 Z" fill="url(#duckBody)" />
 
-            <!-- Head Glossy Highlight -->
-            <ellipse cx="106" cy="30" rx="20" ry="8" transform="rotate(-15 106 30)" fill="url(#headHighlight)" />
+              <!-- Head Glossy Highlight -->
+              <ellipse cx="106" cy="30" rx="20" ry="8" transform="rotate(-15 106 30)" fill="url(#headHighlight)" />
 
-            <!-- Cheek Blush -->
-            <circle cx="92" cy="65" r="9" fill="#FF5252" opacity="0.32" />
+              <!-- Cheek Blush -->
+              <circle cx="92" cy="65" r="9" fill="#FF5252" opacity="0.32" />
 
-            <!-- Duck Eye -->
-            <g class="duck-eye-group" id="duckEyeDefault">
-              <ellipse cx="88" cy="46" rx="7.5" ry="9" fill="#1e1810" />
-              <ellipse cx="86" cy="43" rx="3" ry="4" fill="#FFFFFF" />
-              <circle cx="90.5" cy="49" r="1.5" fill="#FFFFFF" />
-            </g>
+              <!-- Duck Eye -->
+              <g class="duck-eye-group" id="duckEyeDefault">
+                <ellipse cx="88" cy="46" rx="7.5" ry="9" fill="#1e1810" />
+                <ellipse cx="86" cy="43" rx="3" ry="4" fill="#FFFFFF" />
+                <circle cx="90.5" cy="49" r="1.5" fill="#FFFFFF" />
+              </g>
 
-            <!-- Cute Eyebrow -->
-            <path d="M82 34 C86 31 92 32 96 35" stroke="#BF360C" stroke-width="2.2" stroke-linecap="round" opacity="0.6" />
+              <!-- Cute Eyebrow -->
+              <path d="M82 34 C86 31 92 32 96 35" stroke="#BF360C" stroke-width="2.2" stroke-linecap="round" opacity="0.6" />
 
-            <!-- Duck Beak -->
-            <g class="duck-beak-group">
-              <path d="M67 52 C52 52 28 58 22 66 C20 68 22 72 26 73 C35 75 52 75 66 73 C70 70 70 56 67 52 Z" fill="url(#duckBeak)" />
-              <path d="M26 69 C38 69 56 67 67 65" stroke="#BF360C" stroke-width="2" stroke-linecap="round" opacity="0.5" />
-              <ellipse cx="50" cy="59" rx="1.8" ry="1.2" fill="#7F0000" opacity="0.5" />
-            </g>
+              <!-- Duck Beak -->
+              <g class="duck-beak-group">
+                <path d="M67 52 C52 52 28 58 22 66 C20 68 22 72 26 73 C35 75 52 75 66 73 C70 70 70 56 67 52 Z" fill="url(#duckBeak)" />
+                <path d="M26 69 C38 69 56 67 67 65" stroke="#BF360C" stroke-width="2" stroke-linecap="round" opacity="0.5" />
+                <ellipse cx="50" cy="59" rx="1.8" ry="1.2" fill="#7F0000" opacity="0.5" />
+              </g>
 
-            <!-- Duck Wing -->
-            <g class="duck-wing-group">
-              <path d="M102 110 C90 110 82 120 84 135 C88 155 110 162 136 158 C158 154 165 138 160 125 C150 112 125 110 102 110 Z" fill="url(#wingShadow)" />
-              <path d="M104 104 C88 104 78 116 80 132 C84 154 106 162 132 158 C152 155 160 142 155 128 C148 112 126 104 104 104 Z" fill="url(#duckWing)" />
-              <path d="M96 128 C108 142 128 142 144 134" stroke="#FFF8E1" stroke-width="2.5" stroke-linecap="round" opacity="0.4" />
-              <path d="M106 138 C116 148 130 148 140 142" stroke="#FFF8E1" stroke-width="2.5" stroke-linecap="round" opacity="0.3" />
-            </g>
+              <!-- Duck Wing -->
+              <g class="duck-wing-group">
+                <path d="M102 110 C90 110 82 120 84 135 C88 155 110 162 136 158 C158 154 165 138 160 125 C150 112 125 110 102 110 Z" fill="url(#wingShadow)" />
+                <path d="M104 104 C88 104 78 116 80 132 C84 154 106 162 132 158 C152 155 160 142 155 128 C148 112 126 104 104 104 Z" fill="url(#duckWing)" />
+                <path d="M96 128 C108 142 128 142 144 134" stroke="#FFF8E1" stroke-width="2.5" stroke-linecap="round" opacity="0.4" />
+                <path d="M106 138 C116 148 130 148 140 142" stroke="#FFF8E1" stroke-width="2.5" stroke-linecap="round" opacity="0.3" />
+              </g>
 
-          </svg>
-        </div>
-      </section>
+            </svg>
+          </div>
+        </section>
+      </div>
 
+      <!-- Supporting copy + guestbook + hints (below the duck) -->
+      <div class="card-below">
       <!-- Multilingual Cross-Fade Quote Area -->
       <section class="content-area" aria-live="polite">
         <p class="message-text" id="duckMessage">
@@ -2038,7 +2137,8 @@
       </aside>
       <p class="privacy-motto" id="privacyMotto">privacy is a right not a privilege</p>
 
-      <!-- Quack Wall Input Form -->
+      <div id="cardComposeMount">
+      <!-- Quack Wall Input Form (relocates into Wall modal on phones) -->
       <section class="quack-wall-section">
         <div class="wall-title-row">
           <span id="wallTitle">Quack Wall Guestbook</span>
@@ -2055,6 +2155,7 @@
           <span class="feed-text" id="feedText">Quack something cool!</span>
         </div>
       </section>
+      </div>
 
       <!-- Card Footer & Easter Egg Secret Hint -->
       <footer class="card-footer">
@@ -2068,25 +2169,26 @@
           …sans
         </div>
       </footer>
+      </div>
 
     </article>
-  </main>
 
-  <!-- Floating badge stack: ELTE IT, Neptun download, About Nanda -->
-  <div class="badge-stack" id="badgeStack">
-    <a href="./elte-it.html" class="dev-badge it-badge" id="itBadge" title="ELTE Student IT">
-      <span class="dev-badge-icon">🔑</span>
-      <span id="itBadgeText">ELTE <strong>Student IT</strong></span>
-    </a>
-    <a href="./neptun-elte.html" class="dev-badge neptun-badge" id="neptunBadge" title="NEPTUN Mobile for ELTE">
-      <span class="dev-badge-icon">📱</span>
-      <span id="neptunBadgeText">Download <strong>NEPTUN Mobile for ELTE</strong></span>
-    </a>
-    <a href="./about.html" class="dev-badge" id="devBadge" title="About me">
-      <span class="dev-badge-icon">⚡</span>
-      <span id="aboutBadgeText">About <strong>me</strong></span>
-    </a>
-  </div>
+    <!-- Badge stack: fixed bottom-right on desktop; under the card on phones -->
+    <div class="badge-stack" id="badgeStack">
+      <a href="./about.html" class="dev-badge" id="devBadge" title="About me">
+        <span class="dev-badge-icon">⚡</span>
+        <span id="aboutBadgeText">About <strong>me</strong></span>
+      </a>
+      <a href="./elte-it.html" class="dev-badge it-badge" id="itBadge" title="ELTE Student IT">
+        <span class="dev-badge-icon">🔑</span>
+        <span id="itBadgeText">ELTE <strong>Student IT</strong></span>
+      </a>
+      <a href="./neptun-elte.html" class="dev-badge neptun-badge" id="neptunBadge" title="NEPTUN Mobile for ELTE">
+        <span class="dev-badge-icon">📱</span>
+        <span id="neptunBadgeText">Download <strong>NEPTUN Mobile for ELTE</strong></span>
+      </a>
+    </div>
+  </main>
 
   <!-- Fixed bottom nav: Tools + Wall -->
   <nav class="bottom-nav" id="bottomNav" aria-label="Main navigation">
@@ -2331,6 +2433,7 @@
         <button type="button" class="modal-close-btn" data-close="wallModal">&times;</button>
       </div>
       <div class="modal-body">
+        <div id="wallComposeMount"></div>
         <div class="wall-feed-list" id="fullWallFeed">
           <div style="text-align:center; padding: 20px; color: var(--text-dim);">Loading quacks...</div>
         </div>
@@ -2789,6 +2892,28 @@
       const toolsModal = document.getElementById('toolsModal');
       const wallModal = document.getElementById('wallModal');
       const soundModal = document.getElementById('soundModal');
+      const cardComposeMount = document.getElementById('cardComposeMount');
+      const wallComposeMount = document.getElementById('wallComposeMount');
+      const wallComposeSection = cardComposeMount
+        ? cardComposeMount.querySelector('.quack-wall-section')
+        : document.querySelector('.quack-wall-section');
+
+      /** On phones, park guestbook in Wall modal to keep the main card compact. */
+      function placeWallCompose() {
+        if (!wallComposeSection || !cardComposeMount || !wallComposeMount) return;
+        const mobile = window.matchMedia('(max-width: 520px)').matches;
+        const target = mobile ? wallComposeMount : cardComposeMount;
+        if (wallComposeSection.parentElement !== target) {
+          target.appendChild(wallComposeSection);
+        }
+      }
+      placeWallCompose();
+      const mobileComposeMq = window.matchMedia('(max-width: 520px)');
+      if (mobileComposeMq.addEventListener) {
+        mobileComposeMq.addEventListener('change', placeWallCompose);
+      } else {
+        window.addEventListener('resize', placeWallCompose);
+      }
 
       const terminalOverlay = document.getElementById('terminalOverlay');
       const terminalCloseBtn = document.getElementById('terminalCloseBtn');
